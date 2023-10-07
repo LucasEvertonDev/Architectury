@@ -10,6 +10,8 @@ public partial class DomainNotifiable<TEntity> : IDomainNotifiable
 
     public DomainNotifiable()
     {
+        NotificationContext = new NotificationContext();
+
         NotificationInfo = new NotificationInfo()
         {
             NotificationType = Enum.NotificationType.DomainNotification,

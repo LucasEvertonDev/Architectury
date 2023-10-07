@@ -29,7 +29,6 @@ public abstract class BaseUseCase<TParam, TRetorno> : Notifiable
 
     protected async virtual Task OnError(Exception exception)
     {
-        await _unitOfWork.RollbackAsync();
         throw exception;
     }
 
@@ -37,8 +36,7 @@ public abstract class BaseUseCase<TParam, TRetorno> : Notifiable
     {
         try
         {
-            TRetorno retorno = await func();
-            await _unitOfWork.CommitAsync();
+            TRetorno retorno = await _unitOfWork.OpenConnectionAsync(func);
             return retorno;
         }
         catch (Exception exception)
@@ -63,127 +61,5 @@ public abstract class BaseUseCase<TParam, TRetorno> : Notifiable
         entity.SetNotificationContext(Notifications);
         entity.SetAggregateRoot(true);
         return entity;
-    }
-}
-
-public abstract class BaseUseCase<TParam> : Notifiable
-{
-    private readonly IUnitOfWork _unitOfWork;
-    protected readonly IIdentity _identity;
-
-    public BaseUseCase(IServiceProvider serviceProvider)
-    {
-        _unitOfWork = serviceProvider.GetService<IUnitOfWork>();
-        _identity = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext?.User?.Identity;
-    }
-
-    public abstract Task ExecuteAsync(TParam param);
-
-    protected virtual Task OnSucess()
-    {
-        return Task.CompletedTask;
-    }
-
-    protected async virtual Task OnError(Exception exception)
-    {
-        await _unitOfWork.RollbackAsync();
-        throw exception;
-    }
-
-    public async Task OnTransactionAsync(Func<Task> func)
-    {
-        try
-        {
-            await func();
-            await _unitOfWork.CommitAsync();
-        }
-        catch (Exception exception)
-        {
-            await OnError(exception);
-        }
-        finally
-        {
-            await OnSucess();
-        }
-    }
-
-    public async Task<TRetorno> OnTransactionAsync<TRetorno>(Func<Task<TRetorno>> func)
-    {
-        try
-        {
-            TRetorno retorno = await func();
-            await _unitOfWork.CommitAsync();
-            return retorno;
-        }
-        catch (Exception exception)
-        {
-            await OnError(exception);
-            return default;
-        }
-        finally
-        {
-            await OnSucess();
-        }
-    }
-}
-
-public abstract class BaseUseCase : Notifiable
-{
-    private readonly IUnitOfWork _unitOfWork;
-    protected readonly IIdentity _identity;
-
-    public BaseUseCase(IServiceProvider serviceProvider)
-    {
-        _unitOfWork = serviceProvider.GetService<IUnitOfWork>();
-        _identity = serviceProvider.GetService<IHttpContextAccessor>().HttpContext.User?.Identity;
-    }
-
-    public abstract Task ExecuteAsync();
-
-    protected virtual Task OnSucess()
-    {
-        return Task.CompletedTask;
-    }
-
-    protected async virtual Task OnError(Exception exception)
-    {
-        await _unitOfWork.RollbackAsync();
-        throw exception;
-    }
-
-    public async Task OnTransactionAsync(Func<Task> func)
-    {
-        try
-        {
-            await func();
-            await _unitOfWork.CommitAsync();
-        }
-        catch (Exception exception)
-        {
-            await OnError(exception);
-        }
-        finally
-        {
-            await OnSucess();
-        }
-    }
-
-    public async Task<TRetorno> OnTransactionAsync<TRetorno>(Func<Task<TRetorno>> func)
-    {
-        try
-        {
-            TRetorno retorno = await func();
-            await _unitOfWork.CommitAsync();
-            return retorno;
-        }
-        catch (Exception exception)
-        {
-            await OnError(exception);
-            return default;
-        }
-        finally
-        {
-            await OnSucess();
-        }
     }
 }

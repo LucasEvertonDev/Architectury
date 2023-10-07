@@ -1,6 +1,7 @@
 ﻿using Architecture.Application.Core;
 using Architecture.Application.Core.Structure;
 using Architecture.Application.UseCases;
+using Architecture.Infra.Data;
 using Architectury.Infra.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,10 +13,12 @@ public static class BootstrapModule
     {
         services.AddHttpContextAccessor();
 
-        services.RegisterCoreServices(configuration);
+        services.RegisterCore(configuration);
 
-        services.RegisterUseCasesServices(configuration);
+        services.RegisterUseCases(configuration);
 
-        services.AddPlugins(configuration);
+        services.RegisterInfraData(configuration);
+
+        services.RegisterPlugins(configuration);
     }
 }

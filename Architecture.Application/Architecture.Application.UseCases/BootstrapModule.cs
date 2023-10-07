@@ -7,8 +7,9 @@ namespace Architecture.Application.UseCases;
 
 public static class BootstrapModule
 {
-    public static void RegisterUseCasesServices(this IServiceCollection services, AppSettings configuration)
+    public static void RegisterUseCases(this IServiceCollection services, AppSettings configuration)
     {
         services.AddScoped<ICriarPessoaUseCase, CriarPessoaUseCase>();
+        services.AddScoped<IRecuperarPessoasUseCase, RecuperarPessoasUseCase>();
     }
 }

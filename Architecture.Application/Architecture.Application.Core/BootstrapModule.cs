@@ -4,7 +4,7 @@ namespace Architecture.Application.Core;
 
 public static class BootstrapModule
 {
-    public static void RegisterCoreServices(this IServiceCollection services, AppSettings configuration)
+    public static void RegisterCore(this IServiceCollection services, AppSettings configuration)
     {
         services.AddScoped<NotificationContext>();
     }

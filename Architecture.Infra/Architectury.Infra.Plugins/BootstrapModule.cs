@@ -7,7 +7,7 @@ namespace Architectury.Infra.Plugins;
 
 public static class BootstrapModule
 {
-    public static void AddPlugins(this IServiceCollection services, AppSettings configuration)
+    public static void RegisterPlugins(this IServiceCollection services, AppSettings configuration)
     {
         //services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining<BaseValidator>();

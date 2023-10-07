@@ -9,11 +9,21 @@ namespace Architecture.WebApi.Controllers
     public class PessoaController : Controller
     {
         private readonly ICriarPessoaUseCase _criarPessoaUseCase;
+        private readonly IRecuperarPessoasUseCase _recuperarPessoasUseCase;
 
-        public PessoaController(ICriarPessoaUseCase criarPessoaUseCase)
+        public PessoaController(ICriarPessoaUseCase criarPessoaUseCase,
+            IRecuperarPessoasUseCase recuperarPessoasUseCase)
         {
             _criarPessoaUseCase = criarPessoaUseCase;
+            _recuperarPessoasUseCase = recuperarPessoasUseCase;
         }
+
+        [HttpGet]
+        public async Task<ActionResult> Get()
+        {
+            return Ok(await _recuperarPessoasUseCase.ExecuteAsync(null));
+        }
+
 
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] CriarPessoaModel criarPessoaModel)

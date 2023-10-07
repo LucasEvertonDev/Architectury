@@ -10,7 +10,7 @@ public partial class Pessoa : BaseEntity<Pessoa>
     public Nome Nome { get; private set  ; }
     public string Email { get; private set; }
     public DateTime? DataNascimento { get; private set; }
-    public Guid EmpregoId { get; private set; }
+    public Guid EnderecoId { get; private set; }
     public Endereco Endereco { get; private set; }
 
     public Pessoa CriarPessoa(string primeiroNome, string sobrenome, string email, DateTime? dataNascimento, EnderecoModel enderecoModel)

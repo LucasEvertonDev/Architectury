@@ -1,0 +1,27 @@
+﻿using Architecture.Application.Core.Structure.Models;
+using Architecture.Application.Domain.DbContexts.Domains;
+using Architecture.Application.Domain.DbContexts.Repositorys.Base;
+using Architecture.Application.UseCases.IUseCases;
+using Architecture.Application.UseCases.UseCases.Base;
+
+namespace Architecture.Application.UseCases.UseCases.PessoaUseCases;
+
+public class RecuperarPessoasUseCase : BaseUseCase<IVoid, IEnumerable<Pessoa>>, IRecuperarPessoasUseCase
+{
+    private readonly ISearchRepository<Pessoa> _searchRepository;
+
+    public RecuperarPessoasUseCase(IServiceProvider serviceProvider,
+        ISearchRepository<Pessoa> searchRepository)
+        : base(serviceProvider)
+    {
+        _searchRepository = searchRepository;
+    }
+
+    public override async Task<IEnumerable<Pessoa>> ExecuteAsync(IVoid param)
+    {
+        return await OnTransactionAsync(async () =>
+        {
+            return await _searchRepository.ToListAsync();
+        });
+    }
+}

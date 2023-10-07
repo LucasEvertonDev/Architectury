@@ -1,0 +1,43 @@
+version: '3.4'
+
+networks:
+  backend:
+    name: backend
+    
+services:
+  mysql:
+    image: mysql:8.0.20
+    container_name: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - c:/dados/volumes/mysql:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: lucas
+      MYSQL_PASSWORD: 123456
+      MYSQL_DATABASE: LaboratoryDb
+    networks:
+      - 'backend'
+    expose:
+      - 3306
+      
+  # # PLaboratory.webapi:
+    # # image: plaborary.api
+    # # container_name: plaborary.api
+    # # build:
+      # # context: ./
+      # # dockerfile: ./PLaboratory.WebAPI/Dockerfile
+    # # environment:
+      # # - ASPNETCORE_ENVIRONMENT=Development
+      # # - "ConnectionStrings:SqlConnection=server=mysql;port=3306;userid=lucas;password=123456;database=LaboratoryDb;"
+      # # - "ConnectionStrings:SerilogSqlConnection=server=mysql;port=3306;userid=lucas;password=123456;database=LaboratoryDb;"
+      # # - "Logging:LogLevel:Serilog=Warning"
+      # # - "Swagger:FlowLogin=http://localhost:8000/api/v1/auth/flowlogin"
+    # # depends_on:
+      # # - mysql
+    # # ports:
+      # # - '8000:80'
+    # # networks:
+      # # - 'backend'

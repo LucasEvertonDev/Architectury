@@ -36,6 +36,12 @@ public class Startup
 
         Configuration.Bind(appSettings);
 
+        /// Learn more about configuring  https://stackoverflow.com/questions/59774566/what-do-the-size-settings-for-memorycache-mean
+        services.AddMemoryCache((options) => 
+        {
+            options.SizeLimit = 1024 * 1024;
+        });
+
         services.AddSingleton<AppSettings, AppSettings>();
 
         services.AddSwaggerGen(c =>
