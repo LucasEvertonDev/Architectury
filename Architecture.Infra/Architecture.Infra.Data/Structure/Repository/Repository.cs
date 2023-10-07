@@ -29,7 +29,7 @@ public class Repository<TContext, TEntity> : ICreateRepository<TEntity>, IDelete
 
     public virtual Task<TEntity> CreateAsync(TEntity domain)
     {
-        _applicationDbContext.Entry(domain).State = EntityState.Added;
+        //_applicationDbContext.Entry(domain).State = EntityState.Added;
 
         _applicationDbContext.AddAsync(domain);
 

@@ -1,14 +1,14 @@
-﻿using Architecture.Application.Core.Notifications.Notifiable;
-using Architecture.Application.Domain.DbContexts.ValueObjects.Base;
+﻿using Architecture.Application.Core.Notifications.Notifiable.Notifications.Base;
+using Architecture.Application.Core.Notifications.Notifiable.Notifications;
 
 namespace Architecture.Application.Domain.DbContexts.ValueObjects;
 
-public record Nome : ValueObjectRecord<Nome>
+public class Nome : DomainNotifiable<Nome>, IDomainNotifiable
 {
     public Nome() { }
 
-    public string PrimeiroNome { get; private set; }
-    public string Sobrenome { get; private set; }
+    public string PrimeiroNome { get; set; }
+    public string Sobrenome { get; set; }
 
 
     public string NomeCompleto() => string.Concat(PrimeiroNome, " ", Sobrenome);

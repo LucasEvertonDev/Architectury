@@ -43,8 +43,6 @@ public class UnitOfWork<TDbContext> : IUnitOfWork where TDbContext : DbContext
         }
         catch
         {
-            await _context.DisposeAsync();
-
             await transaction.RollbackAsync();
             throw;
         }

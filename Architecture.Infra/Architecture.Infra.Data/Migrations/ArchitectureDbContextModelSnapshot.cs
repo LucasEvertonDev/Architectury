@@ -16,7 +16,7 @@ namespace Architecture.Infra.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Architecture.Application.Domain.DbContexts.Domains.Endereco", b =>
@@ -34,12 +34,18 @@ namespace Architecture.Infra.Data.Migrations
                     b.Property<string>("Estado")
                         .HasColumnType("longtext");
 
+                    b.Property<Guid>("PessoaId")
+                        .HasColumnType("char(36)");
+
                     b.Property<int>("Situacao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(1);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PessoaId")
+                        .IsUnique();
 
                     b.ToTable("Enderecos");
                 });
@@ -56,9 +62,6 @@ namespace Architecture.Infra.Data.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("EnderecoId")
-                        .HasColumnType("char(36)");
-
                     b.Property<int>("Situacao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -66,20 +69,22 @@ namespace Architecture.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId")
-                        .IsUnique();
-
                     b.ToTable("Pessoas");
+                });
+
+            modelBuilder.Entity("Architecture.Application.Domain.DbContexts.Domains.Endereco", b =>
+                {
+                    b.HasOne("Architecture.Application.Domain.DbContexts.Domains.Pessoa", "Pessoa")
+                        .WithOne("Endereco")
+                        .HasForeignKey("Architecture.Application.Domain.DbContexts.Domains.Endereco", "PessoaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pessoa");
                 });
 
             modelBuilder.Entity("Architecture.Application.Domain.DbContexts.Domains.Pessoa", b =>
                 {
-                    b.HasOne("Architecture.Application.Domain.DbContexts.Domains.Endereco", "Endereco")
-                        .WithOne("Pessoa")
-                        .HasForeignKey("Architecture.Application.Domain.DbContexts.Domains.Pessoa", "EnderecoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.OwnsOne("Architecture.Application.Domain.DbContexts.ValueObjects.Nome", "Nome", b1 =>
                         {
                             b1.Property<Guid>("PessoaId")
@@ -93,7 +98,7 @@ namespace Architecture.Infra.Data.Migrations
                             b1.Property<string>("Sobrenome")
                                 .IsRequired()
                                 .HasColumnType("longtext")
-                                .HasColumnName("SobreNome");
+                                .HasColumnName("Sobrenome");
 
                             b1.HasKey("PessoaId");
 
@@ -103,14 +108,12 @@ namespace Architecture.Infra.Data.Migrations
                                 .HasForeignKey("PessoaId");
                         });
 
-                    b.Navigation("Endereco");
-
                     b.Navigation("Nome");
                 });
 
-            modelBuilder.Entity("Architecture.Application.Domain.DbContexts.Domains.Endereco", b =>
+            modelBuilder.Entity("Architecture.Application.Domain.DbContexts.Domains.Pessoa", b =>
                 {
-                    b.Navigation("Pessoa");
+                    b.Navigation("Endereco");
                 });
 #pragma warning restore 612, 618
         }

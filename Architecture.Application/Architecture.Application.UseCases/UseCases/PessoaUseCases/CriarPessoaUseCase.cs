@@ -37,8 +37,6 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
                     return new PessoaCriadaModel();
                 }
 
-                await _createEndereco.CreateAsync(pessoa.Endereco);  
-
                 var pp = await _createRepository.CreateAsync(pessoa);
 
                 return new PessoaCriadaModel()

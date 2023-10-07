@@ -7,6 +7,7 @@ public class Endereco : BaseEntity<Endereco>
     public string Cep { get; private set; }
     public string Estado { get; private set; }
     public string Cidade { get; private set; }
+    public Guid PessoaId { get; private set; }
     public Pessoa Pessoa { get; private set; } 
 
     public Endereco CriarEndereco(string cep, string estado, string cidade)

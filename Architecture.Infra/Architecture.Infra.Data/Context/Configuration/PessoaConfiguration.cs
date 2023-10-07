@@ -17,6 +17,7 @@ public class PessoaConfiguration : IEntityTypeConfiguration<Pessoa>
 
         builder.Property(u => u.Situacao).IsRequired().HasDefaultValue(ESituacao.Ativo);
 
+
         builder.OwnsOne(x => x.Nome)
             .Property(x => x.PrimeiroNome)
             .HasColumnName("PrimeiroNome")
@@ -24,14 +25,7 @@ public class PessoaConfiguration : IEntityTypeConfiguration<Pessoa>
 
         builder.OwnsOne(x => x.Nome)
             .Property(x => x.Sobrenome)
-        .HasColumnName("SobreNome")
-        .IsRequired();
-
-       builder
-        .HasOne(e => e.Endereco)
-             .WithOne(e => e.Pessoa)
-             .HasForeignKey<Pessoa>(e => e.EnderecoId)
-             .IsRequired();
-
+            .HasColumnName("Sobrenome")
+            .IsRequired();
     }
 }

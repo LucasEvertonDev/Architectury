@@ -29,7 +29,6 @@ public abstract class BaseUseCase<TParam, TRetorno> : Notifiable
 
     protected async virtual Task OnError(Exception exception)
     {
-        throw exception;
     }
 
     protected async Task<TRetorno> OnTransactionAsync(Func<Task<TRetorno>> func)
@@ -42,7 +41,7 @@ public abstract class BaseUseCase<TParam, TRetorno> : Notifiable
         catch (Exception exception)
         {
             await OnError(exception);
-            return default;
+            throw;
         }
         finally
         {
