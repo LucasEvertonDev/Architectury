@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Structure\Extensions\SwaggerExtensions.cs" />
+    <Compile Remove="Structure\Filters\ExceptionFilter.cs" />
+    <Compile Remove="Structure\Filters\SwaggerDefaultValues.cs" />
+    <Compile Remove="Structure\Middlewares\AuthUnauthorizedMiddleware.cs" />
+    <Compile Remove="Structure\Middlewares\RequestResponseLoggingMiddleware.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Architecture.Infra\Architeture.Infra.IoC\Architecture.Infra.IoC.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Structure\Middlewares\" />
+  </ItemGroup>
+</Project>
