@@ -21,20 +21,3 @@ public partial class DomainNotifiable<TEntity> : IDomainNotifiable
         return new AfterSet<AfterValidationWhenObject>(NotificationContext, NotificationInfo);
     }
 }
-
-public partial record RecordNotifiable<TEntity> : IRecordNotifiable
-{
-    protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, DateTime>> memberLamda, DateTime value)
-    {
-        this.SetValue(memberLamda, value);
-
-        return new AfterSet<AfterValidationWhenObject>(NotificationContext, NotificationInfo);
-    }
-
-    protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, DateTime?>> memberLamda, DateTime? value)
-    {
-        this.SetValue(memberLamda, value);
-
-        return new AfterSet<AfterValidationWhenObject>(NotificationContext, NotificationInfo);
-    }
-}

@@ -26,16 +26,3 @@ public partial class DomainNotifiable<TEntity> : IDomainNotifiable
         this.SetValue(memberLamda, value);
     }
 }
-
-public partial record RecordNotifiable<TEntity> : IRecordNotifiable
-{
-    /// <summary>
-    ///  Quando record as notificaçoes são integradas de forma interna 
-    /// </summary>
-    /// <param name="memberLamda"></param>
-    /// <param name="value"></param>
-    protected void Set(Expression<Func<TEntity, IRecordNotifiable>> memberLamda, IRecordNotifiable value)
-    {
-        this.SetValue(memberLamda, value);
-    }
-}

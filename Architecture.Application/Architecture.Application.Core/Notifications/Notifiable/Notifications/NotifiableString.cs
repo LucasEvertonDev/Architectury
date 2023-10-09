@@ -15,13 +15,3 @@ public partial class DomainNotifiable<TEntity> : IDomainNotifiable
         return new AfterSet<AfterValidationWhenString>(NotificationContext, NotificationInfo);
     }
 }
-
-public partial record RecordNotifiable<TEntity> : IRecordNotifiable
-{
-    protected AfterSet<AfterValidationWhenString> Set(Expression<Func<TEntity, string>> memberLamda, string value)
-    {
-        this.SetValue(memberLamda, value);
-
-        return new AfterSet<AfterValidationWhenString>(NotificationContext, NotificationInfo);
-    }
-}
