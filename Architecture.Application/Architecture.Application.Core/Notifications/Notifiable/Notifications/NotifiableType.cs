@@ -33,7 +33,7 @@ public partial class Notifiable<TEntity> : INotifiableModel
     /// <summary>
     /// 
     /// </summary>
-    public List<NotificationModel> GetNotifications()
+    public List<NotificationModel> GetFailures()
     {
         return NotificationContext.Notifications.ToList();
     }
@@ -42,9 +42,9 @@ public partial class Notifiable<TEntity> : INotifiableModel
     /// Indica se o dominio é válido ou não
     /// </summary>
     /// <returns></returns>
-    public bool HasNotifications()
+    public bool HasFailure()
     {
-        return !GetNotifications().Any();
+        return GetFailures().Any();
     }
 
 

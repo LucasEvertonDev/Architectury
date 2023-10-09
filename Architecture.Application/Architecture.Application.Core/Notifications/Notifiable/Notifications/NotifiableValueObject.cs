@@ -12,7 +12,7 @@ public partial class Notifiable<TEntity> : INotifiableModel
     /// <param name="value"></param>
     protected void Set(Expression<Func<TEntity, INotifiableModel>> memberLamda, INotifiableModel value)
     {
-        this.NotificationContext.AddNotifications(value.GetNotifications());
+        this.NotificationContext.AddNotifications(value.GetFailures());
 
         this.SetValue(memberLamda, value);
     }

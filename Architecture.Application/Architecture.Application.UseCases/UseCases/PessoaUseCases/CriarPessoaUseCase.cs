@@ -37,9 +37,9 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
                     enderecoModel: param.Endereco
                 );
 
-                if (!pessoa.HasNotifications())
+                if (pessoa.HasFailure())
                 {
-                    Result.Failure<Pessoa>(pessoa.GetNotifications());
+                    Result.Failure<CriarPessoaUseCase>(pessoa);
                     return;
                 }
 
