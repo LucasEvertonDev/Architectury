@@ -21,14 +21,17 @@ namespace Architecture.WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            return Ok(await _recuperarPessoasUseCase.ExecuteAsync(null));
-        }
+            await _recuperarPessoasUseCase.ExecuteAsync();
 
+            return Ok(_recuperarPessoasUseCase.Retorno);
+        }
 
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] CriarPessoaModel criarPessoaModel)
         {
-            return Ok(await _criarPessoaUseCase.ExecuteAsync(criarPessoaModel));
+            await _criarPessoaUseCase.ExecuteAsync(criarPessoaModel);
+
+            return Ok(_criarPessoaUseCase.Retorno);
         }
     }
 }

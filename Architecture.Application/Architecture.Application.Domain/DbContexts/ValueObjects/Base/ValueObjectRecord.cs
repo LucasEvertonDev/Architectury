@@ -53,5 +53,15 @@ public abstract class ValueObject<T> : DomainNotifiable<T>
          .Select(x => x != null ? x.GetHashCode() : 0)
          .Aggregate((x, y) => x ^ y);
     }
+
+    public static bool operator ==(ValueObject<T> one, ValueObject<T> two)
+    {
+        return EqualOperator(one, two);
+    }
+
+    public static bool operator !=(ValueObject<T> one, ValueObject<T> two)
+    {
+        return NotEqualOperator(one, two);
+    }
     // Other utility methods
 }

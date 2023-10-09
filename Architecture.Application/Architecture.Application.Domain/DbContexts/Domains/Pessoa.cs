@@ -23,7 +23,7 @@ public partial class Pessoa : BaseEntity<Pessoa>
 
         Set(pessoa => pessoa.Email, email)
             .ValidateWhen()
-            .IsNullOrEmpty().AddNotification(PessoaNotifications.EmailObrigatorio);
+            .IsNullOrEmpty().AddNotification(PessoaErros.EmailObrigatorio);
             //.IsInvalidEmail().AddNotification(PessoaNotifications.EmailInvalido);
 
         Set(pessoa => pessoa.DataNascimento, dataNascimento);

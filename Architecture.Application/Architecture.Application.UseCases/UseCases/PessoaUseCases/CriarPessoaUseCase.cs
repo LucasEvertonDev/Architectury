@@ -1,4 +1,5 @@
-﻿using Architecture.Application.Domain.DbContexts.Domains;
+﻿using Architecture.Application.Domain.Constants;
+using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.Models.Pessoa;
 using Architecture.Application.UseCases.IUseCases;
@@ -6,24 +7,28 @@ using Architecture.Application.UseCases.UseCases.Base;
 
 namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
 {
-    public class CriarPessoaUseCase : BaseUseCase<CriarPessoaModel, PessoaCriadaModel>, ICriarPessoaUseCase
+    public class CriarPessoaUseCase : BaseUseCase<CriarPessoaModel>, ICriarPessoaUseCase
     {
+        public PessoaCriadaModel Retorno { get; set; } = new PessoaCriadaModel();
+
         private readonly ICreateRepository<Pessoa> _createRepository;
-        private readonly ICreateRepository<Endereco> _createEndereco;
 
         public CriarPessoaUseCase(IServiceProvider serviceProvider,
-            ICreateRepository<Pessoa> createRepository,
-            ICreateRepository<Endereco> createEndereco)
+            ICreateRepository<Pessoa> createRepository)
             : base(serviceProvider)
         {
             _createRepository = createRepository;
-            _createEndereco = createEndereco;
         }
 
-        public override async Task<PessoaCriadaModel> ExecuteAsync(CriarPessoaModel param)
+        public override async Task ExecuteAsync(CriarPessoaModel param)
         {
-            return await OnTransactionAsync(async () =>
+            await OnTransactionAsync(async () =>
             {
+                if (param == null)
+                {
+                    Result.Failure<CriarPessoaUseCase>(PessoaErros.PessoaNula);
+                }
+
                 var pessoa = Notifiable<Pessoa>().CriarPessoa(
                     primeiroNome: param.PrimeiroNome,
                     sobrenome: param.Sobrenome,
@@ -34,12 +39,12 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
 
                 if (!pessoa.IsValid())
                 {
-                    return new PessoaCriadaModel();
+                    return;
                 }
 
-                var pp = await _createRepository.CreateAsync(pessoa);
+                var pessoaCriada = await _createRepository.CreateAsync(pessoa);
 
-                return new PessoaCriadaModel()
+                Retorno = new PessoaCriadaModel()
                 {
                     Message = "Filé demais"
                 };

@@ -1,10 +1,11 @@
 ﻿using Architecture.Application.Core.Structure.Models;
 using Architecture.Application.Domain.DbContexts.Domains;
 
-namespace Architecture.Application.UseCases.IUseCases
+namespace Architecture.Application.UseCases.IUseCases;
+
+public interface IRecuperarPessoasUseCase
 {
-    public interface IRecuperarPessoasUseCase
-    {
-        Task<IEnumerable<Pessoa>> ExecuteAsync(IVoid param);
-    }
+    IEnumerable<Pessoa> Retorno { get; set; }
+
+    Task ExecuteAsync();
 }
