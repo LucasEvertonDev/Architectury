@@ -1,9 +1,8 @@
-﻿using Architecture.Application.Core.Notifications.Notifiable.Notifications.Base;
-using Architecture.Application.Core.Notifications.Notifiable.Notifications;
+﻿using Architecture.Application.Domain.DbContexts.ValueObjects.Base;
 
 namespace Architecture.Application.Domain.DbContexts.ValueObjects;
 
-public class Nome : DomainNotifiable<Nome>, IDomainNotifiable
+public class Nome : ValueObject<Nome>
 {
     public Nome() { }
 
@@ -26,5 +25,11 @@ public class Nome : DomainNotifiable<Nome>, IDomainNotifiable
             .AddNotification(new NotificationModel("SOBRENOME", "SobreNome é obrigatório"));
        
         return this;
+    }
+
+    protected override IEnumerable<object> GetAtomicValues()
+    {
+        yield return PrimeiroNome;
+        yield return Sobrenome;
     }
 }

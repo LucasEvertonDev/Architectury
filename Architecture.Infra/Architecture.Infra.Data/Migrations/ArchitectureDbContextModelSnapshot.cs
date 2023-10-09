@@ -3,6 +3,7 @@ using System;
 using Architecture.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -16,26 +17,28 @@ namespace Architecture.Infra.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Architecture.Application.Domain.DbContexts.Domains.Endereco", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Cep")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Cidade")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Estado")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("PessoaId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Situacao")
                         .ValueGeneratedOnAdd()
@@ -54,13 +57,13 @@ namespace Architecture.Infra.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DataNascimento")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .HasColumnType("longtext");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Situacao")
                         .ValueGeneratedOnAdd()
@@ -88,16 +91,16 @@ namespace Architecture.Infra.Data.Migrations
                     b.OwnsOne("Architecture.Application.Domain.DbContexts.ValueObjects.Nome", "Nome", b1 =>
                         {
                             b1.Property<Guid>("PessoaId")
-                                .HasColumnType("char(36)");
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("PrimeiroNome")
                                 .IsRequired()
-                                .HasColumnType("longtext")
+                                .HasColumnType("nvarchar(max)")
                                 .HasColumnName("PrimeiroNome");
 
                             b1.Property<string>("Sobrenome")
                                 .IsRequired()
-                                .HasColumnType("longtext")
+                                .HasColumnType("nvarchar(max)")
                                 .HasColumnName("Sobrenome");
 
                             b1.HasKey("PessoaId");

@@ -16,10 +16,11 @@ public static class BootstrapModule
     public static void RegisterInfraData(this IServiceCollection services, AppSettings configuration)
     {
         services.AddDbContext<ArchitectureDbContext>(options =>
-            options.UseMySql(configuration.ConnectionStrings.SqlConnection,
-                ServerVersion.AutoDetect(configuration.ConnectionStrings.SqlConnection)));
+           options.UseSqlServer(configuration.ConnectionStrings.SqlConnection,
+           b => b.MigrationsAssembly(typeof(ArchitectureDbContext).Assembly.FullName)));
 
-         services.AddScoped<IUnitOfWork, UnitOfWork<ArchitectureDbContext>>();
+
+        services.AddScoped<IUnitOfWork, UnitOfWork<ArchitectureDbContext>>();
 
         services.AddRepository<Pessoa>();
         services.AddRepository<Endereco>();
