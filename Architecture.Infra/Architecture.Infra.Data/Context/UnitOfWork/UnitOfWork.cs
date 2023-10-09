@@ -5,7 +5,7 @@ namespace Architecture.Infra.Data.Context.UnitOfWork;
 
 public class UnitOfWork<TDbContext> : IUnitOfWork where TDbContext : DbContext
 {
-    private readonly TDbContext _context;
+    public readonly TDbContext _context;
 
     public UnitOfWork(TDbContext applicationDbContext)
     {

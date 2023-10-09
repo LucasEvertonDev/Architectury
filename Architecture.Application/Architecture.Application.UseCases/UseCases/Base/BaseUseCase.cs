@@ -10,7 +10,7 @@ namespace Architecture.Application.UseCases.UseCases.Base;
 
 public abstract class BaseUseCase<TParam, TRetorno> : Notifiable
 {
-    private readonly IUnitOfWork _unitOfWork;
+    protected readonly IUnitOfWork _unitOfWork;
     protected readonly IIdentity _identity;
 
     public BaseUseCase(IServiceProvider serviceProvider)

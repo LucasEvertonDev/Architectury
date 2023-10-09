@@ -12,7 +12,7 @@ public class BaseDbContext<TContext> : DbContext where TContext : DbContext
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        foreach (var entry in ChangeTracker.Entries().Where(entry => entry.Entity.GetType().GetProperty("UpdateDate") != null))
+        foreach (var entry in ChangeTracker.Entries())
         {
             if (entry.State == EntityState.Modified)
             {
