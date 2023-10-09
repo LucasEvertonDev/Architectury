@@ -3,7 +3,7 @@ using Architecture.Application.Domain.Enuns;
 
 namespace Architecture.Application.Domain.DbContexts.Domains.Base;
 
-public partial class BaseEntity<TEntity> : DomainNotifiable<TEntity>, IEntity
+public partial class BaseEntity<TEntity> : Notifiable<TEntity>, IEntity
 {
     public Guid Id { get; protected set; }
 

@@ -3,7 +3,7 @@ using Architecture.Application.Core.Notifications.Notifiable.Notifications.Base;
 
 namespace Architecture.Application.Domain.DbContexts.ValueObjects.Base;
 
-public abstract class ValueObject<T> : DomainNotifiable<T>, IDomainNotifiable
+public abstract class ValueObject<T> : Notifiable<T>, INotifiableModel
 {
     protected static bool EqualOperator(ValueObject<T> left, ValueObject<T> right)
     {

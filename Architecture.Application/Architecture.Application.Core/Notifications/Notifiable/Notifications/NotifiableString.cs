@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Architecture.Application.Core.Notifications.Notifiable.Notifications;
 
-public partial class DomainNotifiable<TEntity> : IDomainNotifiable
+public partial class Notifiable<TEntity> : INotifiableModel
 {
     protected AfterSet<AfterValidationWhenString> Set(Expression<Func<TEntity, string>> memberLamda, string value)
     {

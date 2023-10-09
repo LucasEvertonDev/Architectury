@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Architecture.Application.Core.Notifications.Notifiable.Notifications;
 
-public partial class DomainNotifiable<TEntity> : IDomainNotifiable
+public partial class Notifiable<TEntity> : INotifiableModel
 {
     protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, Decimal>> memberLamda, Decimal value)
     {

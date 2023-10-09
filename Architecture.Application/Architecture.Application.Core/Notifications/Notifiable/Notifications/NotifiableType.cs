@@ -4,13 +4,13 @@ using System.Reflection;
 
 namespace Architecture.Application.Core.Notifications.Notifiable.Notifications;
 
-public partial class DomainNotifiable<TEntity> : IDomainNotifiable
+public partial class Notifiable<TEntity> : INotifiableModel
 {
     protected NotificationInfo NotificationInfo { get; set; }
 
     protected Result Result { get; set; }
 
-    public DomainNotifiable()
+    public Notifiable()
     {
         NotificationContext = new NotificationContext();
 

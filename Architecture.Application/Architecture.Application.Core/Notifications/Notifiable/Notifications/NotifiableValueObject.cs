@@ -3,14 +3,14 @@ using System.Linq.Expressions;
 
 namespace Architecture.Application.Core.Notifications.Notifiable.Notifications;
 
-public partial class DomainNotifiable<TEntity> : IDomainNotifiable
+public partial class Notifiable<TEntity> : INotifiableModel
 {
     /// <summary>
     ///  Quando record as notificaçoes são integradas de forma interna 
     /// </summary>
     /// <param name="memberLamda"></param>
     /// <param name="value"></param>
-    protected void Set(Expression<Func<TEntity, IDomainNotifiable>> memberLamda, IDomainNotifiable value)
+    protected void Set(Expression<Func<TEntity, INotifiableModel>> memberLamda, INotifiableModel value)
     {
         this.NotificationContext.AddNotifications(value.GetNotifications());
 
