@@ -9,8 +9,6 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
 {
     public class CriarPessoaUseCase : BaseUseCase<CriarPessoaModel>, ICriarPessoaUseCase
     {
-        public PessoaCriadaModel Retorno { get; set; } = new PessoaCriadaModel();
-
         private readonly ICreateRepository<Pessoa> _createRepository;
 
         public CriarPessoaUseCase(IServiceProvider serviceProvider,
@@ -45,7 +43,7 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
 
                 var pessoaCriada = await _createRepository.CreateAsync(pessoa);
 
-                Retorno = new PessoaCriadaModel()
+                Result.Data = new PessoaCriadaModel()
                 {
                     Message = "Filé demais"
                 };

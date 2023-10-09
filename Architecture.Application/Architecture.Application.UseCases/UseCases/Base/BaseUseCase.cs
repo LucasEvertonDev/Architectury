@@ -77,6 +77,7 @@ public abstract class BaseUseCase : Notifiable
 {
     protected readonly IUnitOfWork _unitOfWork;
     protected readonly IIdentity _identity;
+    public Result Result { get; private set; }
 
     public BaseUseCase(IServiceProvider serviceProvider)
     {

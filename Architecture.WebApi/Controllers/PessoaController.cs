@@ -23,7 +23,12 @@ namespace Architecture.WebApi.Controllers
         {
             await _recuperarPessoasUseCase.ExecuteAsync();
 
-            return Ok(_recuperarPessoasUseCase.Retorno);
+            if (_recuperarPessoasUseCase.Result.HasFailures())
+            {
+                BadRequest();
+            }
+
+            return Ok(_recuperarPessoasUseCase.Result.Data);
         }
 
         [HttpPost]
@@ -31,7 +36,12 @@ namespace Architecture.WebApi.Controllers
         {
             await _criarPessoaUseCase.ExecuteAsync(criarPessoaModel);
 
-            return Ok(_criarPessoaUseCase.Retorno);
+            if (_recuperarPessoasUseCase.Result.HasFailures())
+            {
+                BadRequest();
+            }
+
+            return Ok(_criarPessoaUseCase.Result.Data);
         }
     }
 }

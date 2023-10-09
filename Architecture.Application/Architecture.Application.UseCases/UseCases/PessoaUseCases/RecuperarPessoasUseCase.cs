@@ -7,7 +7,6 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases;
 
 public class RecuperarPessoasUseCase : BaseUseCase, IRecuperarPessoasUseCase
 {
-    public IEnumerable<Pessoa> Retorno { get; set; }
 
     private readonly ISearchPessoaRepository _searchRepository;
 
@@ -24,7 +23,7 @@ public class RecuperarPessoasUseCase : BaseUseCase, IRecuperarPessoasUseCase
         {
             var aux = await _searchRepository.GetPessoasQuery();
 
-            Retorno = await _searchRepository.ToListAsync();
+            Result.Data = await _searchRepository.ToListAsync();
         });
     }
 }
