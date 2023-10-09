@@ -3,8 +3,10 @@ using Architecture.Application.Core.Structure.UnitOfWork;
 using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Domains.Base;
 using Architecture.Application.Domain.DbContexts.Repositorys.Base;
+using Architecture.Application.Domain.DbContexts.Repositorys.PessoaRepository;
 using Architecture.Infra.Data.Context;
 using Architecture.Infra.Data.Context.Repositories;
+using Architecture.Infra.Data.Context.Repositories.Base;
 using Architecture.Infra.Data.Context.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +25,8 @@ public static class BootstrapModule
         services.AddScoped<IUnitOfWork, UnitOfWork<ArchitectureDbContext>>();
 
         services.AddRepository<Pessoa>();
+        services.AddScoped<ISearchPessoaRepository, PessoaRepository>();
+
         services.AddRepository<Endereco>();
     }
 

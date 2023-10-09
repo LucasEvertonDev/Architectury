@@ -1,6 +1,7 @@
 ﻿using Architecture.Application.Core.Structure;
 using Architecture.Application.Core.Structure.Attributes;
 using Architecture.Application.Core.Structure.Models;
+using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Domains.Base;
 using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Infra.Data.Structure.Extensions;
@@ -38,7 +39,7 @@ public class Repository<TContext, TEntity> : ICreateRepository<TEntity>, IDelete
 
     public virtual Task<TEntity> UpdateAsync(TEntity domain)
     {
-        _applicationDbContext.Entry(domain).State = EntityState.Modified;
+        //_applicationDbContext.Entry(domain).State = EntityState.Modified;
 
         _applicationDbContext.Update(domain);
 
