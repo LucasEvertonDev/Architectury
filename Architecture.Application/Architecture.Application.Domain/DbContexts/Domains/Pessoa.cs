@@ -15,7 +15,7 @@ public partial class Pessoa : BaseEntity<Pessoa>
 
     public Pessoa CriarPessoa(string primeiroNome, string sobrenome, string email, DateTime? dataNascimento, EnderecoModel enderecoModel)
     {
-        Set(pessoa => pessoa.Nome, Notifiable<Nome>()
+        Set(pessoa => pessoa.Nome, new Nome()
             .CriarNome(
                 primeiroNome: primeiroNome,
                 sobrenome: sobrenome
@@ -28,7 +28,7 @@ public partial class Pessoa : BaseEntity<Pessoa>
 
         Set(pessoa => pessoa.DataNascimento, dataNascimento);
 
-        Set(pessoa => pessoa.Endereco, Notifiable<Endereco>()
+        Set(pessoa => pessoa.Endereco, new Endereco()
             .CriarEndereco(
                 cep: enderecoModel.Cep,
                 estado: enderecoModel.Estado,

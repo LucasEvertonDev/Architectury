@@ -21,7 +21,7 @@ public class NotificationContext
         _notifications.Add(notification);
     }
 
-    public void AddNotifications(IEnumerable<NotificationModel> notifications)
+    public void AddNotifications(List<NotificationModel> notifications)
     {
         _notifications.AddRange(notifications);
     }

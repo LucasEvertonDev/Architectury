@@ -1,8 +1,8 @@
-﻿using Architecture.Application.Core.Notifications.Context;
+﻿using Architecture.Application.Core.Notifications;
+using Architecture.Application.Core.Notifications.Context;
 using Architecture.Application.Core.Notifications.Notifiable.Notifications;
 using Architecture.Application.Core.Notifications.Notifiable.Notifications.Base;
 using Architecture.Application.Core.Structure.UnitOfWork;
-using Architecture.Application.Domain.Models.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Principal;
@@ -70,19 +70,6 @@ public abstract class BaseUseCase<TParam> : Notifiable
             await OnSucess();
         }
     }
-
-    /// <summary>
-    /// Instancia classe para trabalhar com notificationPattern
-    /// </summary>
-    /// <typeparam name="TNotifiable"></typeparam>
-    /// <returns></returns>
-    protected TNotifiable Notifiable<TNotifiable>() where TNotifiable : INotifiable
-    {
-        var entity = Activator.CreateInstance<TNotifiable>();
-        entity.SetNotificationContext(Notifications);
-        entity.SetAggregateRoot(true);
-        return entity;
-    }
 }
 
 
@@ -144,18 +131,5 @@ public abstract class BaseUseCase : Notifiable
         {
             await OnSucess();
         }
-    }
-
-    /// <summary>
-    /// Instancia classe para trabalhar com notificationPattern
-    /// </summary>
-    /// <typeparam name="TNotifiable"></typeparam>
-    /// <returns></returns>
-    protected TNotifiable Notifiable<TNotifiable>() where TNotifiable : INotifiable
-    {
-        var entity = Activator.CreateInstance<TNotifiable>();
-        entity.SetNotificationContext(Notifications);
-        entity.SetAggregateRoot(true);
-        return entity;
     }
 }

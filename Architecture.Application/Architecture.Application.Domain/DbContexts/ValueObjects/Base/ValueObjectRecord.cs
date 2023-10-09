@@ -1,8 +1,9 @@
 ﻿using Architecture.Application.Core.Notifications.Notifiable.Notifications;
+using Architecture.Application.Core.Notifications.Notifiable.Notifications.Base;
 
 namespace Architecture.Application.Domain.DbContexts.ValueObjects.Base;
 
-public abstract class ValueObject<T> : DomainNotifiable<T>
+public abstract class ValueObject<T> : DomainNotifiable<T>, IDomainNotifiable
 {
     protected static bool EqualOperator(ValueObject<T> left, ValueObject<T> right)
     {

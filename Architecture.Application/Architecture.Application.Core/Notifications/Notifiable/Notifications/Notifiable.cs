@@ -21,29 +21,8 @@ public partial class Notifiable : INotifiable
     /// Indica se o dominio é válido ou não
     /// </summary>
     /// <returns></returns>
-    public bool HasError()
+    public bool HasNotifications()
     {
         return Notifications.HasNotifications;
-    }
-
-    /// <summary>
-    /// Instancia classe para trabalhar com notificationPattern
-    /// </summary>
-    /// <typeparam name="TNotifiable"></typeparam>
-    /// <returns></returns>
-    protected TNotifiable Notify<TNotifiable>() where TNotifiable : INotifiable
-    {
-        var entity = Activator.CreateInstance<TNotifiable>();
-        entity.SetNotificationContext(Notifications);
-        return entity;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="value"></param>
-    public void SetAggregateRoot(bool value)
-    {
-        NotificationInfo.MainDomain = false;
     }
 }

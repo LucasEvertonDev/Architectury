@@ -8,9 +8,13 @@ public partial class DomainNotifiable<TEntity> : IDomainNotifiable
 {
     protected NotificationInfo NotificationInfo { get; set; }
 
+    protected Result Result { get; set; }
+
     public DomainNotifiable()
     {
         NotificationContext = new NotificationContext();
+
+        Result = new Result(NotificationContext);
 
         NotificationInfo = new NotificationInfo()
         {
@@ -29,35 +33,20 @@ public partial class DomainNotifiable<TEntity> : IDomainNotifiable
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="context"></param>
-    /// <exception cref="NotImplementedException"></exception>
-    public void SetNotificationContext(NotificationContext context)
+    public List<NotificationModel> GetNotifications()
     {
-        NotificationContext = context;
+        return NotificationContext.Notifications.ToList();
     }
-
-    protected List<NotificationModel> Notifications => NotificationContext.Notifications.Where(a => a.context == NotificationInfo.Namespace).ToList();
 
     /// <summary>
     /// Indica se o dominio é válido ou não
     /// </summary>
     /// <returns></returns>
-    public bool IsValid()
+    public bool HasNotifications()
     {
-        return !Notifications.Any();
+        return !GetNotifications().Any();
     }
 
-    /// <summary>
-    /// Instancia classe para trabalhar com notificationPattern
-    /// </summary>
-    /// <typeparam name="TNotifiable"></typeparam>
-    /// <returns></returns>
-    protected TNotifiable Notifiable<TNotifiable>() where TNotifiable : INotifiable
-    {
-        var entity = Activator.CreateInstance<TNotifiable>();
-        entity.SetNotificationContext(NotificationContext);
-        return entity;
-    }
 
     /// <summary>
     /// 
@@ -76,14 +65,5 @@ public partial class DomainNotifiable<TEntity> : IDomainNotifiable
             }
         }
         NotificationInfo.Value = value;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="value"></param>
-    public void SetAggregateRoot(bool value)
-    {
-        this.NotificationInfo.MainDomain = true;
     }
 }

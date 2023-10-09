@@ -29,7 +29,7 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
                     Result.Failure<CriarPessoaUseCase>(PessoaErros.PessoaNula);
                 }
 
-                var pessoa = Notifiable<Pessoa>().CriarPessoa(
+                var pessoa = new Pessoa().CriarPessoa(
                     primeiroNome: param.PrimeiroNome,
                     sobrenome: param.Sobrenome,
                     email: param.Email,
@@ -37,8 +37,9 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
                     enderecoModel: param.Endereco
                 );
 
-                if (!pessoa.IsValid())
+                if (!pessoa.HasNotifications())
                 {
+                    Result.Failure<Pessoa>(pessoa.GetNotifications());
                     return;
                 }
 

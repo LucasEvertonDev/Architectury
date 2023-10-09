@@ -1,4 +1,4 @@
-﻿namespace Architecture.Application.Domain.Models.Base;
+﻿namespace Architecture.Application.Core.Notifications;
 
 public class Result
 {
@@ -9,13 +9,18 @@ public class Result
 
     private NotificationContext NotificationContext { get; set; }
 
-    public bool IsValid() => !NotificationContext.HasNotifications;
+    public bool HasNotifications() => NotificationContext.HasNotifications;
 
     public IReadOnlyCollection<NotificationModel> GetNotifications => NotificationContext.Notifications;
 
     public void Failure<T>(NotificationModel notification)
     {
         NotificationContext.AddNotification(notification);
+    }
+
+    public void Failure<T>(List<NotificationModel> notifications)
+    {
+        NotificationContext.AddNotifications(notifications);
     }
 
     public dynamic Data { get; set; }
