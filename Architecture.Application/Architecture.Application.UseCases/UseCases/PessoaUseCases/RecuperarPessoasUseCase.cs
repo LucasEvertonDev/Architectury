@@ -1,4 +1,4 @@
-﻿using Architecture.Application.Domain.DbContexts.Domains;
+﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.DbContexts.Repositorys.PessoaRepository;
 using Architecture.Application.UseCases.IUseCases;
 using Architecture.Application.UseCases.UseCases.Base;
@@ -17,9 +17,9 @@ public class RecuperarPessoasUseCase : BaseUseCase, IRecuperarPessoasUseCase
         _searchRepository = searchRepository;
     }
 
-    public override async Task ExecuteAsync()
+    public override async Task<Result> ExecuteAsync()
     {
-        await OnTransactionAsync(async () =>
+        return await OnTransactionAsync(async () =>
         {
             var aux = await _searchRepository.GetPessoasQuery();
 

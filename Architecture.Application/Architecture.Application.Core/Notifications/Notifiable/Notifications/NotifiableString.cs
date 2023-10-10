@@ -2,7 +2,6 @@
 using Architecture.Application.Core.Notifications.Notifiable.Steps.AfterSet;
 using Architecture.Application.Core.Notifications.Notifiable.Steps.AfterValidationWhen;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace Architecture.Application.Core.Notifications.Notifiable.Notifications;
 
@@ -12,6 +11,6 @@ public partial class Notifiable<TEntity> : INotifiableModel
     {
         this.SetValue(memberLamda, value);
 
-        return new AfterSet<AfterValidationWhenString>(NotificationContext, NotificationInfo);
+        return new AfterSet<AfterValidationWhenString>(Result.GetContext(), NotificationInfo);
     }
 }

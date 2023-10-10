@@ -17,7 +17,7 @@ public class AddNotificationService<TOut> where TOut : IAfterValidationWhen
         _value = notificationInfo.Value;
     }
 
-    public TOut AddNotification(NotificationModel notification)
+    public TOut AddFailure(NotificationModel notification)
     {
         if (_includeNotification)
         {

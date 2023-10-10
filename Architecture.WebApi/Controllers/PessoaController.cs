@@ -2,46 +2,45 @@
 using Architecture.Application.UseCases.IUseCases;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Architecture.WebApi.Controllers
+namespace Architecture.WebApi.Controllers;
+
+[Route("api/v1/pessoas")]
+[ApiController]
+public class PessoaController : BaseController
 {
-    [Route("api/v1/pessoas")]
-    [ApiController]
-    public class PessoaController : Controller
+    private readonly ICriarPessoaUseCase _criarPessoaUseCase;
+    private readonly IRecuperarPessoasUseCase _recuperarPessoasUseCase;
+
+    public PessoaController(ICriarPessoaUseCase criarPessoaUseCase,
+        IRecuperarPessoasUseCase recuperarPessoasUseCase)
     {
-        private readonly ICriarPessoaUseCase _criarPessoaUseCase;
-        private readonly IRecuperarPessoasUseCase _recuperarPessoasUseCase;
+        _criarPessoaUseCase = criarPessoaUseCase;
+        _recuperarPessoasUseCase = recuperarPessoasUseCase;
+    }
 
-        public PessoaController(ICriarPessoaUseCase criarPessoaUseCase,
-            IRecuperarPessoasUseCase recuperarPessoasUseCase)
+    [HttpGet]
+    public async Task<ActionResult> Get()
+    {
+        var result = await _recuperarPessoasUseCase.ExecuteAsync();
+
+        if (result.HasFailures())
         {
-            _criarPessoaUseCase = criarPessoaUseCase;
-            _recuperarPessoasUseCase = recuperarPessoasUseCase;
+            return BadRequestFailure(result);
         }
 
-        [HttpGet]
-        public async Task<ActionResult> Get()
+        return Ok(result.Data);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Post([FromBody] CriarPessoaModel criarPessoaModel)
+    {
+        var result = await _criarPessoaUseCase.ExecuteAsync(criarPessoaModel);
+
+        if (result.HasFailures())
         {
-            await _recuperarPessoasUseCase.ExecuteAsync();
-
-            if (_recuperarPessoasUseCase.Result.HasFailures())
-            {
-                BadRequest();
-            }
-
-            return Ok(_recuperarPessoasUseCase.Result.Data);
+            return BadRequestFailure(result);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> Post([FromBody] CriarPessoaModel criarPessoaModel)
-        {
-            await _criarPessoaUseCase.ExecuteAsync(criarPessoaModel);
-
-            if (_recuperarPessoasUseCase.Result.HasFailures())
-            {
-                BadRequest();
-            }
-
-            return Ok(_criarPessoaUseCase.Result.Data);
-        }
+        return Ok(result.Data);
     }
 }

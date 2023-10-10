@@ -17,6 +17,11 @@ public record NotificationModel
         this.notificationType = notificationInfo.NotificationType;
     }
 
+    public void SetMemberNamePrefix(string prefix)
+    {
+        this.member = string.IsNullOrEmpty(prefix) ? this.member : string.Concat(prefix, ".", this.member);
+    }
+
     public string key { get; private set; }
     public string message { get; private set; }
     public string context { get; private set; }

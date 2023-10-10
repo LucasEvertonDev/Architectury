@@ -12,7 +12,6 @@ public partial class Pessoa : BaseEntity<Pessoa>
     public DateTime? DataNascimento { get; private set; }
     public Endereco Endereco { get; private set; }
 
-
     public Pessoa CriarPessoa(string primeiroNome, string sobrenome, string email, DateTime? dataNascimento, EnderecoModel enderecoModel)
     {
         Set(pessoa => pessoa.Nome, new Nome()
@@ -23,7 +22,7 @@ public partial class Pessoa : BaseEntity<Pessoa>
 
         Set(pessoa => pessoa.Email, email)
             .ValidateWhen()
-            .IsNullOrEmpty().AddNotification(PessoaErros.EmailObrigatorio);
+            .IsNullOrEmpty().AddFailure(PessoaErros.EmailObrigatorio);
             //.IsInvalidEmail().AddNotification(PessoaNotifications.EmailInvalido);
 
         Set(pessoa => pessoa.DataNascimento, dataNascimento);

@@ -5,8 +5,6 @@ namespace Architecture.Application.UseCases.IUseCases
 {
     public interface ICriarPessoaUseCase
     {
-        public Result Result { get; }
-
-        Task ExecuteAsync(CriarPessoaModel param);
+        Task<Result> ExecuteAsync(CriarPessoaModel param);
     }
 }

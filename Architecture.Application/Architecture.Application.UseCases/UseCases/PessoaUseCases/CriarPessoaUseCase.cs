@@ -1,4 +1,5 @@
-﻿using Architecture.Application.Domain.Constants;
+﻿using Architecture.Application.Core.Notifications;
+using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.Models.Pessoa;
@@ -18,9 +19,9 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
             _createRepository = createRepository;
         }
 
-        public override async Task ExecuteAsync(CriarPessoaModel param)
+        public override async Task<Result> ExecuteAsync(CriarPessoaModel param)
         {
-            await OnTransactionAsync(async () =>
+            return await OnTransactionAsync(async () =>
             {
                 if (param == null)
                 {

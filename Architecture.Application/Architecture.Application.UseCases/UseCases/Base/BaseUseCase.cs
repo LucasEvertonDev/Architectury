@@ -28,7 +28,7 @@ public abstract class BaseUseCase<TParam> : Notifiable
     /// </summary>
     /// <param name="param"></param>
     /// <returns></returns>
-    public abstract Task ExecuteAsync(TParam param);
+    public abstract Task<Result> ExecuteAsync(TParam param);
 
     /// <summary>
     /// 
@@ -54,7 +54,7 @@ public abstract class BaseUseCase<TParam> : Notifiable
     /// </summary>
     /// <param name="func"></param>
     /// <returns></returns>
-    protected async Task OnTransactionAsync(Func<Task> func)
+    protected async Task<Result> OnTransactionAsync(Func<Task> func)
     {
         try
         {
@@ -69,6 +69,7 @@ public abstract class BaseUseCase<TParam> : Notifiable
         {
             await OnSucess();
         }
+        return Result;
     }
 }
 
@@ -91,7 +92,7 @@ public abstract class BaseUseCase : Notifiable
     /// </summary>
     /// <param name="param"></param>
     /// <returns></returns>
-    public abstract Task ExecuteAsync();
+    public abstract Task<Result> ExecuteAsync();
 
     /// <summary>
     /// 
@@ -117,7 +118,7 @@ public abstract class BaseUseCase : Notifiable
     /// </summary>
     /// <param name="func"></param>
     /// <returns></returns>
-    protected async Task OnTransactionAsync(Func<Task> func)
+    protected async Task<Result> OnTransactionAsync(Func<Task> func)
     {
         try
         {
@@ -132,5 +133,7 @@ public abstract class BaseUseCase : Notifiable
         {
             await OnSucess();
         }
+
+        return Result;
     }
 }

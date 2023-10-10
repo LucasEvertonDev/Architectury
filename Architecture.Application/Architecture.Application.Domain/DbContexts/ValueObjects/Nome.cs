@@ -17,12 +17,12 @@ public class Nome : ValueObject<Nome>
         Set(nome => nome.PrimeiroNome, primeiroNome)
             .ValidateWhen()
             .IsNullOrEmpty()
-            .AddNotification(new NotificationModel("PRIMEIRO_NOME", "Primeiro nome é obrigatório"));
+            .AddFailure(new NotificationModel("PRIMEIRO_NOME", "Primeiro nome é obrigatório"));
 
         Set(nome => nome.Sobrenome, sobrenome)
             .ValidateWhen()
             .IsNullOrEmpty()
-            .AddNotification(new NotificationModel("SOBRENOME", "SobreNome é obrigatório"));
+            .AddFailure(new NotificationModel("SOBRENOME", "SobreNome é obrigatório"));
        
         return this;
     }

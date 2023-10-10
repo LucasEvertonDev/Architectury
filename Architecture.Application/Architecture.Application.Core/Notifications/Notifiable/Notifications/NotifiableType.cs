@@ -12,9 +12,7 @@ public partial class Notifiable<TEntity> : INotifiableModel
 
     public Notifiable()
     {
-        NotificationContext = new NotificationContext();
-
-        Result = new Result(NotificationContext);
+        Result = new Result(new NotificationContext());
 
         NotificationInfo = new NotificationInfo()
         {
@@ -24,18 +22,12 @@ public partial class Notifiable<TEntity> : INotifiableModel
         };
     }
 
-
-    /// <summary>
-    /// Notification Context
-    /// </summary>
-    protected NotificationContext NotificationContext { get; set; }
-
     /// <summary>
     /// 
     /// </summary>
     public List<NotificationModel> GetFailures()
     {
-        return NotificationContext.Notifications.ToList();
+        return Result.GetContext().Notifications.ToList();
     }
 
     /// <summary>
@@ -61,7 +53,7 @@ public partial class Notifiable<TEntity> : INotifiableModel
             if (property != null)
             {
                 property.SetValue(this, value, null);
-                NotificationInfo.MemberName = !NotificationInfo.MainDomain ? string.Concat(NotificationInfo.Name, ".", property.Name) : property.Name;
+                NotificationInfo.MemberName = value is INotifiableModel ? NotificationInfo.Name :  string.Concat(NotificationInfo.Name, ".", property.Name);
             }
         }
         NotificationInfo.Value = value;

@@ -25,5 +25,7 @@ public class Result
         NotificationContext.AddNotifications(notifiableModel.GetFailures());
     }
 
+    public NotificationContext GetContext() => NotificationContext;
+
     public dynamic Data { get; set; }
 }

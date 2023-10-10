@@ -11,41 +11,41 @@ public partial class Notifiable<TEntity> : INotifiableModel
     {
         this.SetValue(memberLamda, value);
 
-        return new AfterSet<AfterValidationWhenObject>(NotificationContext, NotificationInfo);
+        return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), NotificationInfo);
     }
 
     protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, short?>> memberLamda, short? value)
     {
         this.SetValue(memberLamda, value);
 
-        return new AfterSet<AfterValidationWhenObject>(NotificationContext, NotificationInfo);
+        return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), NotificationInfo);
     }
 
     protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, int>> memberLamda, int value)
     {
         this.SetValue(memberLamda, value);
 
-        return new AfterSet<AfterValidationWhenObject>(NotificationContext, NotificationInfo);
+        return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), NotificationInfo);
     }
 
     protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, int?>> memberLamda, int? value)
     {
         this.SetValue(memberLamda, value);
 
-        return new AfterSet<AfterValidationWhenObject>(NotificationContext, NotificationInfo);
+        return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), NotificationInfo);
     }
 
     protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, long>> memberLamda, long value)
     {
         this.SetValue(memberLamda, value);
 
-        return new AfterSet<AfterValidationWhenObject>(NotificationContext, NotificationInfo);
+        return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), NotificationInfo);
     }
 
     protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, long?>> memberLamda, long? value)
     {
         this.SetValue(memberLamda, value);
 
-        return new AfterSet<AfterValidationWhenObject>(NotificationContext, NotificationInfo);
+        return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), NotificationInfo);
     }
 }

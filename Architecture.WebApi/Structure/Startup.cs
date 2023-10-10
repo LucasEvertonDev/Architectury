@@ -23,7 +23,7 @@ public class Startup
         services.AddMvc(options =>
         {
             //options.Filters.Add<ValidationFilter>();
-            options.Filters.Add<NotificationFilter>();
+            // options.Filters.Add<NotificationFilter>();
         });
 
         services.AddControllers();

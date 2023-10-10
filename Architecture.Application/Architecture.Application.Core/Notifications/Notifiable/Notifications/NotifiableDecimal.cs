@@ -11,13 +11,13 @@ public partial class Notifiable<TEntity> : INotifiableModel
     {
         this.SetValue(memberLamda, value);
 
-        return new AfterSet<AfterValidationWhenObject>(NotificationContext, NotificationInfo);
+        return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), NotificationInfo);
     }
 
     protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, Decimal?>> memberLamda, Decimal? value)
     {
         this.SetValue(memberLamda, value);
 
-        return new AfterSet<AfterValidationWhenObject>(NotificationContext, NotificationInfo);
+        return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), NotificationInfo);
     }
 }

@@ -12,8 +12,15 @@ public partial class Notifiable<TEntity> : INotifiableModel
     /// <param name="value"></param>
     protected void Set(Expression<Func<TEntity, INotifiableModel>> memberLamda, INotifiableModel value)
     {
-        this.NotificationContext.AddNotifications(value.GetFailures());
-
         this.SetValue(memberLamda, value);
+
+        for (var i = 0; i < value.GetFailures().Count(); i++)
+        {
+            var failure = value.GetFailures()[i];
+
+            failure.SetMemberNamePrefix(NotificationInfo.MemberName);
+
+            this.Result.GetContext().AddNotification(failure);
+        }
     }
 }
