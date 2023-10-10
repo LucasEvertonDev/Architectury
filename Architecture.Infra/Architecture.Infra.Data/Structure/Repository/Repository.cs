@@ -1,4 +1,5 @@
-﻿using Architecture.Application.Core.Structure;
+﻿using Architecture.Application.Core.Notifications.Context;
+using Architecture.Application.Core.Structure;
 using Architecture.Application.Core.Structure.Attributes;
 using Architecture.Application.Core.Structure.Models;
 using Architecture.Application.Domain.DbContexts.Domains;
@@ -20,16 +21,23 @@ public class Repository<TContext, TEntity> : ICreateRepository<TEntity>, IDelete
     protected TContext _applicationDbContext;
     private readonly IMemoryCache _memoryCache;
     private readonly AppSettings _appSettings;
+    private readonly NotificationContext _noticationContext;
 
     public Repository(IServiceProvider serviceProvider)
     {
         _applicationDbContext = serviceProvider.GetService<TContext>();
         _memoryCache = serviceProvider.GetService<IMemoryCache>();
         _appSettings = serviceProvider.GetService<AppSettings>();
+        _noticationContext = serviceProvider.GetService<NotificationContext>();
     }
 
     public virtual Task<TEntity> CreateAsync(TEntity domain)
     {
+        if (_noticationContext.HasNotifications)
+        {
+            throw new Exception("Por favor verifique suas notificações");
+        }
+
         //_applicationDbContext.Entry(domain).State = EntityState.Added;
 
         _applicationDbContext.AddAsync(domain);
@@ -39,6 +47,11 @@ public class Repository<TContext, TEntity> : ICreateRepository<TEntity>, IDelete
 
     public virtual Task<TEntity> UpdateAsync(TEntity domain)
     {
+        if (_noticationContext.HasNotifications)
+        {
+            throw new Exception("Por favor verifique suas notificações");
+        }
+
         //_applicationDbContext.Entry(domain).State = EntityState.Modified;
 
         _applicationDbContext.Update(domain);
