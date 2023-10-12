@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Architecture.Application.Core.Structure;
 using Microsoft.OpenApi.Models;
-using Architecture.WebApi.Structure.Filters;
 using Architecture.Infra.IoC;
+using Architecture.WebApi.Structure.Extensions;
+using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Architecture.WebApi.Structure;
 
@@ -31,10 +36,31 @@ public class Startup
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
 
+
         // Binding model 
         services.Configure<ApiBehaviorOptions>(options => options.SuppressInferBindingSourcesForParameters = true);
 
         Configuration.Bind(appSettings);
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+          .AddJwtBearer(options =>
+          {
+              options.RequireHttpsMetadata = false;
+              options.SaveToken = true;
+              options.TokenValidationParameters = new TokenValidationParameters
+              {
+                  ValidateIssuer = false,
+                  ValidateAudience = false,
+                  ValidateLifetime = true,
+                  ValidateIssuerSigningKey = true,
+                  IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(appSettings.Jwt.Key)),
+                  ClockSkew = TimeSpan.Zero,
+              };
+          });
 
         /// Learn more about configuring  https://stackoverflow.com/questions/59774566/what-do-the-size-settings-for-memorycache-mean
         services.AddMemoryCache((options) => 
@@ -46,8 +72,15 @@ public class Startup
 
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Architeture.WebAPI", Version = "v1" });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Architecture.WebAPI", Version = "v1" });
+
+           c.RegisterSwaggerDefaultConfig(true, appSettings.Swagger.FlowLogin);
+
+            //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename), includeControllerXmlComments: false);
         });
+
+        services.AddSwaggerExamples();
 
         services.AddInfraStructure(appSettings);
     }

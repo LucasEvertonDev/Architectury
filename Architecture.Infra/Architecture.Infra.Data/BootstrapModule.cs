@@ -3,6 +3,7 @@ using Architecture.Application.Core.Structure.UnitOfWork;
 using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Domains.Base;
 using Architecture.Application.Domain.DbContexts.Repositorys.Base;
+using Architecture.Application.Domain.DbContexts.Repositorys.MapUserGroupRolesRepository;
 using Architecture.Application.Domain.DbContexts.Repositorys.PessoaRepository;
 using Architecture.Infra.Data.Context;
 using Architecture.Infra.Data.Context.Repositories;
@@ -25,7 +26,20 @@ public static class BootstrapModule
         services.AddScoped<IUnitOfWork, UnitOfWork<ArchitectureDbContext>>();
 
         services.AddRepository<Pessoa>();
+
+        services.AddRepository<Usuario>();
+
+        services.AddRepository<CredenciaisCliente>();
+
+        services.AddRepository<MapPermissoesPorGrupoUsuario>();
+
+        services.AddRepository<Permissao>();
+
+        services.AddRepository<GrupoUsuario>();
+
         services.AddScoped<ISearchPessoaRepository, PessoaRepository>();
+
+        services.AddScoped<ISearchMapPermissoesPorGrupoUsuarioRepository, MapPermissoesPorGrupoUsuarioRepository>();
 
         services.AddRepository<Endereco>();
     }

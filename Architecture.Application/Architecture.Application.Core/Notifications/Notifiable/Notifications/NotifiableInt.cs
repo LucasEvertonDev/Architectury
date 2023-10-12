@@ -48,4 +48,5 @@ public partial class Notifiable<TEntity> : INotifiableModel
 
         return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), NotificationInfo);
     }
+
 }

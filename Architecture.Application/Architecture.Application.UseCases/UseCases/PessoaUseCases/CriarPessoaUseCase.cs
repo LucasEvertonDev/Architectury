@@ -1,6 +1,5 @@
 ﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Constants;
-using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.Models.Pessoa;
 using Architecture.Application.UseCases.IUseCases;
@@ -10,10 +9,10 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
 {
     public class CriarPessoaUseCase : BaseUseCase<CriarPessoaModel>, ICriarPessoaUseCase
     {
-        private readonly ICreateRepository<Pessoa> _createRepository;
+        private readonly ICreateRepository<Domain.DbContexts.Domains.Pessoa> _createRepository;
 
         public CriarPessoaUseCase(IServiceProvider serviceProvider,
-            ICreateRepository<Pessoa> createRepository)
+            ICreateRepository<Domain.DbContexts.Domains.Pessoa> createRepository)
             : base(serviceProvider)
         {
             _createRepository = createRepository;
@@ -25,10 +24,10 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
             {
                 if (param == null)
                 {
-                    Result.Failure<CriarPessoaUseCase>(PessoaErros.PessoaNula);
+                    Result.Failure<CriarPessoaUseCase>(Erros.Pessoa.PessoaNula);
                 }
 
-                var pessoa = new Pessoa().CriarPessoa(
+                var pessoa = new Domain.DbContexts.Domains.Pessoa().CriarPessoa(
                     primeiroNome: param.PrimeiroNome,
                     sobrenome: param.Sobrenome,
                     email: param.Email,

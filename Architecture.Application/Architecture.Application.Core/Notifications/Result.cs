@@ -15,14 +15,16 @@ public class Result
 
     public IReadOnlyCollection<NotificationModel> GetFailures => NotificationContext.Notifications;
 
-    public void Failure<T>(NotificationModel notification)
+    public Result Failure<T>(NotificationModel notification)
     {
         NotificationContext.AddNotification(notification);
+        return this;
     }
 
-    public void Failure<T>(INotifiableModel notifiableModel)
+    public Result Failure<T>(INotifiableModel notifiableModel)
     {
         NotificationContext.AddNotifications(notifiableModel.GetFailures());
+        return this;
     }
 
     public NotificationContext GetContext() => NotificationContext;

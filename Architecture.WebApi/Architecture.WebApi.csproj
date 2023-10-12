@@ -9,24 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Structure\Extensions\SwaggerExtensions.cs" />
+    <Compile Remove="Controllers\AuthController.cs" />
     <Compile Remove="Structure\Filters\ExceptionFilter.cs" />
-    <Compile Remove="Structure\Filters\SwaggerDefaultValues.cs" />
-    <Compile Remove="Structure\Middlewares\AuthUnauthorizedMiddleware.cs" />
-    <Compile Remove="Structure\Middlewares\RequestResponseLoggingMiddleware.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.4" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Architecture.Infra\Architeture.Infra.IoC\Architecture.Infra.IoC.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Structure\Middlewares\" />
   </ItemGroup>
 </Project>

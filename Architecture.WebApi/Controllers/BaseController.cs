@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Architecture.WebApi.Controllers;
 
-public class BaseController : Controller
+public class BaseController : ControllerBase
 {
 
     [ApiExplorerSettings(IgnoreApi = true)]

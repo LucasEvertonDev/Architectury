@@ -16,8 +16,8 @@ public class AfterValidationWhenObject : AfterValidationWhen, IAfterValidationWh
         return new AddNotificationService<AfterValidationWhenObject>(_notificationContext, ruleFor, _notificationInfo);
     }
 
-    public AddNotificationService<AfterValidationWhenObject> IsNull(bool ruleFor)
+    public AddNotificationService<AfterValidationWhenObject> IsNull()
     {
-        return new AddNotificationService<AfterValidationWhenObject>(_notificationContext, ruleFor, _notificationInfo);
+        return new AddNotificationService<AfterValidationWhenObject>(_notificationContext, _notificationInfo.Value == null, _notificationInfo);
     }
 }

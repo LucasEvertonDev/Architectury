@@ -26,6 +26,12 @@ public record NotificationModel
     public string message { get; private set; }
     public string context { get; private set; }
     public string member { get; private set; }
+
+    public void SetMember(string member)
+    {
+        this.member = member;
+    }
+
     public NotificationType notificationType { get; private set; } = NotificationType.BusinessNotification; 
 } 
 

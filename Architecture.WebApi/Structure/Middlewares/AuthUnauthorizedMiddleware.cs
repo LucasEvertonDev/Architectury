@@ -1,6 +1,5 @@
-﻿using PLaboratory.Core.Domain.Infra.AppSettings;
-using PLaboratory.Core.Domain.Models.Dto;
-using PLaboratory.Core.Domain.Models.Error;
+﻿using Architecture.Application.Core.Structure;
+using Architecture.Application.Domain.Models.Base;
 using System.Text.Json;
 
 namespace Architecture.WebApi.Structure.Middlewares;
@@ -43,7 +42,7 @@ public class AuthUnauthorizedMiddleware
                     {
                         new ErrorModel
                         {
-                            Message = _appSettings.Messages.Unauthorized,
+                            Message = "Acesso negado. Você não tem permissões suficientes para acessar esta API",
                             Context = "Authorization"
                         }
                     }
@@ -57,7 +56,7 @@ public class AuthUnauthorizedMiddleware
                     {
                         new ErrorModel
                         {
-                            Message = _appSettings.Messages.Forbidden,
+                            Message = "Não autorizado. Credenciais fornecidas ausentes, inválidas ou expiradas",
                             Context = "Authorization"
                         }
                     }

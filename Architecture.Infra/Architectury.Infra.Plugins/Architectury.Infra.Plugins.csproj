@@ -3,17 +3,23 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
 
   <ItemGroup>
     <PackageReference PrivateAssets="none" Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference PrivateAssets="none" Include="FluentValidation" Version="11.7.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.11" />
+    <PackageReference PrivateAssets="none" Include="Serilog.AspNetCore" Version="7.0.0" />
+    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.3.0" />
   </ItemGroup>
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.Core\Architecture.Application.Core.csproj" />
     <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.Domain\Architecture.Application.Domain.csproj" />
   </ItemGroup>
 </Project>

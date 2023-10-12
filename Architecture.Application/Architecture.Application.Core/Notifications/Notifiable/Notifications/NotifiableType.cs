@@ -53,7 +53,11 @@ public partial class Notifiable<TEntity> : INotifiableModel
             if (property != null)
             {
                 property.SetValue(this, value, null);
-                NotificationInfo.MemberName = value is INotifiableModel ? NotificationInfo.Name :  string.Concat(NotificationInfo.Name, ".", property.Name);
+                NotificationInfo.MemberName = value is INotifiableModel ? NotificationInfo.Name : string.Concat(NotificationInfo.Name, ".", property.Name);
+            }
+            else
+            {
+                throw new Exception("É preciso adicionar {get; set;} a syua prop");
             }
         }
         NotificationInfo.Value = value;

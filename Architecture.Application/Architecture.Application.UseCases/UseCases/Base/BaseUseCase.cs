@@ -54,6 +54,24 @@ public abstract class BaseUseCase<TParam> : Notifiable
     /// </summary>
     /// <param name="func"></param>
     /// <returns></returns>
+    protected async Task<Result> OnTransactionAsync(Func<Task<Result>> func)
+    {
+        try
+        {
+            await _unitOfWork.OpenConnectionAsync(func);
+        }
+        catch (Exception exception)
+        {
+            await OnError(exception);
+            throw;
+        }
+        finally
+        {
+            await OnSucess();
+        }
+        return Result;
+    }
+
     protected async Task<Result> OnTransactionAsync(Func<Task> func)
     {
         try
@@ -111,6 +129,30 @@ public abstract class BaseUseCase : Notifiable
     protected virtual Task OnError(Exception exception)
     {
         return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="func"></param>
+    /// <returns></returns>
+    protected async Task<Result> OnTransactionAsync(Func<Task<Result>> func)
+    {
+        try
+        {
+            await _unitOfWork.OpenConnectionAsync(func);
+        }
+        catch (Exception exception)
+        {
+            await OnError(exception);
+            throw;
+        }
+        finally
+        {
+            await OnSucess();
+        }
+
+        return Result;
     }
 
     /// <summary>

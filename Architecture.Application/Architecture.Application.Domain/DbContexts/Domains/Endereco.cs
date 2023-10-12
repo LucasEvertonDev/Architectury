@@ -13,6 +13,8 @@ public class Endereco : BaseEntity<Endereco>
 
     public Pessoa Pessoa { get; private set; } 
 
+    public Logradouro Logradouro { get; private set; }  
+
     public Endereco CriarEndereco(string cep, string estado, string cidade)
     {
         Set(endereco => endereco.Cep, cep)
@@ -29,6 +31,8 @@ public class Endereco : BaseEntity<Endereco>
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(new NotificationModel("endereco", "Cidade é obrigatório"));
+
+        Set(endereco => endereco.Logradouro, new Logradouro().CriarLogradouro(""));
 
         return this;
     }
