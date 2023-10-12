@@ -25,19 +25,20 @@ public partial class Pessoa : BaseEntity<Pessoa>
 
         Set(pessoa => pessoa.Email, email)
             .ValidateWhen()
-            .IsNullOrEmpty().AddFailure(Erros.Pessoa.EmailObrigatorio);
-            //.IsInvalidEmail().AddNotification(PessoaNotifications.EmailInvalido);
+            .IsNullOrEmpty().AddFailure(Erros.Pessoa.EmailObrigatorio)
+            .IsInvalidEmail().AddFailure(Erros.Pessoa.EmailInvalido);
 
         Set(pessoa => pessoa.DataNascimento, dataNascimento);
 
         if(enderecoModel != null)
         {
-            //Set(pessoa => pessoa.Endereco, new Endereco()
-            //     .CriarEndereco(
-            //         cep: enderecoModel?.Cep,
-            //         estado: enderecoModel?.Estado,
-            //         cidade: enderecoModel?.Cidade
-            //     ));
+            Set(pessoa => pessoa.Endereco, new Endereco()
+                 .CriarEndereco(
+                     cep: enderecoModel?.Cep,
+                     estado: enderecoModel?.Estado,
+                     cidade: enderecoModel?.Cidade
+                 ));
+
             var endereco = new Endereco().CriarEndereco("", "", "");
 
             var endereco2 = new Endereco().CriarEndereco("", "", "");
@@ -46,8 +47,6 @@ public partial class Pessoa : BaseEntity<Pessoa>
 
             Set<Endereco>(pessoa => pessoa.Enderecos, list);
         }
-
-
 
         return this;
     }
