@@ -45,7 +45,7 @@ public class UsuarioController : BaseController
 
         return Ok(new ResponseDto<PagedResult<UsuariosRecuperadosModel>>()
         {
-            Content = result.Data
+            Content = result.GetValue<PagedResult<UsuariosRecuperadosModel>>()
         });
     }
 
@@ -62,7 +62,7 @@ public class UsuarioController : BaseController
 
         return Ok(new ResponseDto<UsuarioCriadoModel>()
         {
-            Content = result.Data
+            Content = result.GetValue<UsuarioCriadoModel>()
         });
     }
 
@@ -79,7 +79,7 @@ public class UsuarioController : BaseController
 
         return Ok(new ResponseDto<AtualizarUsuarioModel>()
         {
-            Content = result.Data
+            Content = result.GetValue<AtualizarUsuarioModel>()
         });
     }
 

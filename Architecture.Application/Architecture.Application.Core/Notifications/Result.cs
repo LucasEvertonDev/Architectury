@@ -50,6 +50,9 @@ public class Result
         this.Data = value;
         return this;
     }
-
-    public dynamic Data { get; private set; }
+    public T GetValue<T>()
+    {
+        return (T)this.Data;
+    }
+    private dynamic Data { get; set; }
 }

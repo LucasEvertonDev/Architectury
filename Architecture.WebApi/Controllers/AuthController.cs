@@ -36,7 +36,7 @@ public class AuthController : BaseController
 
         return Ok(new ResponseDto<TokenModel>()
         {
-            Content = result.Data
+            Content = result.GetValue<TokenModel>()
         });
     }
 
@@ -53,7 +53,7 @@ public class AuthController : BaseController
 
         return Ok(new ResponseDto<TokenModel>()
         {
-            Content = result.Data
+            Content = result.GetValue<TokenModel>()
         });
     }
 
@@ -81,7 +81,7 @@ public class AuthController : BaseController
         return Ok(new
         {
             token_type = "bearer",
-            access_token = result.Data.TokenJWT
+            access_token = result.GetValue<TokenModel>().TokenJWT
         });
     }
 }

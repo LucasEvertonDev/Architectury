@@ -14,7 +14,7 @@ public class AtualizarSenhaUsuarioValidator : AbstractValidator<AtualizarSenhaUs
 
         When(c => !string.IsNullOrWhiteSpace(c.Body.Password), () =>
         {
-            RuleFor(c => c.Body.Password.Length).GreaterThanOrEqualTo(6).WithError(Erros.Usuario.SenhaMaximoLenght);
+            RuleFor(c => c.Body.Password.Length).GreaterThanOrEqualTo(6).WithError(Erros.Usuario.PasswordLenght);
         });
     }
 }

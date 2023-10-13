@@ -1,6 +1,7 @@
 ﻿using Architecture.Application.Domain.Models.Pessoa;
 using Architecture.Application.UseCases.UseCases.PessoaUseCases.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using static Architecture.Application.Domain.Constants.Erros;
 
 namespace Architecture.WebApi.Controllers;
 
@@ -28,7 +29,7 @@ public class PessoaController : BaseController
             return BadRequestFailure(result);
         }
 
-        return Ok(result.Data);
+        return Ok(result.GetValue<IEnumerable<Pessoa>>());
     }
 
     [HttpPost]
@@ -41,6 +42,6 @@ public class PessoaController : BaseController
             return BadRequestFailure(result);
         }
 
-        return Ok(result.Data);
+        return Ok(result.GetValue<PessoaCriadaModel>());
     }
 }
