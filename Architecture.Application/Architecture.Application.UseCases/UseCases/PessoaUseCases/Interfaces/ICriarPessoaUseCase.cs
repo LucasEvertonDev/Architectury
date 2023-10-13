@@ -1,7 +1,7 @@
 ﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Models.Pessoa;
 
-namespace Architecture.Application.UseCases.IUseCases
+namespace Architecture.Application.UseCases.UseCases.PessoaUseCases.Interfaces
 {
     public interface ICriarPessoaUseCase
     {

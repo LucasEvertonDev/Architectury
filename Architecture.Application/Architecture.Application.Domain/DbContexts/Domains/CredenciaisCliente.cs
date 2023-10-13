@@ -2,6 +2,7 @@
 using Architecture.Application.Core.Structure.Attributes;
 using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.DbContexts.Domains.Base;
+using Architecture.Application.Domain.Enuns;
 
 namespace Architecture.Application.Domain.DbContexts.Domains;
 
@@ -31,6 +32,16 @@ public class CredenciaisCliente : BaseEntityWithDates<CredenciaisCliente>
            .IsNullOrEmpty()
            .AddFailure(Erros.CredenciaisCliente.ChaveObrigatoria);
 
+        Set(cliente => cliente.Situacao, (int)ESituacao.Ativo);
+
+        Set(cliente => cliente.CreateDate, DateTime.Now);
+
+
         return this;
+    }
+
+    public void SetId(Guid id)
+    {
+        this.Id = id;
     }
 }

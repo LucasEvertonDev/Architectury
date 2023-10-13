@@ -27,23 +27,14 @@ public class MapPermissoesPorGrupoUsuarioConfiguration : BaseEntityConfiguration
 
     public void DefaultData(EntityTypeBuilder<MapPermissoesPorGrupoUsuario> builder)
     {
-        //var grupoUsuarioAdmin = new GrupoUsuario()
-        //    .CriarGrupoUsuario(
-        //        nome: "Admin",
-        //        descricao: "Administrador do sistema"
-        //    );
+        var mapPermissoesGrupo = new MapPermissoesPorGrupoUsuario()
+            .CriarMapeamentoParaCarga(
+                grupoUsuario: new Guid("F97E565D-08AF-4281-BC11-C0206EAE06FA"),
+                permissao: new Guid("bbdbc055-b8b9-42af-b667-9a18c854ee8e")
+            );
 
-        //var permissao = new Permissao()
-        //    .CriarPermissao(
-        //        nome: "CHANGE_STUDENTS"
-        //    );
+        mapPermissoesGrupo.SetId(new Guid("b94afe49-6630-4bf8-a19d-923af259f475"));
 
-        //var mapPermissoesGrupo = new MapPermissoesPorGrupoUsuario()
-        //    .CriarMapeamentoPermissaoPorGrupoUsuario(
-        //        grupoUsuario: grupoUsuarioAdmin,
-        //        permissao: permissao
-        //    );
-
-        //builder.HasData(mapPermissoesGrupo);
+        builder.HasData(mapPermissoesGrupo);
     }
 }

@@ -2,7 +2,6 @@
 using Architecture.Application.Domain.DbContexts.Domains.Base;
 using Architecture.Application.Domain.DbContexts.ValueObjects;
 using Architecture.Application.Domain.Models.Endereco;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Architecture.Application.Domain.DbContexts.Domains;
 

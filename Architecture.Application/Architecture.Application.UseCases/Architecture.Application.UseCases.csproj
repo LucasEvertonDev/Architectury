@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="UseCases\UsuarioUseCases\DeleteUserService.cs" />
     <Compile Remove="UseCases\UsuarioUseCases\SearchUserService.cs" />
     <Compile Remove="UseCases\UsuarioUseCases\UpdatePasswordService.cs" />
     <Compile Remove="UseCases\UsuarioUseCases\UpdateUserService.cs" />

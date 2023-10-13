@@ -59,12 +59,34 @@ public class Repository<TContext, TEntity> : ICreateRepository<TEntity>, IDelete
         return Task.FromResult(domain);
     }
 
+    public virtual Task DeleteAsync(params TEntity[] entidadesParaExcluir)
+    {
+        if(_noticationContext.HasNotifications)
+        {
+            throw new Exception("Por favor verifique suas notificações");
+        }
+
+        if (entidadesParaExcluir != null)
+        {
+            for (var index = 0; index < entidadesParaExcluir.Count(); index++)
+            {
+                entidadesParaExcluir[index].Delete();
+
+                _applicationDbContext.Remove(entidadesParaExcluir[index]);
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+
     public virtual async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate)
     {
         var remove = await AsQueriable().Where(predicate).ToListAsync();
 
         _applicationDbContext.Remove(remove);
     }
+
 
     public virtual async Task DeleteLogicAsync(Expression<Func<TEntity, bool>> predicate)
     {
@@ -77,6 +99,19 @@ public class Repository<TContext, TEntity> : ICreateRepository<TEntity>, IDelete
                 remove[index].Delete();
 
                 await UpdateAsync(remove[index]);
+            }
+        }
+    }
+
+    public virtual async Task DeleteLogicAsync(params TEntity[] entidadesParaExcluir)
+    {
+        if (entidadesParaExcluir != null)
+        {
+            for (var index = 0; index < entidadesParaExcluir.Count(); index++)
+            {
+                entidadesParaExcluir[index].Delete();
+
+                await UpdateAsync(entidadesParaExcluir[index]);
             }
         }
     }

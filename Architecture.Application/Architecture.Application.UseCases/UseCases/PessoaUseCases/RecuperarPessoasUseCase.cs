@@ -1,7 +1,7 @@
 ﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.DbContexts.Repositorys.PessoaRepository;
-using Architecture.Application.UseCases.IUseCases;
 using Architecture.Application.UseCases.UseCases.Base;
+using Architecture.Application.UseCases.UseCases.PessoaUseCases.Interfaces;
 
 namespace Architecture.Application.UseCases.UseCases.PessoaUseCases;
 

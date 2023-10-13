@@ -1,5 +1,6 @@
 ﻿using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.DbContexts.Domains.Base;
+using Architecture.Application.Domain.Enuns;
 
 namespace Architecture.Application.Domain.DbContexts.Domains;
 
@@ -32,7 +33,14 @@ public class GrupoUsuario : BaseEntity<GrupoUsuario>
            .IsNullOrEmpty()
            .AddFailure(Erros.GrupoUsuario.DescricaoObrigatoria);
 
+        Set(grupo => grupo.Situacao, (int)ESituacao.Ativo);
+
         return this;
+    }
+
+    public void SetId(Guid id)
+    {
+        this.Id = id;
     }
 
     public void VinculaUsuarioAoGrupoUsuario(Usuario usuario)

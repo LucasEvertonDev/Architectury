@@ -1,6 +1,6 @@
 ﻿using Architecture.Application.Core.Notifications;
 
-namespace Architecture.Application.UseCases.IUseCases;
+namespace Architecture.Application.UseCases.UseCases.PessoaUseCases.Interfaces;
 
 public interface IRecuperarPessoasUseCase
 {

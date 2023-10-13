@@ -5,16 +5,16 @@ using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.Models.Usuarios;
 using Architecture.Application.Domain.Plugins.Cryptography;
 using Architecture.Application.UseCases.UseCases.Base;
+using Architecture.Application.UseCases.UseCases.UsuarioUseCases.UseCases;
 
-namespace PLaboratory.Core.Application.Services.UserServices;
+namespace Architecture.Application.UseCases.UseCases.UsuarioUseCases;
 
-public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>
+public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuarioUseCase
 {
     private readonly ISearchRepository<Usuario> _searchRepository;
     private readonly IPasswordHash _passwordHash;
     private readonly ISearchRepository<GrupoUsuario> _searchGrupoUsuario;
     private readonly ICreateRepository<Usuario> _createRepository;
-
 
     public CriarUsuarioUseCase(IServiceProvider serviceProvider,
         ISearchRepository<Usuario> searchRepository,
@@ -62,7 +62,7 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>
             }
 
             user = await _createRepository.CreateAsync(user);
-             
+
             return Result.Data = user;
         });
     }
@@ -74,7 +74,7 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>
     /// <returns></returns>
     private async Task<bool> EmailCadastrado(string email)
     {
-        return (await _searchRepository.FirstOrDefaultAsync(usuario => usuario.Email == email)) != null;
+        return await _searchRepository.FirstOrDefaultAsync(usuario => usuario.Email == email) != null;
     }
 
     /// <summary>
@@ -83,6 +83,6 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>
     /// <returns></returns>
     private async Task<bool> UsernameCadastrado(string userName)
     {
-        return (await _searchRepository.FirstOrDefaultAsync(usuario => usuario.Username == userName)) != null;
+        return await _searchRepository.FirstOrDefaultAsync(usuario => usuario.Username == userName) != null;
     }
 }

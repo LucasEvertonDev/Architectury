@@ -74,5 +74,7 @@ public static class Erros
 
         public static NotificationModel EmailExistente = new NotificationModel("EmailExistente", "Já existe um usuário cadastrado para o email informado.");
 
+        public static NotificationModel UsuarioInexistente = new NotificationModel("UsuarioInexistente", "Não foi possível encontrar o usuário para os parâmetros informados ");
+
     }
 }

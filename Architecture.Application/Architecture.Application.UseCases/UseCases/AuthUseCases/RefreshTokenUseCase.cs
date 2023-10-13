@@ -6,19 +6,18 @@ using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.DbContexts.Repositorys.MapUserGroupRolesRepository;
 using Architecture.Application.Domain.Models.Auth;
 using Architecture.Application.Domain.Plugins.JWT;
+using Architecture.Application.UseCases.UseCases.AuthUseCases.Interfaces;
 using Architecture.Application.UseCases.UseCases.Base;
 
 namespace Architecture.Application.UseCases.UseCases.AuthUseCases;
 
-public class RefreshTokenUseCase : BaseUseCase<RefreshTokenDto>
+public class RefreshTokenUseCase : BaseUseCase<RefreshTokenDto>, IRefreshTokenUseCase
 {
     private readonly ISearchRepository<Usuario> _searchUserRepository;
     private readonly ISearchMapPermissoesPorGrupoUsuarioRepository _mapGrupoUsuarioSearchRepository;
     private readonly ITokenService _tokenService;
     private readonly IUpdateRepository<Usuario> _updateUserRepository;
     private readonly ISearchRepository<CredenciaisCliente> _searchClientCredentials;
-
-    public TokenModel TokenRetorno { get; private set; }
 
     public RefreshTokenUseCase(IServiceProvider serviceProvider,
         ISearchRepository<Usuario> searchUserRepository,

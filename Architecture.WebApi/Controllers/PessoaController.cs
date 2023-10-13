@@ -1,5 +1,5 @@
 ﻿using Architecture.Application.Domain.Models.Pessoa;
-using Architecture.Application.UseCases.IUseCases;
+using Architecture.Application.UseCases.UseCases.PessoaUseCases.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Architecture.WebApi.Controllers;

@@ -2,8 +2,8 @@
 using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.Models.Pessoa;
-using Architecture.Application.UseCases.IUseCases;
 using Architecture.Application.UseCases.UseCases.Base;
+using Architecture.Application.UseCases.UseCases.PessoaUseCases.Interfaces;
 
 namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
 {
@@ -37,13 +37,12 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
 
                 if (pessoa.HasFailure())
                 {
-                    Result.Failure<CriarPessoaUseCase>(pessoa);
-                    return;
+                    return Result.Failure<CriarPessoaUseCase>(pessoa);
                 }
 
                 var pessoaCriada = await _createRepository.CreateAsync(pessoa);
 
-                Result.Data = new PessoaCriadaModel()
+                return Result.Data = new PessoaCriadaModel()
                 {
                     Message = "Filé demais"
                 };

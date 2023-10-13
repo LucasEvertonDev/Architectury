@@ -52,6 +52,46 @@ public class Usuario : BaseEntity<Usuario>
         return this;
     }
 
+    public Usuario AtualizaUsuario(string username, string email, string nome, GrupoUsuario grupoUsuario)
+    {
+        Set(usuario => usuario.Username, username)
+            .ValidateWhen()
+            .IsNullOrEmpty()
+            .AddFailure(Erros.Usuario.UsernameObrigatorio);
+
+        Set(usuario => usuario.GrupoUsuario, grupoUsuario)
+            .ValidateWhen()
+            .IsNull()
+            .AddFailure(Erros.Usuario.GrupoUsuarioInvalido);
+
+        Set(usuario => usuario.Nome, nome)
+            .ValidateWhen()
+            .IsNullOrEmpty()
+            .AddFailure(Erros.Usuario.NomeObrigatorio);
+
+        Set(usuario => usuario.Email, email)
+            .ValidateWhen()
+            .IsNullOrEmpty()
+            .AddFailure(Erros.Usuario.EmailObrigatorio);
+
+        return this;
+    }
+
+    public Usuario AtualizaSenhaUsuario(string password, string passwordHash)
+    {
+        Set(usuario => usuario.Password, password)
+          .ValidateWhen()
+          .IsNullOrEmpty()
+          .AddFailure(Erros.Usuario.PasswordObrigatorio);
+
+        Set(usuario => usuario.PasswordHash, passwordHash)
+            .ValidateWhen()
+            .IsNullOrEmpty()
+            .AddFailure(Erros.Usuario.PasswordHashObrigatorio);
+
+        return this;
+    }
+
     public void RegistraUltimoAcesso()
     {
         this.UltimoAcesso = DateTime.Now;

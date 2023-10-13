@@ -6,7 +6,7 @@ using Architecture.Application.Domain.DbContexts.Repositorys.MapUserGroupRolesRe
 using Architecture.Application.Domain.Models.Auth;
 using Architecture.Application.Domain.Plugins.Cryptography;
 using Architecture.Application.Domain.Plugins.JWT;
-using Architecture.Application.UseCases.IUseCases;
+using Architecture.Application.UseCases.UseCases.AuthUseCases.Interfaces;
 using Architecture.Application.UseCases.UseCases.Base;
 
 namespace Architecture.Application.UseCases.UseCases.AuthUseCases;

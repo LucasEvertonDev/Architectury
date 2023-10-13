@@ -1,4 +1,5 @@
 ﻿using Architecture.Application.Core.Notifications.Notifiable.Notifications.Base;
+using System.Reflection;
 
 namespace Architecture.Application.Core.Notifications;
 
@@ -15,8 +16,23 @@ public class Result
 
     public IReadOnlyCollection<NotificationModel> GetFailures => NotificationContext.Notifications;
 
-    public Result Failure<T>(NotificationModel notification)
+    public Result Failure<T>(NotificationModel notification) where T : class
     {
+        var notificationType = Enum.NotificationType.BusinessNotification;
+        if (typeof(T).GetInterfaces().ToList().Exists(x => x.Name == nameof(INotifiableModel)))
+        {
+            notificationType = Enum.NotificationType.DomainNotification;
+        }
+
+        var notificationInfo = new NotificationInfo()
+        {
+            NotificationType = notificationType,
+            Name = typeof(T).Name,
+            Namespace = typeof(T).Namespace
+        };
+
+        notification.SetNotificationInfo(notificationInfo);
+
         NotificationContext.AddNotification(notification);
         return this;
     }

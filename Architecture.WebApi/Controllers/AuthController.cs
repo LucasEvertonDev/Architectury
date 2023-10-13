@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Architecture.Application.Domain.Models.Base;
-using Architecture.Application.UseCases.IUseCases;
+using Architecture.Application.UseCases.UseCases.AuthUseCases.Interfaces;
+using Architecture.Application.UseCases.UseCases.UsuarioUseCases.UseCases;
+using Architecture.Application.Domain.Models.Auth;
 
 namespace Architecture.WebApi.Controllers;
 
@@ -9,12 +11,12 @@ namespace Architecture.WebApi.Controllers;
 public class AuthController : BaseController
 {
     private readonly ILoginUseCase _loginUseCase;
-    private readonly ICreateUserService _createUserService;
-    private readonly IRefreshTokenService _refreshTokenService;
+    private readonly ICriarUsuarioUseCase _createUserService;
+    private readonly IRefreshTokenUseCase _refreshTokenService;
 
-    public AuthController(ICreateUserService createUserService,
-         ILoginService loginservice,
-         IRefreshTokenService refreshTokenService)
+    public AuthController(ICriarUsuarioUseCase createUserService,
+         ILoginUseCase loginservice,
+         IRefreshTokenUseCase refreshTokenService)
     {
         _loginUseCase = loginservice;
         _createUserService = createUserService;
@@ -25,11 +27,16 @@ public class AuthController : BaseController
     [ProducesResponseType(typeof(ResponseDto<TokenModel>), StatusCodes.Status200OK)]
     public async Task<ActionResult> Login(LoginDto loginModel)
     {
-        await _loginUseCase.ExecuteAsync(loginModel);
+        var result = await _loginUseCase.ExecuteAsync(loginModel);
+
+        if (result.HasFailures())
+        {
+            return BadRequestFailure(result);
+        }
 
         return Ok(new ResponseDto<TokenModel>()
         {
-            Content = _loginUseCase.TokenRetorno
+            Content = result.Data
         });
     }
 
@@ -37,11 +44,16 @@ public class AuthController : BaseController
     [ProducesResponseType(typeof(ResponseDto<TokenModel>), StatusCodes.Status200OK)]
     public async Task<ActionResult> RefreshToken(RefreshTokenDto refreshTokenDto)
     {
-        await _refreshTokenService.ExecuteAsync(refreshTokenDto);
+        var result = await _refreshTokenService.ExecuteAsync(refreshTokenDto);
+
+        if (result.HasFailures())
+        {
+            return BadRequestFailure(result);
+        }
 
         return Ok(new ResponseDto<TokenModel>()
         {
-            Content = _refreshTokenService.TokenRetorno
+            Content = result.Data
         });
     }
 
@@ -50,7 +62,7 @@ public class AuthController : BaseController
     public async Task<ActionResult> FlowLogin(LoginInfo loginInfo)
     {
         var authorization = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(loginInfo.Authorization.Split("Basic ")[1].ToString())).Split(":");
-        await _loginUseCase.ExecuteAsync(new LoginDto
+        var result =  await _loginUseCase.ExecuteAsync(new LoginDto
         {
             Body = new LoginModel
             {
@@ -61,10 +73,15 @@ public class AuthController : BaseController
             ClientSecret = authorization[1]
         });
 
+        if (result.HasFailures())
+        {
+            return BadRequestFailure(result);
+        }
+
         return Ok(new
         {
             token_type = "bearer",
-            access_token = _loginUseCase.TokenRetorno.TokenJWT
+            access_token = result.Data.TokenJWT
         });
     }
 }

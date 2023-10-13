@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\AuthController.cs" />
     <Compile Remove="Structure\Filters\ExceptionFilter.cs" />
   </ItemGroup>
 
