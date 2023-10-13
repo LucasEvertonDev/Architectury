@@ -60,6 +60,8 @@ public static class Erros
         public static NotificationModel DataUltimoAcessoInvalida = new NotificationModel("DataUltimoAcessoInvalida", "Data de último acesso inválida");
 
         public static NotificationModel GrupoUsuarioInvalido = new NotificationModel("GrupoUsuarioInvalido", "Grupo de usuário inválido");
+
+        public static NotificationModel PasswordLenght = new NotificationModel("PasswordLenght", "Senha deve ter no máximo seis caracteres");
     }
 
     public class Business
@@ -75,6 +77,5 @@ public static class Erros
         public static NotificationModel EmailExistente = new NotificationModel("EmailExistente", "Já existe um usuário cadastrado para o email informado.");
 
         public static NotificationModel UsuarioInexistente = new NotificationModel("UsuarioInexistente", "Não foi possível encontrar o usuário para os parâmetros informados ");
-
     }
 }
