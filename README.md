@@ -12,7 +12,7 @@ Foi usada um lib que ainda estou implementando. O objetivo dela é aplicar as va
 A lib tem como objetivo ajudar a aplicar as regras de negócio buscando manter o modelo no sempre válido. Garantindo uma melhor qualidade de software e fácil vislumbramento de boa parte das regras sobre o dominio.
 
 # Repositorios
-Nessa versão está sendo usada uma classe unica para o contexto de repository da entidade. Foi Adotado o modelo de unit of work que tem como vantagens deixar os use cases mais limpos.
+Nessa versão está sendo usada uma classe unica para o contexto de repository da entidade. Foi Adotado o modelo de unit of work que tem como vantagens deixar os use cases mais limpos. Porém existe a quebra do principio da responsabilidade única.
 
 # Notification Pattern 
 Devido melhora na performance, foi escolhido o modelo de notification. Tem como objetivo reservar as exceptions apenas para casos inesperados. Resultando em um aumento de performance.
