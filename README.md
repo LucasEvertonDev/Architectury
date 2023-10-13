@@ -12,8 +12,7 @@ Foi usada um lib que ainda estou implementando. O objetivo dela é aplicar as va
 A lib tem como objetivo ajudar a aplicar as regras de negócio buscando manter o modelo no sempre válido. Garantindo uma melhor qualidade de software e fácil vislumbramento de boa parte das regras sobre o dominio.
 
 # Repositorios
-Nesse modelo foi usado um repositorio único que possui abstrações segmentadas de acordo com ações(Insert, delete, update, Search). Por mais que apresenta um boa prática é mesmo é bastante trabalhosa. A qual degve ser análisada se realmente é valida para o cenário.
-Como tivemos essa abstração por cenários a unidade de trabalho segue sendo mais um manipulador de contexto. Pelo contrário de muitos exemplos na internet onde é um aglomerados de repositorys. Essa decisão veio pelo motivo de que uma vez englobe todos os repositorios o conceito de principio unico já estaria rompido perdendo todo o sentido de criar Nº abstrações para um único repositorio.
+Nessa versão está sendo usada uma classe unica para o contexto de repository da entidade. Foi Adotado o modelo de unit of work que tem como vantagens deixar os use cases mais limpos.
 
 # Notification Pattern 
 Devido melhora na performance, foi escolhido o modelo de notification. Tem como objetivo reservar as exceptions apenas para casos inesperados. Resultando em um aumento de performance.
