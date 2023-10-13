@@ -13,6 +13,7 @@ A lib tem como objetivo ajudar a aplicar as regras de negócio buscando manter o
 
 # Repositorios
 Nesse modelo foi usado um repositorio único que possui abstrações segmentadas de acordo com ações(Insert, delete, update, Search). Por mais que apresenta um boa prática é mesmo é bastante trabalhosa. A qual degve ser análisada se realmente é valida para o cenário.
+Como tivemos essa abstração por cenários a unidade de trabalho segue sendo mais um manipulador de contexto. Pelo contrário de muitos exemplos na internet onde é um aglomerados de repositorys. Essa decisão veio pelo motivo de que uma vez englobe todos os repositorios o conceito de principio unico já estaria rompido perdendo todo o sentido de criar Nº abstrações para um único repositorio.
 
 # Notification Pattern 
 Devido melhora na performance, foi escolhido o modelo de notification. Tem como objetivo reservar as exceptions apenas para casos inesperados. Resultando em um aumento de performance.
