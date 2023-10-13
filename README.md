@@ -9,6 +9,7 @@ Foi usado o conceito de casos de uso onde cada ação contemsua própria classe.
 
 # Camada Domain
 Foi usada um lib que ainda estou implementando. O objetivo dela é aplicar as validações de forma simples e prática. Sendo que a mesma alimenta o padrão notification pattern.
+A lib tem como objetivo ajudar a aplicar as regras de negócio buscando manter o modelo no sempre válido. Garantindo uma melhor qualidade de software e fácil vislumbramento de boa parte das regras sobre o dominio.
 
 # Repositorios
 Nesse modelo foi usado um repositorio único que possui abstrações segmentadas de acordo com ações(Insert, delete, update, Search). Por mais que apresenta um boa prática é mesmo é bastante trabalhosa. A qual degve ser análisada se realmente é valida para o cenário.
