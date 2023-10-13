@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Architecture.Application.Core.Structure.Models;
+using Architecture.Application.Domain.DbContexts.Domains;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 
 namespace Architecture.Application.Domain.Models.Usuarios;
@@ -33,4 +35,23 @@ public class UsuariosRecuperadosModel
     public string Nome { get; set; }
     [DefaultValue("lcseverton@gmail.com")]
     public string Email { get; set; }
+
+    public PagedResult<UsuariosRecuperadosModel> FromEntity(PagedResult<Usuario> paged)
+    {
+        var usuarios = new List<UsuariosRecuperadosModel>();
+
+        foreach(var usuario in paged.Items)
+        {
+            usuarios.Add(new UsuariosRecuperadosModel()
+            {
+                Email = usuario.Email,
+                GrupoUsuarioId = usuario.GrupoUsuarioId.ToString(),
+                Nome = usuario.Nome,
+                Username = usuario.Username,
+                Id = usuario.Id.ToString()
+            });
+        }
+
+        return new PagedResult<UsuariosRecuperadosModel>(usuarios, pageNumber: paged.PageNumber, pageSize: paged.PageSize, totalElements: paged.TotalElements);
+    }
 }

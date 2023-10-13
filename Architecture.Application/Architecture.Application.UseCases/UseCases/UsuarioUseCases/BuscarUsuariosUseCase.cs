@@ -1,4 +1,5 @@
 ﻿using Architecture.Application.Core.Notifications;
+using Architecture.Application.Core.Structure.Models;
 using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.Models.Usuarios;
@@ -26,7 +27,7 @@ public class BuscarUsuariosUseCase : BaseUseCase<RecuperarUsuariosDto>, IBuscarU
                 predicate: u => string.IsNullOrEmpty(param.Nome) || u.Nome.Contains(param.Nome)
             );
 
-            return Result.IncludeResult(pagedResult);
+            return Result.IncludeResult(new UsuariosRecuperadosModel().FromEntity(pagedResult));
         });
     }
 }

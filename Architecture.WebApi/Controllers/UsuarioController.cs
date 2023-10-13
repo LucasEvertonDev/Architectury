@@ -33,7 +33,7 @@ public class UsuarioController : BaseController
     }
 
     [HttpGetParams<RecuperarUsuariosDto>, Authorize]
-    [ProducesResponseType(typeof(ResponseDto<PagedResult<RecuperarUsuariosDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<PagedResult<UsuariosRecuperadosModel>>), StatusCodes.Status200OK)]
     public async Task<ActionResult> Get(RecuperarUsuariosDto seacrhUserDto)
     {
         var result = await _searchServices.ExecuteAsync(seacrhUserDto);
@@ -43,7 +43,7 @@ public class UsuarioController : BaseController
             return BadRequestFailure(result);
         }
 
-        return Ok(new ResponseDto<PagedResult<RecuperarUsuariosDto>>()
+        return Ok(new ResponseDto<PagedResult<UsuariosRecuperadosModel>>()
         {
             Content = result.Data
         });

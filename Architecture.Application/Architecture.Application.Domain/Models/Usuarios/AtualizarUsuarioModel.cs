@@ -42,13 +42,13 @@ public class UsuarioAtualizadoModel
     [DefaultValue("lcseverton@gmail.com")]
     public string Email { get; set; }
 
-    public UsuarioCriadoModel FromEntity(Usuario usuario)
+    public UsuarioAtualizadoModel FromEntity(Usuario usuario)
     {
-        return new UsuarioCriadoModel()
+        return new UsuarioAtualizadoModel()
         {
             Email = usuario.Email,
-            GrupoUsuarioId = usuario.GrupoUsuarioId.ToString(),
-            Name = usuario.Nome,
+            GrupoUsuarioId = usuario.GrupoUsuarioId,
+            Nome = usuario.Nome,
             Username = usuario.Username,
             Id = usuario.Id.ToString()
         };
