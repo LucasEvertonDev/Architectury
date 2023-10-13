@@ -1,10 +1,10 @@
 ﻿using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.Models.Usuarios;
 using Architecture.Application.UseCases.UseCases.UsuarioUseCases.UseCases;
+using Architecture.Tests.Structure;
 using Architecture.Tests.Structure.Attribute;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using PLaboratory.Test.Infrastructure;
 
 namespace Architecture.Tests.UseCases.Usuario;
 

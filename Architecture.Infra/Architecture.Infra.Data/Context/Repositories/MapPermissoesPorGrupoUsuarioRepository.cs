@@ -6,7 +6,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Architecture.Infra.Data.Context.Repositories;
 
-public class MapPermissoesPorGrupoUsuarioRepository : Repository<MapPermissoesPorGrupoUsuario>, ISearchMapPermissoesPorGrupoUsuarioRepository
+public class MapPermissoesPorGrupoUsuarioRepository : Repository<MapPermissoesPorGrupoUsuario>, IMapPermissoesPorGrupoUsuarioRepository
 {
     private readonly IMemoryCache _memoryCache;
 
@@ -18,7 +18,7 @@ public class MapPermissoesPorGrupoUsuarioRepository : Repository<MapPermissoesPo
 
     public async Task<List<Permissao>> GetRolesByGrupoUsuario(string GrupoUsuarioId)
     {
-        return await this.AsQueriable()
+        return await AsQueriable()
             .Include(c => c.Permissao)
             .Include(c => c.GrupoUsuario)
             .Where(p => p.GrupoUsuarioId.ToString() == GrupoUsuarioId)

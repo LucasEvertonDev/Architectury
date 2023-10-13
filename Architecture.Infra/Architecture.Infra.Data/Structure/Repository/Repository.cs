@@ -15,8 +15,7 @@ using System.Reflection;
 
 namespace Architecture.Infra.Data.Structure.Repository;
 
-public class Repository<TContext, TEntity> : ICreateRepository<TEntity>, IDeleteRepository<TEntity>,
-    IUpdateRepository<TEntity>, ISearchRepository<TEntity> where TEntity : BaseEntity<TEntity> where TContext : DbContext
+public class Repository<TContext, TEntity> : IRepository<TEntity> where TEntity : BaseEntity<TEntity> where TContext : DbContext
 {
     protected TContext _applicationDbContext;
     private readonly IMemoryCache _memoryCache;

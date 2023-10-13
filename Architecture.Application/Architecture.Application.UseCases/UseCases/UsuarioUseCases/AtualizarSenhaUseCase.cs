@@ -1,7 +1,5 @@
 ﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Constants;
-using Architecture.Application.Domain.DbContexts.Domains;
-using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.Models.Usuarios;
 using Architecture.Application.Domain.Plugins.Cryptography;
 using Architecture.Application.UseCases.UseCases.Base;
@@ -11,26 +9,18 @@ namespace Architecture.Application.UseCases.UseCases.UsuarioUseCases;
 
 public class AtualizarSenhaUseCase : BaseUseCase<AtualizarSenhaUsuarioDto>, IAtualizarSenhaUseCase
 {
-    private readonly ISearchRepository<Usuario> _searchUserRepository;
     private readonly IPasswordHash _passwordHash;
-    private readonly IUpdateRepository<Usuario> _updateUserRepository;
 
-    public AtualizarSenhaUseCase(IServiceProvider serviceProvider,
-        ISearchRepository<Usuario> searchUserRepository,
-        IPasswordHash passwordHash,
-        IUpdateRepository<Usuario> updateUserRepository
-    ) : base(serviceProvider)
+    public AtualizarSenhaUseCase(IServiceProvider serviceProvider, IPasswordHash passwordHash) : base(serviceProvider)
     {
-        _searchUserRepository = searchUserRepository;
         _passwordHash = passwordHash;
-        _updateUserRepository = updateUserRepository;
     }
 
     public override async Task<Result> ExecuteAsync(AtualizarSenhaUsuarioDto param)
     {
         return await OnTransactionAsync(async () =>
         {
-            var usuario = await _searchUserRepository.FirstOrDefaultAsync(u => u.Id.ToString() == param.Id);
+            var usuario = await _unitOfWorkTransaction.UsuarioRepository.FirstOrDefaultAsync(u => u.Id.ToString() == param.Id);
 
             if (usuario == null)
             {
@@ -45,7 +35,7 @@ public class AtualizarSenhaUseCase : BaseUseCase<AtualizarSenhaUsuarioDto>, IAtu
                 );
 
             return Result.IncludeResult(
-                new UsuarioAtualizadoModel().FromEntity(await _updateUserRepository.UpdateAsync(usuario)));
+                new UsuarioAtualizadoModel().FromEntity(await _unitOfWorkTransaction.UsuarioRepository.UpdateAsync(usuario)));
         });
     }
 }

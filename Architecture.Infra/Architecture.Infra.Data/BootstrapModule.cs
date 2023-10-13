@@ -1,10 +1,10 @@
 ﻿using Architecture.Application.Core.Structure;
-using Architecture.Application.Core.Structure.UnitOfWork;
 using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Domains.Base;
 using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.DbContexts.Repositorys.MapUserGroupRolesRepository;
 using Architecture.Application.Domain.DbContexts.Repositorys.PessoaRepository;
+using Architecture.Application.Domain.DbContexts.UnitOfWork;
 using Architecture.Infra.Data.Context;
 using Architecture.Infra.Data.Context.Repositories;
 using Architecture.Infra.Data.Context.Repositories.Base;
@@ -22,8 +22,7 @@ public static class BootstrapModule
            options.UseSqlServer(configuration.ConnectionStrings.SqlConnection,
            b => b.MigrationsAssembly(typeof(ArchitectureDbContext).Assembly.FullName)));
 
-
-        services.AddScoped<IUnitOfWork, UnitOfWork<ArchitectureDbContext>>();
+        services.AddScoped<IUnitWorkTransaction, UnitOfWork<ArchitectureDbContext>>();
 
         services.AddRepository<Pessoa>();
 
@@ -37,18 +36,16 @@ public static class BootstrapModule
 
         services.AddRepository<GrupoUsuario>();
 
-        services.AddScoped<ISearchPessoaRepository, PessoaRepository>();
-
-        services.AddScoped<ISearchMapPermissoesPorGrupoUsuarioRepository, MapPermissoesPorGrupoUsuarioRepository>();
-
         services.AddRepository<Endereco>();
+
+        services.AddScoped<IPessoaRepository, PessoaRepository>();
+
+        services.AddScoped<IMapPermissoesPorGrupoUsuarioRepository, MapPermissoesPorGrupoUsuarioRepository>();
+
     }
 
     public static void AddRepository<TEntity>(this IServiceCollection services) where TEntity : BaseEntity<TEntity>
     {
-        services.AddScoped<ICreateRepository<TEntity>, Repository<TEntity>>();
-        services.AddScoped<ISearchRepository<TEntity>, Repository<TEntity>>();
-        services.AddScoped<IDeleteRepository<TEntity>, Repository<TEntity>>();
-        services.AddScoped<IUpdateRepository<TEntity>, Repository<TEntity>>();
+        services.AddScoped<IRepository<TEntity>, Repository<TEntity>>();
     }
 }

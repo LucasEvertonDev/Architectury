@@ -5,32 +5,32 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Architecture.Infra.Data.Context.Repositories;
 
-public class PessoaRepository : Repository<Pessoa>, ISearchPessoaRepository
-{ 
+public class PessoaRepository : Repository<Pessoa>, IPessoaRepository
+{
     public PessoaRepository(IServiceProvider serviceProvider) : base(serviceProvider)
     {
     }
 
     public async Task<dynamic> GetPessoasQuery()
     {
-        var pessoaList = (
+        var pessoaList =
             from pessoas in _applicationDbContext.Pessoas
             join endereco in _applicationDbContext.Enderecos on pessoas.Id equals endereco.PessoaId
             select new
             {
                 Data = pessoas.DataNascimento,
-                Id = pessoas.Id,
-                Email = pessoas.Email,
-                PrimeiroNome = pessoas.Nome.PrimeiroNome,
-                Sobrenome = pessoas.Nome.Sobrenome,
+                pessoas.Id,
+                pessoas.Email,
+                pessoas.Nome.PrimeiroNome,
+                pessoas.Nome.Sobrenome,
                 Endereco = new
                 {
-                    Cep = endereco.Cep,
-                    Estado = endereco.Estado,
-                    Cidade = endereco.Cidade
+                    endereco.Cep,
+                    endereco.Estado,
+                    endereco.Cidade
                 }
             }
-        );
+        ;
 
         return await pessoaList.ToListAsync();
     }

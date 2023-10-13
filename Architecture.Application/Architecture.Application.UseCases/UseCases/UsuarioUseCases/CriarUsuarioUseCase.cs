@@ -11,21 +11,15 @@ namespace Architecture.Application.UseCases.UseCases.UsuarioUseCases;
 
 public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuarioUseCase
 {
-    private readonly ISearchRepository<Usuario> _searchRepository;
     private readonly IPasswordHash _passwordHash;
-    private readonly ISearchRepository<GrupoUsuario> _searchGrupoUsuario;
-    private readonly ICreateRepository<Usuario> _createRepository;
+    private readonly IRepository<Usuario> _createRepository;
 
     public CriarUsuarioUseCase(IServiceProvider serviceProvider,
-        ISearchRepository<Usuario> searchRepository,
-        ISearchRepository<GrupoUsuario> searchGrupoUsuario,
         IPasswordHash passwordHash,
-        ICreateRepository<Usuario> createRepository) : base(serviceProvider)
+        IRepository<Usuario> createRepository) : base(serviceProvider)
     {
         _createRepository = createRepository;
-        _searchRepository = searchRepository;
         _passwordHash = passwordHash;
-        _searchGrupoUsuario = searchGrupoUsuario;
     }
 
     public override async Task<Result> ExecuteAsync(CriarUsuarioModel param)
@@ -34,7 +28,7 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
         {
             var passwordHash = _passwordHash.GeneratePasswordHash();
 
-            var grupoUsuario = await _searchGrupoUsuario.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.GrupoUsuarioId));
+            var grupoUsuario = await _unitOfWorkTransaction.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.GrupoUsuarioId));
 
             var user = new Usuario()
                 .CriarUsuario(
@@ -75,7 +69,7 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
     /// <returns></returns>
     private async Task<bool> EmailCadastrado(string email)
     {
-        return await _searchRepository.FirstOrDefaultAsync(usuario => usuario.Email == email) != null;
+        return await _unitOfWorkTransaction.UsuarioRepository.FirstOrDefaultAsync(usuario => usuario.Email == email) != null;
     }
 
     /// <summary>
@@ -84,6 +78,6 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
     /// <returns></returns>
     private async Task<bool> UsernameCadastrado(string userName)
     {
-        return await _searchRepository.FirstOrDefaultAsync(usuario => usuario.Username == userName) != null;
+        return await _unitOfWorkTransaction.UsuarioRepository.FirstOrDefaultAsync(usuario => usuario.Username == userName) != null;
     }
 }

@@ -1,7 +1,5 @@
 ﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Constants;
-using Architecture.Application.Domain.DbContexts.Domains;
-using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.Models.Usuarios;
 using Architecture.Application.UseCases.UseCases.Base;
 using Architecture.Application.UseCases.UseCases.UsuarioUseCases.UseCases;
@@ -10,33 +8,23 @@ namespace Architecture.Application.UseCases.UseCases.UsuarioUseCases;
 
 public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtualizarUsuarioUseCase
 {
-    private readonly IUpdateRepository<Usuario> _updateUserRepository;
-    private readonly ISearchRepository<Usuario> _searchUserRepository;
-    private readonly ISearchRepository<GrupoUsuario> _searchUserGroupRepository;
 
-    public AtualizarUsuarioUseCase(IServiceProvider serviceProvider,
-        IUpdateRepository<Usuario> updateUserRepository,
-        ISearchRepository<Usuario> searchUserRepository,
-        ISearchRepository<GrupoUsuario> searchUserGroupRepository
-    ) : base(serviceProvider)
+    public AtualizarUsuarioUseCase(IServiceProvider serviceProvider) : base(serviceProvider)
     {
-        _updateUserRepository = updateUserRepository;
-        _searchUserRepository = searchUserRepository;
-        _searchUserGroupRepository = searchUserGroupRepository;
     }
 
     public override async Task<Result> ExecuteAsync(AtualizarUsuarioDto param)
     {
         return await OnTransactionAsync(async () =>
         {
-            var usuario = await _searchUserRepository.FirstOrDefaultTrackingAsync(u => u.Id.ToString() == param.Id);
+            var usuario = await _unitOfWorkTransaction.UsuarioRepository.FirstOrDefaultTrackingAsync(u => u.Id.ToString() == param.Id);
 
             if (usuario == null)
             {
                 return Result.Failure<AtualizarUsuarioUseCase>(Erros.Business.UsuarioInexistente);
             }
 
-            var grupoUsuario = await _searchUserGroupRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.Body.GrupoUsuarioId));
+            var grupoUsuario = await _unitOfWorkTransaction.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.Body.GrupoUsuarioId));
 
             usuario.AtualizaUsuario(
                     username: param.Body.Username,
@@ -55,7 +43,7 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
                 Result.Failure<AtualizarUsuarioUseCase>(Erros.Business.EmailExistente);
             }
 
-            return Result.IncludeResult(await _updateUserRepository.UpdateAsync(usuario));
+            return Result.IncludeResult(await _unitOfWorkTransaction.UsuarioRepository.UpdateAsync(usuario));
         });
     }
 
@@ -66,7 +54,7 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
     /// <returns></returns>
     private async Task<bool> EmailCadastrado(string email)
     {
-        return await _searchUserRepository.FirstOrDefaultAsync(usuario => usuario.Email == email) != null;
+        return await _unitOfWorkTransaction.UsuarioRepository.FirstOrDefaultAsync(usuario => usuario.Email == email) != null;
     }
 
     /// <summary>
@@ -75,6 +63,6 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
     /// <returns></returns>
     private async Task<bool> UsernameCadastrado(string userName)
     {
-        return await _searchUserRepository.FirstOrDefaultAsync(usuario => usuario.Username == userName) != null;
+        return await _unitOfWorkTransaction.UsuarioRepository.FirstOrDefaultAsync(usuario => usuario.Username == userName) != null;
     }
 }

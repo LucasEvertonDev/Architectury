@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Architecture.WebApi.Structure.Middlewares;
+using Architecture.WebApi.Structure.Filters;
 
 namespace Architecture.WebApi.Structure;
 
@@ -28,7 +29,7 @@ public class Startup
     {
         services.AddMvc(options =>
         {
-            //options.Filters.Add<ValidationFilter>();
+            options.Filters.Add<ValidationFilter>();
             // options.Filters.Add<NotificationFilter>();
         });
 

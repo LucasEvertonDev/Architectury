@@ -1,16 +1,51 @@
-﻿using Architecture.Application.Core.Structure.UnitOfWork;
+﻿using Architecture.Application.Domain.DbContexts.Domains;
+using Architecture.Application.Domain.DbContexts.Repositorys.Base;
+using Architecture.Application.Domain.DbContexts.Repositorys.MapUserGroupRolesRepository;
+using Architecture.Application.Domain.DbContexts.Repositorys.PessoaRepository;
+using Architecture.Application.Domain.DbContexts.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace Architecture.Infra.Data.Context.UnitOfWork;
 
-public class UnitOfWork<TDbContext> : IUnitOfWork where TDbContext : DbContext
+public class UnitOfWork<TDbContext> : IUnitWorkTransaction where TDbContext : DbContext
 {
     public readonly TDbContext _context;
+    private readonly IRepository<Usuario> _usuarioRepository;
+    private readonly IRepository<Permissao> _permissaoRepository;
+    private readonly IPessoaRepository _pessoaRepository;
+    private readonly IRepository<CredenciaisCliente> _credenciaisClienteRepository;
+    private readonly IMapPermissoesPorGrupoUsuarioRepository _mapPermissoesPorGrupoUsuarioRepository;
+    private readonly IRepository<GrupoUsuario> _grupoUsuarioRepository;
 
-    public UnitOfWork(TDbContext applicationDbContext)
+    public UnitOfWork(TDbContext applicationDbContext,
+            IRepository<Usuario> usuarioRepository,
+            IRepository<Permissao> permissaoRepository,
+            IPessoaRepository pessoaRepository,
+            IRepository<CredenciaisCliente> credenciaisClienteRepository,
+            IMapPermissoesPorGrupoUsuarioRepository mapPermissoesPorGrupoUsuarioRepository,
+            IRepository<GrupoUsuario> grupoUsuarioRepository
+        )
     {
         _context = applicationDbContext;
+        _usuarioRepository = usuarioRepository;
+        _permissaoRepository = permissaoRepository;
+        _pessoaRepository = pessoaRepository;
+        _credenciaisClienteRepository = credenciaisClienteRepository;
+        _mapPermissoesPorGrupoUsuarioRepository = mapPermissoesPorGrupoUsuarioRepository;
+        _grupoUsuarioRepository = grupoUsuarioRepository;
     }
+
+    public IRepository<Usuario> UsuarioRepository => _usuarioRepository;
+
+    public IRepository<Permissao> PermissaoRepository => _permissaoRepository;
+
+    public IPessoaRepository PessoasRepository => _pessoaRepository;
+
+    public IRepository<CredenciaisCliente> CredenciaisClientesRepository => _credenciaisClienteRepository;
+
+    public IMapPermissoesPorGrupoUsuarioRepository MapPermissoesPorGrupoUsuarioRepository => _mapPermissoesPorGrupoUsuarioRepository;
+
+    public IRepository<GrupoUsuario> GrupoUsuarioRepository => _grupoUsuarioRepository;
 
     public async Task OpenConnectionAsync(Func<Task> func)
     {
@@ -48,13 +83,8 @@ public class UnitOfWork<TDbContext> : IUnitOfWork where TDbContext : DbContext
         }
     }
 
-    public async Task CommitAsync()
+    public async Task SaveChangesAsync()
     {
         await _context.SaveChangesAsync();
-    }
-
-    public async Task RollbackAsync()
-    {
-        await _context.DisposeAsync();
     }
 }

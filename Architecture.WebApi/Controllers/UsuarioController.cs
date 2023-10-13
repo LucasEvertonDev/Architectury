@@ -3,12 +3,11 @@ using Architecture.Application.Core.Structure.Models;
 using Architecture.Application.Domain.Models.Base;
 using Architecture.Application.Domain.Models.Usuarios;
 using Architecture.Application.UseCases.UseCases.UsuarioUseCases.UseCases;
-using Architecture.WebApi.Controllers;
 using Architecture.WebApi.Structure.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace PLaboratory.WebAPI.Controllers;
+namespace Architecture.WebApi.Controllers;
 
 [Route("api/v1/usuarios")]
 public class UsuarioController : BaseController
@@ -70,7 +69,7 @@ public class UsuarioController : BaseController
     [ProducesResponseType(typeof(ResponseDto<AtualizarUsuarioDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult> Put(AtualizarUsuarioDto updateUserModel)
     {
-        var result =await _updateUserService.ExecuteAsync(updateUserModel);
+        var result = await _updateUserService.ExecuteAsync(updateUserModel);
 
         if (result.HasFailures())
         {

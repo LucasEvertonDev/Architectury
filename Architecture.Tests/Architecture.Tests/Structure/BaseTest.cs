@@ -2,7 +2,7 @@
 using Architecture.Infra.IoC;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace PLaboratory.Test.Infrastructure;
+namespace Architecture.Tests.Structure;
 
 public class BaseTest
 {

@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DbContexts\Repositorys\Base\IDeleteRepository.cs" />
+    <Compile Remove="DbContexts\Repositorys\Base\ISearchRepository.cs" />
+    <Compile Remove="DbContexts\Repositorys\Base\IUpdateRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
 

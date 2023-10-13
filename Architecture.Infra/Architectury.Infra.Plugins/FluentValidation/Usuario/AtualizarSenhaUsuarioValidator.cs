@@ -4,7 +4,7 @@ using Architectury.Infra.Plugins.FluentValidation.Extensions;
 using FluentValidation;
 using static Architecture.Application.Domain.Constants.Erros;
 
-namespace PLaboratory.Plugins.FluentValidation.User;
+namespace Architectury.Infra.Plugins.FluentValidation.Usuario;
 
 public class AtualizarSenhaUsuarioValidator : AbstractValidator<AtualizarSenhaUsuarioDto>
 {

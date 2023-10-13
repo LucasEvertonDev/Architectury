@@ -3,7 +3,7 @@ using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 
 namespace Architecture.Application.Domain.DbContexts.Repositorys.PessoaRepository;
 
-public interface ISearchPessoaRepository : ISearchRepository<Pessoa>
+public interface IPessoaRepository : IRepository<Pessoa>
 {
     Task<dynamic> GetPessoasQuery();
 }
