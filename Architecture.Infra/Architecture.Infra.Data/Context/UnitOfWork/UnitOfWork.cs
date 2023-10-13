@@ -3,6 +3,8 @@ using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.DbContexts.Repositorys.MapUserGroupRolesRepository;
 using Architecture.Application.Domain.DbContexts.Repositorys.PessoaRepository;
 using Architecture.Application.Domain.DbContexts.UnitOfWork;
+using Architecture.Infra.Data.Context.Repositories;
+using Architecture.Infra.Data.Context.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace Architecture.Infra.Data.Context.UnitOfWork;
@@ -10,42 +12,94 @@ namespace Architecture.Infra.Data.Context.UnitOfWork;
 public class UnitOfWork<TDbContext> : IUnitWorkTransaction where TDbContext : DbContext
 {
     public readonly TDbContext _context;
-    private readonly IRepository<Usuario> _usuarioRepository;
-    private readonly IRepository<Permissao> _permissaoRepository;
-    private readonly IPessoaRepository _pessoaRepository;
-    private readonly IRepository<CredenciaisCliente> _credenciaisClienteRepository;
-    private readonly IMapPermissoesPorGrupoUsuarioRepository _mapPermissoesPorGrupoUsuarioRepository;
-    private readonly IRepository<GrupoUsuario> _grupoUsuarioRepository;
+    private readonly IServiceProvider _serviceProvider;
+    private IRepository<Usuario> _usuarioRepository;
+    private IRepository<Permissao> _permissaoRepository;
+    private IPessoaRepository _pessoaRepository;
+    private IRepository<CredenciaisCliente> _credenciaisClienteRepository;
+    private IMapPermissoesPorGrupoUsuarioRepository _mapPermissoesPorGrupoUsuarioRepository;
+    private IRepository<GrupoUsuario> _grupoUsuarioRepository;
 
     public UnitOfWork(TDbContext applicationDbContext,
-            IRepository<Usuario> usuarioRepository,
-            IRepository<Permissao> permissaoRepository,
-            IPessoaRepository pessoaRepository,
-            IRepository<CredenciaisCliente> credenciaisClienteRepository,
-            IMapPermissoesPorGrupoUsuarioRepository mapPermissoesPorGrupoUsuarioRepository,
-            IRepository<GrupoUsuario> grupoUsuarioRepository
+            IServiceProvider serviceProvider
         )
     {
         _context = applicationDbContext;
-        _usuarioRepository = usuarioRepository;
-        _permissaoRepository = permissaoRepository;
-        _pessoaRepository = pessoaRepository;
-        _credenciaisClienteRepository = credenciaisClienteRepository;
-        _mapPermissoesPorGrupoUsuarioRepository = mapPermissoesPorGrupoUsuarioRepository;
-        _grupoUsuarioRepository = grupoUsuarioRepository;
+        _serviceProvider = serviceProvider;
     }
 
-    public IRepository<Usuario> UsuarioRepository => _usuarioRepository;
 
-    public IRepository<Permissao> PermissaoRepository => _permissaoRepository;
+    public IRepository<Usuario> UsuarioRepository
+    { 
+        get
+        {
+            if (_usuarioRepository == null)
+            {
+                _usuarioRepository = new Repository<Usuario>(_serviceProvider);
+            }
+            return _usuarioRepository;
+        } 
+    }
 
-    public IPessoaRepository PessoasRepository => _pessoaRepository;
+    public IRepository<Permissao> PermissaoRepository
+    {
+        get
+        {
+            if (_permissaoRepository == null)
+            {
+                _permissaoRepository = new Repository<Permissao>(_serviceProvider);
+            }
+            return _permissaoRepository;
+        }
+    }
 
-    public IRepository<CredenciaisCliente> CredenciaisClientesRepository => _credenciaisClienteRepository;
+    public IPessoaRepository PessoasRepository
+    {
+        get
+        {
+            if (_pessoaRepository == null)
+            {
+                _pessoaRepository = new PessoaRepository(_serviceProvider);
+            }
+            return _pessoaRepository;
+        }
+    }
 
-    public IMapPermissoesPorGrupoUsuarioRepository MapPermissoesPorGrupoUsuarioRepository => _mapPermissoesPorGrupoUsuarioRepository;
+    public IRepository<CredenciaisCliente> CredenciaisClientesRepository
+    {
+        get
+        {
+            if (_credenciaisClienteRepository == null)
+            {
+                _credenciaisClienteRepository = new Repository<CredenciaisCliente>(_serviceProvider);
+            }
+            return _credenciaisClienteRepository;
+        }
+    }
 
-    public IRepository<GrupoUsuario> GrupoUsuarioRepository => _grupoUsuarioRepository;
+    public IMapPermissoesPorGrupoUsuarioRepository MapPermissoesPorGrupoUsuarioRepository
+    {
+        get
+        {
+            if (_mapPermissoesPorGrupoUsuarioRepository == null)
+            {
+                _mapPermissoesPorGrupoUsuarioRepository = new MapPermissoesPorGrupoUsuarioRepository(_serviceProvider);
+            }
+            return _mapPermissoesPorGrupoUsuarioRepository;
+        }
+    }
+
+    public IRepository<GrupoUsuario> GrupoUsuarioRepository
+    {
+        get
+        {
+            if (_grupoUsuarioRepository == null)
+            {
+                _grupoUsuarioRepository = new Repository<GrupoUsuario>(_serviceProvider);
+            }
+            return _grupoUsuarioRepository;
+        }
+    }
 
     public async Task OpenConnectionAsync(Func<Task> func)
     {

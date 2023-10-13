@@ -35,7 +35,7 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
                     return Result.Failure<CriarPessoaUseCase>(pessoa);
                 }
 
-                var pessoaCriada = await _unitOfWorkTransaction.PessoasRepository.CreateAsync(pessoa);
+                var pessoaCriada = await _unitOfWork.PessoasRepository.CreateAsync(pessoa);
 
                 return Result.IncludeResult(new PessoaCriadaModel()
                 {

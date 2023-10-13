@@ -17,14 +17,14 @@ public class ExcluirUsuarioUseCase : BaseUseCase<ExcluirUsuarioDto>, IExcluirUsu
     {
         return await OnTransactionAsync(async () =>
         {
-            var usuario = await _unitOfWorkTransaction.UsuarioRepository.FirstOrDefaultAsync(u => u.Id.ToString() == param.Id);
+            var usuario = await _unitOfWork.UsuarioRepository.FirstOrDefaultAsync(u => u.Id.ToString() == param.Id);
 
             if (usuario == null)
             {
                 return Result.Failure<ExcluirUsuarioUseCase>(Erros.Business.UsuarioInexistente);
             }
 
-            await _unitOfWorkTransaction.UsuarioRepository.DeleteLogicAsync(usuario);
+            await _unitOfWork.UsuarioRepository.DeleteLogicAsync(usuario);
 
             return Result;
         });
