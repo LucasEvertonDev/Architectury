@@ -11,7 +11,7 @@ public class CredenciaisClienteConfiguration : BaseEntityWithDatesConfiguration<
     {
         base.Configure(builder);
 
-        builder.ToTable("CredenciaisCliente");
+        builder.ToTable("CredenciaisClientes");
 
         builder.Property(u => u.Identificacao).IsRequired();
 

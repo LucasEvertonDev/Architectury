@@ -18,7 +18,9 @@ public class MapPermissoesPorGrupoUsuarioRepository : Repository<MapPermissoesPo
 
     public async Task<List<Permissao>> GetRolesByGrupoUsuario(string GrupoUsuarioId)
     {
-        return await this.AsQueriable().Include(c => new { c.Permissao, c.GrupoUsuario })
+        return await this.AsQueriable()
+            .Include(c => c.Permissao)
+            .Include(c => c.GrupoUsuario)
             .Where(p => p.GrupoUsuarioId.ToString() == GrupoUsuarioId)
             .Select(a => a.Permissao)
             .ToListAsync();

@@ -34,7 +34,7 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
         {
             var passwordHash = _passwordHash.GeneratePasswordHash();
 
-            var grupoUsuario = await _searchGrupoUsuario.FirstOrDefaultAsync(grupo => grupo.Id == new Guid(param.GrupoUsuarioId));
+            var grupoUsuario = await _searchGrupoUsuario.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.GrupoUsuarioId));
 
             var user = new Usuario()
                 .CriarUsuario(
@@ -56,14 +56,15 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
                 Result.Failure<CriarUsuarioUseCase>(Erros.Business.EmailExistente);
             }
 
-            if (user.HasFailure())
+            if (user.HasFailure() || Result.HasFailures())
             {
                 return Result.Failure<CriarUsuarioUseCase>(user);
             }
 
             user = await _createRepository.CreateAsync(user);
 
-            return Result.Data = user;
+            return Result.IncludeResult(
+                    new UsuarioCriadoModel().FromEntity(user));
         });
     }
 

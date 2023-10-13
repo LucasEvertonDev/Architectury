@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Architecture.Application.Domain.DbContexts.Domains;
+using System.ComponentModel;
 
 namespace Architecture.Application.Domain.Models.Usuarios;
 
@@ -30,4 +31,16 @@ public class UsuarioCriadoModel
     public string Name { get; set; }
     [DefaultValue("lcseverton@gmail.com")]
     public string Email { get; set; }
+
+    public UsuarioCriadoModel FromEntity(Usuario usuario)
+    {
+        return new UsuarioCriadoModel()
+        {
+            Email = usuario.Email,
+            GrupoUsuarioId = usuario.GrupoUsuarioId.ToString(),
+            Name = usuario.Nome,
+            Username = usuario.Username,
+            Id = usuario.Id.ToString()
+        };
+    }
 }

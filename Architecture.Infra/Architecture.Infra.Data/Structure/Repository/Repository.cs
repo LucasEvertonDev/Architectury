@@ -116,6 +116,11 @@ public class Repository<TContext, TEntity> : ICreateRepository<TEntity>, IDelete
         }
     }
 
+    public virtual async Task<TEntity> FirstOrDefaultTrackingAsync(Expression<Func<TEntity, bool>> predicate)
+    {
+        return await _applicationDbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
+    }
+
     public virtual async Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await _applicationDbContext.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(predicate);
@@ -129,6 +134,11 @@ public class Repository<TContext, TEntity> : ICreateRepository<TEntity>, IDelete
     public virtual async Task<IEnumerable<TEntity>> ToListAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await _applicationDbContext.Set<TEntity>().AsNoTracking().Where(predicate).ToListAsync();
+    }
+
+    public virtual IQueryable<TEntity> AsQueriableTracking()
+    {
+        return _applicationDbContext.Set<TEntity>();
     }
 
     public virtual IQueryable<TEntity> AsQueriable()

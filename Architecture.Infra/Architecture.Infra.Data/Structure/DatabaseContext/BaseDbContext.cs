@@ -1,18 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Architecture.Application.Core.Structure.Extensions;
+using Architecture.Application.Domain.Constants;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace Architecture.Infra.Data.Structure.DatabaseContext;
 
 public class BaseDbContext<TContext> : DbContext where TContext : DbContext
 {
-    public BaseDbContext(DbContextOptions<TContext> options)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public BaseDbContext(DbContextOptions<TContext> options, IHttpContextAccessor httpContextAccessor)
        : base(options)
     {
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        foreach (var entry in ChangeTracker.Entries())
+        foreach (var entry in ChangeTracker.Entries().Where(entry => entry.Entity.GetType().GetProperty("CreateDate") != null))
         {
             if (entry.State == EntityState.Modified)
             {
@@ -30,10 +36,10 @@ public class BaseDbContext<TContext> : DbContext where TContext : DbContext
         {
             if (entry.State == EntityState.Modified)
             {
-                //var userid = _httpContextAccessor.HttpContext?.User?.Identity?.GetUserClaim(JWTUserClaims.UserId);
+                var userid = _httpContextAccessor.HttpContext?.User?.Identity?.GetUserClaim(JWTUserClaims.UserId);
 
-                //if (entry.Property("LastUpdateBy").CurrentValue == null && !string.IsNullOrEmpty(userid))
-                //    entry.Property("LastUpdateBy").CurrentValue = userid;
+                if (entry.Property("LastUpdateBy").CurrentValue == null && !string.IsNullOrEmpty(userid))
+                    entry.Property("LastUpdateBy").CurrentValue = userid;
             }
 
         }

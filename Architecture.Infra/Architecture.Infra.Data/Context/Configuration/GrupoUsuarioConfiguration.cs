@@ -12,7 +12,7 @@ public class GrupoUsuarioConfiguration : BaseEntityConfiguration<GrupoUsuario>
     {
         base.Configure(builder);
 
-        builder.ToTable("GrupoUsuarios");
+        builder.ToTable("GruposUsuarios");
 
         builder.Property(u => u.Nome).HasMaxLength(20).IsRequired();
 

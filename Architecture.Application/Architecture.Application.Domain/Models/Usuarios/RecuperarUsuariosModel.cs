@@ -16,7 +16,7 @@ public class RecuperarUsuariosDto
     public int PageSize { get; set; }
 
     [FromQuery(Name = "name")]
-    public string Name { get; set; }
+    public string Nome { get; set; }
 }
 
 public class UsuariosRecuperadosModel
@@ -30,7 +30,7 @@ public class UsuariosRecuperadosModel
     [DefaultValue("F97E565D-08AF-4281-BC11-C0206EAE06FA")]
     public string GrupoUsuarioId { get; set; }
     [DefaultValue("Lucas Everton Santos de Oliveira")]
-    public string Name { get; set; }
+    public string Nome { get; set; }
     [DefaultValue("lcseverton@gmail.com")]
     public string Email { get; set; }
 }

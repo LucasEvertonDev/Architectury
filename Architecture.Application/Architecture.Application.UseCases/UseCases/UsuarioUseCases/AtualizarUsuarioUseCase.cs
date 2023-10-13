@@ -29,19 +29,19 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
     {
         return await OnTransactionAsync(async () =>
         {
-            var usuario = await _searchUserRepository.FirstOrDefaultAsync(u => u.Id.ToString() == param.Id);
+            var usuario = await _searchUserRepository.FirstOrDefaultTrackingAsync(u => u.Id.ToString() == param.Id);
 
             if (usuario == null)
             {
                 return Result.Failure<AtualizarUsuarioUseCase>(Erros.Business.UsuarioInexistente);
             }
 
-            var grupoUsuario = await _searchUserGroupRepository.FirstOrDefaultAsync(grupo => grupo.Id == new Guid(param.Body.GrupoUsuarioId));
+            var grupoUsuario = await _searchUserGroupRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.Body.GrupoUsuarioId));
 
             usuario.AtualizaUsuario(
                     username: param.Body.Username,
                     email: param.Body.Email,
-                    nome: param.Body.Name,
+                    nome: param.Body.Nome,
                     grupoUsuario: grupoUsuario
                 );
 
@@ -55,7 +55,7 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
                 Result.Failure<AtualizarUsuarioUseCase>(Erros.Business.EmailExistente);
             }
 
-            return Result.Data = await _updateUserRepository.UpdateAsync(usuario);
+            return Result.IncludeResult(await _updateUserRepository.UpdateAsync(usuario));
         });
     }
 

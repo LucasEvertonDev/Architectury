@@ -42,22 +42,19 @@ public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
         {
             if (await CredenciasClienteInvalidas(param))
             {
-                Result.Failure<LoginUseCase>(Erros.Business.CrendenciaisClienteInvalida);
-                return;
+                return Result.Failure<LoginUseCase>(Erros.Business.CrendenciaisClienteInvalida);
             }
 
             var user = await _userSearchRepository.FirstOrDefaultAsync(a => a.Username == param.Body.Username);
 
             if (user == null || string.IsNullOrEmpty(user.Id.ToString()))
             {
-                Result.Failure<LoginUseCase>(Erros.Business.UsernamePasswordInvalidos);
-                return;
+                return Result.Failure<LoginUseCase>(Erros.Business.UsernamePasswordInvalidos);
             }
 
             if (!_passwordHash.PasswordIsEquals(param.Body.Password, user?.PasswordHash, user?.Password))
             {
-                Result.Failure<LoginUseCase>(Erros.Business.UsernamePasswordInvalidos);
-                return;
+                return Result.Failure<LoginUseCase>(Erros.Business.UsernamePasswordInvalidos);
             }
 
             user.RegistraUltimoAcesso();
@@ -68,11 +65,11 @@ public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
 
             await _updateUserRepository.UpdateAsync(user);
 
-            Result.Data = new TokenModel
+            return Result.IncludeResult(new TokenModel
             {
                 TokenJWT = tokem,
                 DataExpiracao = data.ToLocalTime()
-            };
+            });
         });
     }
 

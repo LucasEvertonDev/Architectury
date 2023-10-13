@@ -6,6 +6,8 @@ namespace Architecture.Application.Domain.DbContexts.Repositorys.Base;
 
 public interface ISearchRepository<TEntity> where TEntity : IEntity
 {
+    IQueryable<TEntity> AsQueriableTracking();
+
     IQueryable<TEntity> AsQueriable();
 
     Task<IEnumerable<TEntity>> ToListAsync();
@@ -17,4 +19,6 @@ public interface ISearchRepository<TEntity> where TEntity : IEntity
     Task<PagedResult<TEntity>> ToListAsync(int pageNumber, int pageSize, Expression<Func<TEntity, bool>> predicate);
 
     Task<List<TEntity>> GetListFromCacheAsync(Func<TEntity, bool> predicate);
+
+    Task<TEntity> FirstOrDefaultTrackingAsync(Expression<Func<TEntity, bool>> predicate);
 }

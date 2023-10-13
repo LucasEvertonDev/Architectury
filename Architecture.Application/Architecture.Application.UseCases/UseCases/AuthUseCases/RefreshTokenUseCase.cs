@@ -41,16 +41,14 @@ public class RefreshTokenUseCase : BaseUseCase<RefreshTokenDto>, IRefreshTokenUs
         {
             if (await CredenciasClienteInvalidas(refreshTokenDto))
             {
-                Result.Failure<LoginUseCase>(Erros.Business.CrendenciaisClienteInvalida);
-                return;
+                return Result.Failure<LoginUseCase>(Erros.Business.CrendenciaisClienteInvalida);
             }
 
             var user = await _searchUserRepository.FirstOrDefaultAsync(user => user.Id.ToString() == _identity.GetUserClaim(JWTUserClaims.UserId));
 
             if (user == null || string.IsNullOrEmpty(user.Id.ToString()))
             {
-                Result.Failure<RefreshTokenUseCase>(Erros.Business.RefreshTokenInvalido);
-                return;
+                return Result.Failure<RefreshTokenUseCase>(Erros.Business.RefreshTokenInvalido);
             }
 
             user.RegistraUltimoAcesso();
@@ -61,11 +59,11 @@ public class RefreshTokenUseCase : BaseUseCase<RefreshTokenDto>, IRefreshTokenUs
 
             await _updateUserRepository.UpdateAsync(user);
 
-            Result.Data = new TokenModel
+            return Result.IncludeResult(new TokenModel
             {
                 TokenJWT = tokem,
                 DataExpiracao = data.ToLocalTime()
-            };
+            });
         });
     }
 

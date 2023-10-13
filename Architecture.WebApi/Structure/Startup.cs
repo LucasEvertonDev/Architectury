@@ -8,6 +8,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Architecture.WebApi.Structure.Middlewares;
 
 namespace Architecture.WebApi.Structure;
 
@@ -65,10 +66,10 @@ public class Startup
         /// Learn more about configuring  https://stackoverflow.com/questions/59774566/what-do-the-size-settings-for-memorycache-mean
         services.AddMemoryCache((options) => 
         {
-            options.SizeLimit = 1024 * 1024;
+            //options.SizeLimit = 1024 * 1024;
         });
 
-        services.AddSingleton<AppSettings, AppSettings>();
+        services.AddSingleton(appSettings);
 
         services.AddSwaggerGen(c =>
         {
@@ -92,6 +93,10 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
+        app.UseMiddleware<RequestResponseLoggingMiddleware>();
+
+        app.UseMiddleware<AuthUnauthorizedMiddleware>();
+
         app.UseHttpsRedirection();
 
         app.UseRouting();
@@ -105,6 +110,9 @@ public class Startup
         // subir no local host 
         app.UseSwaggerUI(c =>
         {
+            c.OAuthClientId("7064bbbf-5d11-4782-9009-95e5a6fd6822");
+            c.OAuthClientSecret("dff0bcb8dad7ea803e8d28bf566bcd354b5ec4e96ff4576a1b71ec4a21d56910");
+            c.OAuthUsername("lcseverton");
         });
 
         app.UseAuthentication();

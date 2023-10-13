@@ -45,5 +45,11 @@ public class Result
 
     public NotificationContext GetContext() => NotificationContext;
 
-    public dynamic Data { get; set; }
+    public Result IncludeResult(dynamic value)
+    {
+        this.Data = value;
+        return this;
+    }
+
+    public dynamic Data { get; private set; }
 }

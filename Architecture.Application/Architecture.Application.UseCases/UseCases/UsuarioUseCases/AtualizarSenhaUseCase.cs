@@ -44,7 +44,8 @@ public class AtualizarSenhaUseCase : BaseUseCase<AtualizarSenhaUsuarioDto>, IAtu
                     passwordHash: passwordHash
                 );
 
-            return Result.Data = await _updateUserRepository.UpdateAsync(usuario);
+            return Result.IncludeResult(
+                new UsuarioAtualizadoModel().FromEntity(await _updateUserRepository.UpdateAsync(usuario)));
         });
     }
 }

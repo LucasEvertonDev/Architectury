@@ -12,7 +12,7 @@ public class MapPermissoesPorGrupoUsuarioConfiguration : BaseEntityConfiguration
     {
         base.Configure(builder);
 
-        builder.ToTable("MapPermissoesPorGrupoUsuario");
+        builder.ToTable("MapPermissoesPorGruposUsuarios");
 
         builder.HasOne(m => m.GrupoUsuario)
              .WithMany(GrupoUsuario => GrupoUsuario.MapPermissoesPorGrupoUsuario)

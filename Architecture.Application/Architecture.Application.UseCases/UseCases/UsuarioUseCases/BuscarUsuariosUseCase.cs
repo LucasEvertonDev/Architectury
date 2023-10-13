@@ -23,10 +23,10 @@ public class BuscarUsuariosUseCase : BaseUseCase<RecuperarUsuariosDto>, IBuscarU
             var pagedResult = await _searchUserRepository.ToListAsync(
                 pageNumber: param.PageNumber,
                 pageSize: param.PageSize,
-                predicate: u => string.IsNullOrEmpty(param.Name) || u.Nome.Contains(param.Name)
+                predicate: u => string.IsNullOrEmpty(param.Nome) || u.Nome.Contains(param.Nome)
             );
 
-            return Result.Data = pagedResult;
+            return Result.IncludeResult(pagedResult);
         });
     }
 }

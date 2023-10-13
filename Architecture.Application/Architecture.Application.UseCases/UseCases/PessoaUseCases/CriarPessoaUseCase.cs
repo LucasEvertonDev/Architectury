@@ -42,10 +42,10 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
 
                 var pessoaCriada = await _createRepository.CreateAsync(pessoa);
 
-                return Result.Data = new PessoaCriadaModel()
+                return Result.IncludeResult(new PessoaCriadaModel()
                 {
                     Message = "Filé demais"
-                };
+                }); 
             });
         }
     }

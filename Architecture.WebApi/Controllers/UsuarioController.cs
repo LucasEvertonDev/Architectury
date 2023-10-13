@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PLaboratory.WebAPI.Controllers;
 
-[Route("api/v1/users")]
-public class UsersController : BaseController
+[Route("api/v1/usuarios")]
+public class UsuarioController : BaseController
 {
     private readonly ICriarUsuarioUseCase _createUserService;
     private readonly IAtualizarUsuarioUseCase _updateUserService;
@@ -19,7 +19,7 @@ public class UsersController : BaseController
     private readonly IBuscarUsuariosUseCase _searchServices;
     private readonly IAtualizarSenhaUseCase _updatePasswodService;
 
-    public UsersController(ICriarUsuarioUseCase createUserService,
+    public UsuarioController(ICriarUsuarioUseCase createUserService,
         IAtualizarUsuarioUseCase updateUserService,
         IExcluirUsuarioUseCase deleteUserService,
         IBuscarUsuariosUseCase searchServices,
@@ -50,17 +50,17 @@ public class UsersController : BaseController
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(ResponseDto<CriarUsuarioModel>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseDto<UsuarioCriadoModel>), StatusCodes.Status200OK)]
     public async Task<ActionResult> Post([FromBody] CriarUsuarioModel createUserModel)
     {
-        var result =await _createUserService.ExecuteAsync(createUserModel);
+        var result = await _createUserService.ExecuteAsync(createUserModel);
 
         if (result.HasFailures())
         {
             return BadRequestFailure(result);
         }
 
-        return Ok(new ResponseDto<CriarUsuarioModel>()
+        return Ok(new ResponseDto<UsuarioCriadoModel>()
         {
             Content = result.Data
         });

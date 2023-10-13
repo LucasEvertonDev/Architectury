@@ -23,7 +23,7 @@ public class RecuperarPessoasUseCase : BaseUseCase, IRecuperarPessoasUseCase
         {
             var aux = await _searchRepository.GetPessoasQuery();
 
-            Result.Data = await _searchRepository.ToListAsync();
+            return Result.IncludeResult(await _searchRepository.ToListAsync());
         });
     }
 }

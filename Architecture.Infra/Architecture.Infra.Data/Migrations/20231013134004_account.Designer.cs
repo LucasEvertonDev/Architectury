@@ -4,6 +4,7 @@ using Architecture.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Architecture.Infra.Data.Migrations
 {
     [DbContext(typeof(ArchitectureDbContext))]
-    partial class ArchitectureDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231013134004_account")]
+    partial class account
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,14 +54,14 @@ namespace Architecture.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CredenciaisClientes", (string)null);
+                    b.ToTable("CredenciaisCliente", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("9245fe4a-d402-451c-b9ed-9c1a04247482"),
                             Chave = "dff0bcb8dad7ea803e8d28bf566bcd354b5ec4e96ff4576a1b71ec4a21d56910",
-                            CreateDate = new DateTime(2023, 10, 13, 10, 44, 26, 222, DateTimeKind.Local).AddTicks(9072),
+                            CreateDate = new DateTime(2023, 10, 13, 10, 40, 4, 443, DateTimeKind.Local).AddTicks(3652),
                             Descricao = "Cliente padrão da aplicação",
                             Identificacao = new Guid("7064bbbf-5d11-4782-9009-95e5a6fd6822"),
                             Situacao = 1
@@ -128,7 +131,7 @@ namespace Architecture.Infra.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GruposUsuarios", (string)null);
+                    b.ToTable("GrupoUsuarios", (string)null);
 
                     b.HasData(
                         new
@@ -187,7 +190,7 @@ namespace Architecture.Infra.Data.Migrations
 
                     b.HasIndex("PermissaoId");
 
-                    b.ToTable("MapPermissoesPorGruposUsuarios", (string)null);
+                    b.ToTable("MapPermissoesPorGrupoUsuario", (string)null);
 
                     b.HasData(
                         new
