@@ -10,7 +10,7 @@ namespace Architecture.Application.UseCases.UseCases.Base;
 
 public abstract class BaseUseCase<TParam> : Notifiable
 {
-    protected readonly IUnitWorkTransaction _unitOfWorkTransaction;
+    private readonly IUnitWorkTransaction _unitOfWorkTransaction;
     protected readonly IIdentity _identity;
     public Result Result { get; private set; }
 
