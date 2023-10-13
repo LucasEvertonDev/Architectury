@@ -21,3 +21,8 @@ Devido melhora na performance, foi escolhido o modelo de notification. Tem como 
 # Controllers
 Está sendo usado. Porém ele está tendo uma ação básica. Nesse momento ele ainda trata por mais que de forma repetida as notificações. Embora eu possa criar um filtro, e tratar em background isso da uma sensação de fantasma na aplicação.
 Onde eu simplesmente irei retornar nada em um momento abstrato e acabará de maneira oculta retornando um json. Um pouco confuso além de deixar o processo meio macabro.
+
+# Testes
+A aplicação foi fundade em cima de uma classe espelho do appsettings. Tal abordagem facilita totalmente a inserção de testes unitários. Uma vez que setadan os testes vivem o mesmo cenário de uma requisição comum. O que facilita testes unitários a níveis de banco.
+Tendo por objetivo não ter que criar repositorios fakes para tal fato. 
+Para garantir uma ação de crud foi implementada a ordem de prioridade para que os testes possam ser executados em etapas. Considerando que estejam em uma classe. Ou seja um item inserido no momento de teste poderá ser consultado, atualizado, apagado. Deixando todo o seu ciclo de vida testável
