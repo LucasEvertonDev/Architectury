@@ -1,5 +1,5 @@
-# Architectury
-Representa possíveis estruturas pro projeto 
+# Importante
+Todo o contexto do projeto foi feito pra estudo. Visando muito mais arquitetura do que qualidade do software escrito(Famoso casa de ferreiro espeto é de pau)
 
 # Validações dos objeto das requisições
 Neste modelo foi usado o fluent validation. O mesmo está sendo ativado de forma assincrona e automática por meio de um filter. Se faz necessário pois o pipeline do .net core não é assincrono. Sendo assim seria impossível fazer verificações junto ao banco. 
