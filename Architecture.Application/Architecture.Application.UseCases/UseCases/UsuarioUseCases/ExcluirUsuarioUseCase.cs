@@ -1,5 +1,7 @@
 ﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Constants;
+using Architecture.Application.Domain.DbContexts.Domains;
+using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.Models.Usuarios;
 using Architecture.Application.UseCases.UseCases.Base;
 using Architecture.Application.UseCases.UseCases.UsuarioUseCases.UseCases;
@@ -15,16 +17,18 @@ public class ExcluirUsuarioUseCase : BaseUseCase<ExcluirUsuarioDto>, IExcluirUsu
 
     public override async Task<Result> ExecuteAsync(ExcluirUsuarioDto param)
     {
-        return await OnTransactionAsync(async () =>
+        return await OnTransactionAsync(async (transaction) =>
         {
-            var usuario = await _unitOfWork.UsuarioRepository.FirstOrDefaultAsync(u => u.Id.ToString() == param.Id);
+            var usuario = await transaction.GetRepository<IRepository<Usuario>>()
+                .FirstOrDefaultAsync(u => u.Id.ToString() == param.Id);
 
             if (usuario == null)
             {
                 return Result.Failure<ExcluirUsuarioUseCase>(Erros.Business.UsuarioInexistente);
             }
 
-            await _unitOfWork.UsuarioRepository.DeleteLogicAsync(usuario);
+            await transaction.GetRepository<IRepository<Usuario>>()
+                .DeleteLogicAsync(usuario);
 
             return Result;
         });

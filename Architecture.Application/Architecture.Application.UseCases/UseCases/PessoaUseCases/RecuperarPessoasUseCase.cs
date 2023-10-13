@@ -14,9 +14,9 @@ public class RecuperarPessoasUseCase : BaseUseCase, IRecuperarPessoasUseCase
     {
         return await OnTransactionAsync(async () =>
         {
-            var aux = await _unitOfWork.PessoasRepository.GetPessoasQuery();
+            //var aux = await _unitOfWork.PessoasRepository.GetPessoasQuery();
 
-            return Result.IncludeResult(await _unitOfWork.PessoasRepository.ToListAsync());
+            //return Result.IncludeResult(await _unitOfWork.PessoasRepository.ToListAsync());
         });
     }
 }

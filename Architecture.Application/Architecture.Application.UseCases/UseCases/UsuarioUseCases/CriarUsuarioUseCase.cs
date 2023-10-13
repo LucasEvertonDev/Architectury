@@ -6,6 +6,7 @@ using Architecture.Application.Domain.Models.Usuarios;
 using Architecture.Application.Domain.Plugins.Cryptography;
 using Architecture.Application.UseCases.UseCases.Base;
 using Architecture.Application.UseCases.UseCases.UsuarioUseCases.UseCases;
+using System.Transactions;
 
 namespace Architecture.Application.UseCases.UseCases.UsuarioUseCases;
 
@@ -24,11 +25,12 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
 
     public override async Task<Result> ExecuteAsync(CriarUsuarioModel param)
     {
-        return await OnTransactionAsync(async () =>
+        return await OnTransactionAsync(async (transaction) =>
         {
             var passwordHash = _passwordHash.GeneratePasswordHash();
 
-            var grupoUsuario = await _unitOfWork.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.GrupoUsuarioId));
+            var grupoUsuario = await transaction.GetRepository<IRepository<GrupoUsuario>>().
+                FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.GrupoUsuarioId));
 
             var user = new Usuario()
                 .CriarUsuario(
@@ -69,7 +71,7 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
     /// <returns></returns>
     private async Task<bool> EmailCadastrado(string email)
     {
-        return await _unitOfWork.UsuarioRepository.FirstOrDefaultAsync(usuario => usuario.Email == email) != null;
+        return await transaction.GetRepository<IRepository<Usuario>>().FirstOrDefaultAsync(usuario => usuario.Email == email) != null;
     }
 
     /// <summary>
@@ -78,6 +80,6 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
     /// <returns></returns>
     private async Task<bool> UsernameCadastrado(string userName)
     {
-        return await _unitOfWork.UsuarioRepository.FirstOrDefaultAsync(usuario => usuario.Username == userName) != null;
+        return await transaction.GetRepository<IRepository<Usuario>>().FirstOrDefaultAsync(usuario => usuario.Username == userName) != null;
     }
 }

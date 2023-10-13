@@ -1,5 +1,7 @@
 ﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Constants;
+using Architecture.Application.Domain.DbContexts.Domains;
+using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.Models.Pessoa;
 using Architecture.Application.UseCases.UseCases.Base;
 using Architecture.Application.UseCases.UseCases.PessoaUseCases.Interfaces;
@@ -15,7 +17,7 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
 
         public override async Task<Result> ExecuteAsync(CriarPessoaModel param)
         {
-            return await OnTransactionAsync(async () =>
+            return await OnTransactionAsync(async (transaction) =>
             {
                 if (param == null)
                 {
@@ -35,7 +37,8 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
                     return Result.Failure<CriarPessoaUseCase>(pessoa);
                 }
 
-                var pessoaCriada = await _unitOfWork.PessoasRepository.CreateAsync(pessoa);
+                var pessoaCriada = await transaction.GetRepository<IRepository<Pessoa>>().
+                    CreateAsync(pessoa);
 
                 return Result.IncludeResult(new PessoaCriadaModel()
                 {

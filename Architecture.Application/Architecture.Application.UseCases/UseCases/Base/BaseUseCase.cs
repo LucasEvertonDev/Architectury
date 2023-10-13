@@ -22,7 +22,7 @@ public abstract class BaseUseCase<TParam> : Notifiable
         Result = new Result(Notifications);
     }
 
-    public IUnitOfWorkRepos _unitOfWork => _unitOfWorkTransaction;
+    public ITransaction transaction => _unitOfWorkTransaction;
 
     public abstract Task<Result> ExecuteAsync(TParam param);
 
@@ -36,7 +36,7 @@ public abstract class BaseUseCase<TParam> : Notifiable
         return Task.CompletedTask;
     }
 
-    protected async Task<Result> OnTransactionAsync(Func<Task<Result>> func)
+    protected async Task<Result> OnTransactionAsync(Func<ITransaction, Task<Result>> func)
     {
         try
         {
@@ -86,7 +86,7 @@ public abstract class BaseUseCase : Notifiable
         Notifications = serviceProvider.GetService<NotificationContext>();
     }
 
-    protected IUnitOfWorkRepos _unitOfWork => _unitOfWorkTransaction;
+    protected ITransaction _unitOfWork => _unitOfWorkTransaction;
 
 
     public abstract Task<Result> ExecuteAsync();

@@ -1,5 +1,7 @@
 ﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Constants;
+using Architecture.Application.Domain.DbContexts.Domains;
+using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.Models.Usuarios;
 using Architecture.Application.Domain.Plugins.Cryptography;
 using Architecture.Application.UseCases.UseCases.Base;
@@ -18,9 +20,10 @@ public class AtualizarSenhaUseCase : BaseUseCase<AtualizarSenhaUsuarioDto>, IAtu
 
     public override async Task<Result> ExecuteAsync(AtualizarSenhaUsuarioDto param)
     {
-        return await OnTransactionAsync(async () =>
+        return await OnTransactionAsync(async (transaction) =>
         {
-            var usuario = await _unitOfWork.UsuarioRepository.FirstOrDefaultAsync(u => u.Id.ToString() == param.Id);
+            var usuario = await transaction.GetRepository<IRepository<Usuario>>()
+                .FirstOrDefaultAsync(u => u.Id.ToString() == param.Id);
 
             if (usuario == null)
             {
@@ -35,7 +38,10 @@ public class AtualizarSenhaUseCase : BaseUseCase<AtualizarSenhaUsuarioDto>, IAtu
                 );
 
             return Result.IncludeResult(
-                new UsuarioAtualizadoModel().FromEntity(await _unitOfWork.UsuarioRepository.UpdateAsync(usuario)));
+                new UsuarioAtualizadoModel().FromEntity(
+                    await transaction.GetRepository<IRepository<Usuario>>()
+                        .UpdateAsync(usuario))
+                );
         });
     }
 }

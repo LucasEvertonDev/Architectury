@@ -1,11 +1,7 @@
-﻿using Architecture.Application.Domain.DbContexts.Domains;
-using Architecture.Application.Domain.DbContexts.Repositorys.Base;
-using Architecture.Application.Domain.DbContexts.Repositorys.MapUserGroupRolesRepository;
-using Architecture.Application.Domain.DbContexts.Repositorys.PessoaRepository;
+﻿using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.DbContexts.UnitOfWork;
-using Architecture.Infra.Data.Context.Repositories;
-using Architecture.Infra.Data.Context.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Architecture.Infra.Data.Context.UnitOfWork;
 
@@ -13,92 +9,24 @@ public class UnitOfWork<TDbContext> : IUnitWorkTransaction where TDbContext : Db
 {
     public readonly TDbContext _context;
     private readonly IServiceProvider _serviceProvider;
-    private IRepository<Usuario> _usuarioRepository;
-    private IRepository<Permissao> _permissaoRepository;
-    private IPessoaRepository _pessoaRepository;
-    private IRepository<CredenciaisCliente> _credenciaisClienteRepository;
-    private IMapPermissoesPorGrupoUsuarioRepository _mapPermissoesPorGrupoUsuarioRepository;
-    private IRepository<GrupoUsuario> _grupoUsuarioRepository;
-
-    public UnitOfWork(TDbContext applicationDbContext,
-            IServiceProvider serviceProvider
-        )
+    private Dictionary<Type, object> _repositories;
+    public UnitOfWork(TDbContext applicationDbContext, IServiceProvider serviceProvider)
     {
         _context = applicationDbContext;
         _serviceProvider = serviceProvider;
+        _repositories = new Dictionary<Type, object>();
     }
 
-
-    public IRepository<Usuario> UsuarioRepository
-    { 
-        get
-        {
-            if (_usuarioRepository == null)
-            {
-                _usuarioRepository = new Repository<Usuario>(_serviceProvider);
-            }
-            return _usuarioRepository;
-        } 
-    }
-
-    public IRepository<Permissao> PermissaoRepository
+    public TRepository GetRepository<TRepository>() where TRepository : IRepository
     {
-        get
+        if (_repositories.ContainsKey(typeof(TRepository)))
         {
-            if (_permissaoRepository == null)
-            {
-                _permissaoRepository = new Repository<Permissao>(_serviceProvider);
-            }
-            return _permissaoRepository;
+            return (TRepository)_repositories[typeof(TRepository)];
         }
-    }
 
-    public IPessoaRepository PessoasRepository
-    {
-        get
-        {
-            if (_pessoaRepository == null)
-            {
-                _pessoaRepository = new PessoaRepository(_serviceProvider);
-            }
-            return _pessoaRepository;
-        }
-    }
-
-    public IRepository<CredenciaisCliente> CredenciaisClientesRepository
-    {
-        get
-        {
-            if (_credenciaisClienteRepository == null)
-            {
-                _credenciaisClienteRepository = new Repository<CredenciaisCliente>(_serviceProvider);
-            }
-            return _credenciaisClienteRepository;
-        }
-    }
-
-    public IMapPermissoesPorGrupoUsuarioRepository MapPermissoesPorGrupoUsuarioRepository
-    {
-        get
-        {
-            if (_mapPermissoesPorGrupoUsuarioRepository == null)
-            {
-                _mapPermissoesPorGrupoUsuarioRepository = new MapPermissoesPorGrupoUsuarioRepository(_serviceProvider);
-            }
-            return _mapPermissoesPorGrupoUsuarioRepository;
-        }
-    }
-
-    public IRepository<GrupoUsuario> GrupoUsuarioRepository
-    {
-        get
-        {
-            if (_grupoUsuarioRepository == null)
-            {
-                _grupoUsuarioRepository = new Repository<GrupoUsuario>(_serviceProvider);
-            }
-            return _grupoUsuarioRepository;
-        }
+        var repository = _serviceProvider.GetService<TRepository>();
+        _repositories.Add(typeof(TRepository), repository);
+        return repository;
     }
 
     public async Task OpenConnectionAsync(Func<Task> func)
@@ -117,12 +45,12 @@ public class UnitOfWork<TDbContext> : IUnitWorkTransaction where TDbContext : Db
         }
     }
 
-    public async Task<TRetorno> OpenConnectionAsync<TRetorno>(Func<Task<TRetorno>> func)
+    public async Task<TRetorno> OpenConnectionAsync<TRetorno>(Func<ITransaction, Task<TRetorno>> func)
     {
         var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            TRetorno retorno = await func();
+            TRetorno retorno = await func(this);
 
             await _context.SaveChangesAsync();
 

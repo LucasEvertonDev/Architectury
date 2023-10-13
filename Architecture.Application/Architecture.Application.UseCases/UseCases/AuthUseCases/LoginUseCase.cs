@@ -1,5 +1,8 @@
 ﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Constants;
+using Architecture.Application.Domain.DbContexts.Domains;
+using Architecture.Application.Domain.DbContexts.Repositorys.Base;
+using Architecture.Application.Domain.DbContexts.Repositorys.MapUserGroupRolesRepository;
 using Architecture.Application.Domain.Models.Auth;
 using Architecture.Application.Domain.Plugins.Cryptography;
 using Architecture.Application.Domain.Plugins.JWT;
@@ -23,14 +26,15 @@ public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
 
     public override async Task<Result> ExecuteAsync(LoginDto param)
     {
-        return await OnTransactionAsync(async () =>
+        return await OnTransactionAsync(async (transaction) =>
         {
             if (await CredenciasClienteInvalidas(param))
             {
                 return Result.Failure<LoginUseCase>(Erros.Business.CrendenciaisClienteInvalida);
             }
 
-            var user = await _unitOfWork.UsuarioRepository.FirstOrDefaultAsync(a => a.Username == param.Body.Username);
+            var user = await transaction.GetRepository<IRepository<Usuario>>()
+                .FirstOrDefaultAsync(a => a.Username == param.Body.Username);
 
             if (user == null || string.IsNullOrEmpty(user.Id.ToString()))
             {
@@ -44,11 +48,12 @@ public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
 
             user.RegistraUltimoAcesso();
 
-            var roles = await _unitOfWork.MapPermissoesPorGrupoUsuarioRepository.GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
+            var roles = await transaction.GetRepository<IMapPermissoesPorGrupoUsuarioRepository>().GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
 
             var (tokem, data) = await _tokenService.GenerateToken(user, param.ClientId, roles);
 
-            await _unitOfWork.UsuarioRepository.UpdateAsync(user);
+            await transaction.GetRepository<IRepository<Usuario>>()
+                .UpdateAsync(user);
 
             return Result.IncludeResult(new TokenModel
             {
@@ -61,8 +66,8 @@ public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
     private async Task<bool> CredenciasClienteInvalidas(LoginDto param)
     {
         return !(
-                    await _unitOfWork.CredenciaisClientesRepository.
-                        GetListFromCacheAsync(a => a.Identificacao == new Guid(param.ClientId)
+                    await transaction.GetRepository<IRepository<CredenciaisCliente>>()
+                        .GetListFromCacheAsync(a => a.Identificacao == new Guid(param.ClientId)
                             && a.Chave == param.ClientSecret)
                 ).Any();
     }
