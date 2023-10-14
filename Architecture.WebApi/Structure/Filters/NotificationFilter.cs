@@ -24,11 +24,11 @@ public class NotificationFilter : IAsyncResultFilter
             
             Dictionary<object, object[]> dic = new Dictionary<object, object[]>();
 
-            var agrupados = _notificationContext.Notifications.OrderByDescending(a => (int)a.notificationType)
+            var agrupados = _notificationContext.Notifications.OrderByDescending(a => (int)a.NotificationInfo.EntityInfo.NotificationType)
                 .Select(a => new
                 {
-                    key = a.member ?? nameof(NotificationType.BusinessNotification),
-                    message = a.message,
+                    key = a.NotificationInfo.PropInfo.MemberName ?? nameof(NotificationType.BusinessNotification),
+                    message = a.Error.message,
                 })
                 .GroupBy(a => a.key).Select(a => new
                 {

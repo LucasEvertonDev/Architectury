@@ -1,4 +1,4 @@
-﻿using Architecture.Application.Core.Notifications.Notifiable.Steps.AddNotification;
+﻿using Architecture.Application.Core.Notifications;
 
 namespace Architecture.Application.Core.Notifications.Notifiable.Steps.AfterValidationWhen;
 
@@ -12,6 +12,6 @@ public class AfterValidationWhen : IAfterValidationWhen
     {
         _notificationContext = notificationContext;
         _notificationInfo = notificationInfo;
-        _value = notificationInfo.Value;
+        _value = notificationInfo.PropInfo.Value;
     }
 }

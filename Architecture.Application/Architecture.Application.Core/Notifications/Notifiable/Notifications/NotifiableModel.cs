@@ -1,51 +1,45 @@
 ﻿using Architecture.Application.Core.Notifications.Notifiable.Notifications.Base;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace Architecture.Application.Core.Notifications.Notifiable.Notifications;
 
 public partial class Notifiable<TEntity> : INotifiableModel
 {
-    protected NotificationInfo NotificationInfo { get; set; }
-
+    [JsonIgnore]
     protected Result Result { get; set; }
+
+    [JsonIgnore]
+    protected PropInfo CurrentProp { get; set; }
 
     public Notifiable()
     {
         Result = new Result(new NotificationContext());
-
-        NotificationInfo = new NotificationInfo()
-        {
-            NotificationType = Enum.NotificationType.DomainNotification,
-            Name = typeof(TEntity).Name,
-            Namespace = typeof(TEntity).Namespace
-        };
+        CurrentProp = new PropInfo();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    [JsonIgnore]
+    protected EntityInfo EntityInfo => new EntityInfo()
+    {
+        Name = typeof(TEntity).Name,
+        Namespace = typeof(TEntity).Namespace
+    };
+
     public List<NotificationModel> GetFailures()
     {
         return Result.GetContext().Notifications.ToList();
     }
 
-    /// <summary>
-    /// Indica se o dominio é válido ou não
-    /// </summary>
-    /// <returns></returns>
     public bool HasFailure()
     {
         return GetFailures().Any();
     }
 
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
     private void SetValue(dynamic lambda, dynamic value)
     {
+        CurrentProp = new PropInfo();
+
         var memberSelectorExpression = lambda.Body as MemberExpression;
         if (memberSelectorExpression != null)
         {
@@ -53,13 +47,14 @@ public partial class Notifiable<TEntity> : INotifiableModel
             if (property != null)
             {
                 property.SetValue(this, value, null);
-                NotificationInfo.MemberName = value is INotifiableModel ? NotificationInfo.Name : string.Concat(NotificationInfo.Name, ".", property.Name);
+                CurrentProp.MemberName = value is INotifiableModel ? EntityInfo.Name : string.Concat(EntityInfo.Name, ".", property.Name);
+                CurrentProp.ClearName = property.Name;
             }
             else
             {
-                throw new Exception("É preciso adicionar {get; set;} a syua prop");
+                throw new Exception("É preciso adicionar {get; set;} a sua prop");
             }
         }
-        NotificationInfo.Value = value;
+        CurrentProp.Value = value;
     }
 }

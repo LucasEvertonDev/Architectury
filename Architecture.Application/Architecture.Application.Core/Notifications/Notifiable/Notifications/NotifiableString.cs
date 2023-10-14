@@ -11,6 +11,6 @@ public partial class Notifiable<TEntity> : INotifiableModel
     {
         this.SetValue(memberLamda, value);
 
-        return new AfterSet<AfterValidationWhenString>(Result.GetContext(), NotificationInfo);
+        return new AfterSet<AfterValidationWhenString>(Result.GetContext(), new NotificationInfo(CurrentProp, EntityInfo));
     }
 }

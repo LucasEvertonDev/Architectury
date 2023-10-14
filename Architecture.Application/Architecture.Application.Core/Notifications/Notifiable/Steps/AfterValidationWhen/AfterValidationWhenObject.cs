@@ -8,7 +8,7 @@ public class AfterValidationWhenObject : AfterValidationWhen, IAfterValidationWh
 
     public AfterValidationWhenObject(NotificationContext notificationContext, NotificationInfo notificationInfo) : base(notificationContext, notificationInfo)
     {
-        _currentvalue = notificationInfo.Value;
+        _currentvalue = notificationInfo.PropInfo.Value;
     }
 
     public AddNotificationService<AfterValidationWhenObject> Is(bool ruleFor)
@@ -18,6 +18,6 @@ public class AfterValidationWhenObject : AfterValidationWhen, IAfterValidationWh
 
     public AddNotificationService<AfterValidationWhenObject> IsNull()
     {
-        return new AddNotificationService<AfterValidationWhenObject>(_notificationContext, _notificationInfo.Value == null, _notificationInfo);
+        return new AddNotificationService<AfterValidationWhenObject>(_notificationContext, _notificationInfo.PropInfo.Value == null, _notificationInfo);
     }
 }

@@ -1,6 +1,4 @@
-﻿using Architecture.Application.Core.Notifications.Notifiable.Steps.AfterValidationWhen;
-
-namespace Architecture.Application.Core.Notifications.Notifiable.Steps.AfterSet;
+﻿namespace Architecture.Application.Core.Notifications.Notifiable.Steps.AfterSet;
 
 public class AfterSet<TNext>
 {

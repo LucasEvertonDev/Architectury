@@ -6,7 +6,7 @@ namespace Architectury.Infra.Plugins.FluentValidation.Extensions;
 
 public static class FluentExtensions
 {
-    public static IRuleBuilderOptions<T, TProperty> WithError<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, NotificationModel errorModel)
+    public static IRuleBuilderOptions<T, TProperty> WithError<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, FailureModel errorModel)
     {
         return rule.WithMessage(errorModel.message).WithErrorCode(errorModel.key);
     }

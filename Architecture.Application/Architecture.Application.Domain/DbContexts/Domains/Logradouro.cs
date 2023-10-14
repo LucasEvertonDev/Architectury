@@ -12,7 +12,7 @@ public class Logradouro : BaseEntity<Logradouro>
         Set(logradouro => logradouro.Nome, logradouro)
             .ValidateWhen()
             .IsNullOrEmpty()
-            .AddFailure(new NotificationModel("logradouro", "logradouro é obrigatório"));
+            .AddFailure(new FailureModel("logradouro", "logradouro é obrigatório"));
 
         var ruas = new List<Rua>()
         { 
@@ -35,7 +35,7 @@ public class Rua : BaseEntity<Rua>
         Set(Rua => Rua.Nome, Rua)
             .ValidateWhen()
             .IsNullOrEmpty()
-            .AddFailure(new NotificationModel("Rua", "Rua é obrigatório"));
+            .AddFailure(new FailureModel("Rua", "Rua é obrigatório"));
 
         return this;
     }
