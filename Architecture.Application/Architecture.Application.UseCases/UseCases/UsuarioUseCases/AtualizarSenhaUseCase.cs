@@ -22,7 +22,7 @@ public class AtualizarSenhaUseCase : BaseUseCase<AtualizarSenhaUsuarioDto>, IAtu
     {
         return await OnTransactionAsync(async (transaction) =>
         {
-            var usuario = await transaction.GetRepository<IRepository<Usuario>>()
+            var usuario = await transaction.GetRepository<Usuario>()
                 .FirstOrDefaultAsync(u => u.Id.ToString() == param.Id);
 
             if (usuario == null)
@@ -39,8 +39,7 @@ public class AtualizarSenhaUseCase : BaseUseCase<AtualizarSenhaUsuarioDto>, IAtu
 
             return Result.IncludeResult(
                 new UsuarioAtualizadoModel().FromEntity(
-                    await transaction.GetRepository<IRepository<Usuario>>()
-                        .UpdateAsync(usuario))
+                    await transaction.GetRepository<Usuario>().UpdateAsync(usuario))
                 );
         });
     }

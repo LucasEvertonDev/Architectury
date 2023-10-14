@@ -17,7 +17,7 @@ public class BuscarUsuariosUseCase : BaseUseCase<RecuperarUsuariosDto>, IBuscarU
     {
         return await OnTransactionAsync(async (transaction) =>
         {
-            var pagedResult = await transaction.GetRepository<IRepository<Usuario>>()
+            var pagedResult = await transaction.GetRepository<Usuario>()
                 .ToListAsync(
                     pageNumber: param.PageNumber,
                     pageSize: param.PageSize,

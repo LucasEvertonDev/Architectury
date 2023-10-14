@@ -29,7 +29,7 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
         {
             var passwordHash = _passwordHash.GeneratePasswordHash();
 
-            var grupoUsuario = await transaction.GetRepository<IRepository<GrupoUsuario>>().
+            var grupoUsuario = await transaction.GetRepository<GrupoUsuario>().
                 FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.GrupoUsuarioId));
 
             var user = new Usuario()
@@ -71,7 +71,7 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
     /// <returns></returns>
     private async Task<bool> EmailCadastrado(string email)
     {
-        return await transaction.GetRepository<IRepository<Usuario>>().FirstOrDefaultAsync(usuario => usuario.Email == email) != null;
+        return await transaction.GetRepository<Usuario>().FirstOrDefaultAsync(usuario => usuario.Email == email) != null;
     }
 
     /// <summary>
@@ -80,6 +80,6 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
     /// <returns></returns>
     private async Task<bool> UsernameCadastrado(string userName)
     {
-        return await transaction.GetRepository<IRepository<Usuario>>().FirstOrDefaultAsync(usuario => usuario.Username == userName) != null;
+        return await transaction.GetRepository<Usuario>().FirstOrDefaultAsync(usuario => usuario.Username == userName) != null;
     }
 }

@@ -1,7 +1,9 @@
-﻿using Architecture.Application.Domain.DbContexts.Repositorys.Base;
+﻿using Architecture.Application.Domain.DbContexts.Domains.Base;
+using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.DbContexts.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Architecture.Infra.Data.Context.UnitOfWork;
 
@@ -17,7 +19,19 @@ public class UnitOfWork<TDbContext> : IUnitWorkTransaction where TDbContext : Db
         _repositories = new Dictionary<Type, object>();
     }
 
-    public TRepository GetRepository<TRepository>() where TRepository : IRepository
+    public IRepository<TEntity> GetRepository<TEntity>() where TEntity : IEntity
+    {
+        if (_repositories.ContainsKey(typeof(TEntity)))
+        {
+            return (IRepository<TEntity>)_repositories[typeof(TEntity)];
+        }
+
+        var repository = _serviceProvider.GetService<IRepository<TEntity>>();
+        _repositories.Add(typeof(TEntity), repository);
+        return repository;
+    }
+
+    public TRepository GetCustomRepository<TRepository>() where TRepository : IRepository
     {
         if (_repositories.ContainsKey(typeof(TRepository)))
         {
@@ -29,12 +43,12 @@ public class UnitOfWork<TDbContext> : IUnitWorkTransaction where TDbContext : Db
         return repository;
     }
 
-    public async Task OpenConnectionAsync(Func<Task> func)
+    public async Task OpenConnectionAsync(Func<ITransaction, Task> func)
     {
         var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            await func();
+            await func(this);
 
             await transaction.CommitAsync();
         }

@@ -1,4 +1,5 @@
 ﻿using Architecture.Application.Core.Notifications;
+using Architecture.Application.Domain.DbContexts.Repositorys.PessoaRepository;
 using Architecture.Application.UseCases.UseCases.Base;
 using Architecture.Application.UseCases.UseCases.PessoaUseCases.Interfaces;
 
@@ -12,11 +13,15 @@ public class RecuperarPessoasUseCase : BaseUseCase, IRecuperarPessoasUseCase
 
     public override async Task<Result> ExecuteAsync()
     {
-        return await OnTransactionAsync(async () =>
+        return await OnTransactionAsync(async (transaction) =>
         {
-            //var aux = await _unitOfWork.PessoasRepository.GetPessoasQuery();
+            var aux = await transaction.GetCustomRepository<IPessoaRepository>()
+                .GetPessoasQuery();
 
-            //return Result.IncludeResult(await _unitOfWork.PessoasRepository.ToListAsync());
+            return Result.IncludeResult(
+                await transaction.GetCustomRepository<IPessoaRepository>()
+                    .ToListAsync()
+                );
         });
     }
 }

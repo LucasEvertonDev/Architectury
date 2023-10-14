@@ -54,7 +54,7 @@ public abstract class BaseUseCase<TParam> : Notifiable
         return Result;
     }
 
-    protected async Task<Result> OnTransactionAsync(Func<Task> func)
+    protected async Task<Result> OnTransactionAsync(Func<ITransaction, Task> func)
     {
         try
         {
@@ -101,7 +101,7 @@ public abstract class BaseUseCase : Notifiable
         return Task.CompletedTask;
     }
 
-    protected async Task<Result> OnTransactionAsync(Func<Task<Result>> func)
+    protected async Task<Result> OnTransactionAsync(Func<ITransaction, Task<Result>> func)
     {
         try
         {
@@ -120,7 +120,7 @@ public abstract class BaseUseCase : Notifiable
         return Result;
     }
 
-    protected async Task<Result> OnTransactionAsync(Func<Task> func)
+    protected async Task<Result> OnTransactionAsync(Func<ITransaction, Task> func)
     {
         try
         {

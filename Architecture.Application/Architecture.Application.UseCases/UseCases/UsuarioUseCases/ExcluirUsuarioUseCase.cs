@@ -19,7 +19,7 @@ public class ExcluirUsuarioUseCase : BaseUseCase<ExcluirUsuarioDto>, IExcluirUsu
     {
         return await OnTransactionAsync(async (transaction) =>
         {
-            var usuario = await transaction.GetRepository<IRepository<Usuario>>()
+            var usuario = await transaction.GetRepository<Usuario>()
                 .FirstOrDefaultAsync(u => u.Id.ToString() == param.Id);
 
             if (usuario == null)
@@ -27,7 +27,7 @@ public class ExcluirUsuarioUseCase : BaseUseCase<ExcluirUsuarioDto>, IExcluirUsu
                 return Result.Failure<ExcluirUsuarioUseCase>(Erros.Business.UsuarioInexistente);
             }
 
-            await transaction.GetRepository<IRepository<Usuario>>()
+            await transaction.GetRepository<Usuario>()
                 .DeleteLogicAsync(usuario);
 
             return Result;

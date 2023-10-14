@@ -33,7 +33,7 @@ public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
                 return Result.Failure<LoginUseCase>(Erros.Business.CrendenciaisClienteInvalida);
             }
 
-            var user = await transaction.GetRepository<IRepository<Usuario>>()
+            var user = await transaction.GetRepository<Usuario>()
                 .FirstOrDefaultAsync(a => a.Username == param.Body.Username);
 
             if (user == null || string.IsNullOrEmpty(user.Id.ToString()))
@@ -48,11 +48,12 @@ public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
 
             user.RegistraUltimoAcesso();
 
-            var roles = await transaction.GetRepository<IMapPermissoesPorGrupoUsuarioRepository>().GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
+            var roles = await transaction.GetCustomRepository<IMapPermissoesPorGrupoUsuarioRepository>()
+                .GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
 
             var (tokem, data) = await _tokenService.GenerateToken(user, param.ClientId, roles);
 
-            await transaction.GetRepository<IRepository<Usuario>>()
+            await transaction.GetRepository<Usuario>()
                 .UpdateAsync(user);
 
             return Result.IncludeResult(new TokenModel
@@ -66,7 +67,7 @@ public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
     private async Task<bool> CredenciasClienteInvalidas(LoginDto param)
     {
         return !(
-                    await transaction.GetRepository<IRepository<CredenciaisCliente>>()
+                    await transaction.GetRepository<CredenciaisCliente>()
                         .GetListFromCacheAsync(a => a.Identificacao == new Guid(param.ClientId)
                             && a.Chave == param.ClientSecret)
                 ).Any();
