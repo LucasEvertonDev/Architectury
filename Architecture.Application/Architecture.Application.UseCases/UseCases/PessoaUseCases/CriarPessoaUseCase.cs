@@ -24,13 +24,47 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
                     Result.Failure<CriarPessoaUseCase>(Erros.Pessoa.PessoaNula);
                 }
 
-                var pessoa = new Domain.DbContexts.Domains.Pessoa().CriarPessoa(
-                    primeiroNome: param.PrimeiroNome,
-                    sobrenome: param.Sobrenome,
-                    email: param.Email,
-                    dataNascimento: param.DataNascimento,
-                    enderecoModel: param.Endereco
-                );
+                var endereco1 = new Endereco()
+                            .CriarEndereco(
+                                cep: "",
+                                cidade: "",
+                                estado: "",
+                                logradouro: new Logradouro().CriarLogradouro(
+                                        logradouro: "",
+                                        ruas: new List<Rua>()
+                                        {
+                            new Rua().CriarRua(Rua: ""),
+                            new Rua().CriarRua(Rua: "")
+                                        }
+                                    )
+                            );
+
+
+                var endereco2 = new Endereco()
+                    .CriarEndereco(
+                        cep: "",
+                        cidade: "",
+                        estado: "",
+                        logradouro: new Logradouro().CriarLogradouro(
+                                logradouro: "",
+                                ruas: new List<Rua>()
+                                {
+                            new Rua().CriarRua(Rua: ""),
+                            new Rua().CriarRua(Rua: "")
+                                }
+                            )
+                    );
+
+                var pessoa = new Pessoa()
+                    .CriarPessoa(
+                        primeiroNome: "",
+                        sobrenome: "",
+                        email: "",
+                        dataNascimento: DateTime.Now,
+                        endereco: endereco2,
+                        enderecos : new List<Endereco> { endereco1, endereco2 }
+                    );
+
 
                 if (pessoa.HasFailure())
                 {

@@ -9,7 +9,7 @@ public class AfterValidationWhenString : AfterValidationWhen, IAfterValidationWh
 
     public AfterValidationWhenString(NotificationContext notificationContext, NotificationInfo notificationInfo) : base(notificationContext, notificationInfo)
     {
-        _currentvalue = notificationInfo.Value;
+        _currentvalue = notificationInfo.PropInfo.Value;
     }
 
     public AddNotificationService<AfterValidationWhenString> Is(bool ruleFor)

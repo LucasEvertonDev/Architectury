@@ -12,11 +12,11 @@ public class BaseController : ControllerBase
     {
         Dictionary<object, object[]> dic = new Dictionary<object, object[]>();
 
-        var agrupados = result.GetFailures.OrderByDescending(a => (int)a.notificationType)
+        var agrupados = result.GetFailures.OrderByDescending(a => (int)a.NotificationInfo.EntityInfo.NotificationType)
             .Select(a => new
             {
-                key = a.member ?? nameof(NotificationType.BusinessNotification),
-                message = a.message,
+                key = a.NotificationInfo.PropInfo.MemberName ?? nameof(NotificationType.BusinessNotification),
+                message = a.Error.message,
             })
             .GroupBy(a => a.key).Select(a => new
             {

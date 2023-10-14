@@ -1,8 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿using Architecture.Application.Core.Notifications;
+using System.Text.RegularExpressions;
 
 namespace Architecture.Application.Core.Notifications.Services
 {
-    public partial class ConditionalNotificationsService 
+    public partial class ConditionalNotificationsService
     {
         private readonly NotificationContext _notificationContext;
 
@@ -18,7 +19,7 @@ namespace Architecture.Application.Core.Notifications.Services
 
         public NotificationService IsInvalidEmail(string email)
         {
-            return new NotificationService(_notificationContext, !Regex.IsMatch((string)email, @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$"));
+            return new NotificationService(_notificationContext, !Regex.IsMatch(email, @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$"));
         }
 
         public NotificationService IsNullOrEmpty(string value)

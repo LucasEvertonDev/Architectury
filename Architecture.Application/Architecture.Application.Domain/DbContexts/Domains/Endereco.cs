@@ -15,24 +15,24 @@ public class Endereco : BaseEntity<Endereco>
 
     public Logradouro Logradouro { get; private set; }  
 
-    public Endereco CriarEndereco(string cep, string estado, string cidade)
+    public Endereco CriarEndereco(string cep, string estado, string cidade, Logradouro logradouro)
     {
         Set(endereco => endereco.Cep, cep)
             .ValidateWhen()
             .IsNullOrEmpty()
-            .AddFailure(new NotificationModel("endereco", "Cep é obrigatório"));
+            .AddFailure(new FailureModel("endereco", "Cep é obrigatório"));
 
         Set(endereco => endereco.Estado, estado)
             .ValidateWhen()
             .IsNullOrEmpty()
-            .AddFailure(new NotificationModel("endereco", "Estado é obrigatório"));
+            .AddFailure(new FailureModel("endereco", "Estado é obrigatório"));
 
         Set(endereco => endereco.Cidade, cidade)
             .ValidateWhen()
             .IsNullOrEmpty()
-            .AddFailure(new NotificationModel("endereco", "Cidade é obrigatório"));
+            .AddFailure(new FailureModel("endereco", "Cidade é obrigatório"));
 
-        Set(endereco => endereco.Logradouro, new Logradouro().CriarLogradouro(""));
+        Set(endereco => endereco.Logradouro, logradouro);
 
         return this;
     }
