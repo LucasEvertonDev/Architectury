@@ -1,12 +1,13 @@
-﻿using FluentValidation;
+﻿using Architecture.Application.Domain.Models.Base;
+using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
+using System.Reflection;
 
 namespace Architecture.WebApi.Structure.Filters;
 
-public class ValidationFilter : IAsyncActionFilter
+public class ValidationFilter : IEndpointFilter
 {
     private readonly IServiceProvider _serviceProvider;
 
@@ -15,30 +16,32 @@ public class ValidationFilter : IAsyncActionFilter
         _serviceProvider = serviceProvider;
     }
 
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    public async ValueTask<object> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
-        if (!context.ActionArguments.Any())
+        if (!context.Arguments.Any())
         {
-            await next();
-            return;
+            return await next(context);
         }
 
         var validationFailures = new List<ValidationFailure>();
 
-        foreach (var actionArgument in context.ActionArguments)
+        foreach (var actionArgument in context.Arguments)
         {
-            var validationErrors = await GetValidationErrorsAsync(actionArgument.Value);
-            validationFailures.AddRange(validationErrors);
+            if (actionArgument.GetType().GetInterface(nameof(IValidationAsync)) != null)
+            {
+                var validationErrors = await GetValidationErrorsAsync(actionArgument);
+                validationFailures.AddRange(validationErrors);
+            }
         }
 
         if (!validationFailures.Any())
         {
-            await next();
-            return;
+            return await next(context);
         }
 
-        context.Result = new BadRequestObjectResult(validationFailures.ToProblemDetails());
+        return Results.BadRequest(validationFailures.ToProblemDetails());
     }
+
 
     private async Task<IEnumerable<ValidationFailure>> GetValidationErrorsAsync(object value)
     {

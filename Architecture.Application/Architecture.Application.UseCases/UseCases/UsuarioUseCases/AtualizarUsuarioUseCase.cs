@@ -43,6 +43,11 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
                 Result.Failure<AtualizarUsuarioUseCase>(Erros.Business.EmailExistente);
             }
 
+            if (usuario.HasFailure() || HasFailure())
+            {
+                Result.Failure<AtualizarUsuarioUseCase>(usuario);
+            }
+
             return Result.IncludeResult(await unitOfWork.UsuarioRepository.UpdateAsync(usuario));
         });
     }

@@ -1,8 +1,9 @@
-﻿using Architecture.Application.Domain.Models.Endereco;
+﻿using Architecture.Application.Domain.Models.Base;
+using Architecture.Application.Domain.Models.Endereco;
 
 namespace Architecture.Application.Domain.Models.Pessoa;
 
-public class CriarPessoaModel
+public class CriarPessoaModel : IValidationAsync
 {
     public string PrimeiroNome { get; set; }
     public string Sobrenome { get; set; }

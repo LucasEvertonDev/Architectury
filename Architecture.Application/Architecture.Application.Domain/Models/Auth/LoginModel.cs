@@ -24,6 +24,14 @@ public class LoginInfo
 {
     [FromHeader(Name = "Authorization")]
     public string Authorization { get; set; }
+
+    [FromBody]
+    public Body Body { get; set; }
+}
+
+
+public class Body 
+{
     public string username { get; set; }
     public string password { get; set; }
 }

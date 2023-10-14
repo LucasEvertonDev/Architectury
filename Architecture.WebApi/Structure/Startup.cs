@@ -10,6 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Architecture.WebApi.Structure.Middlewares;
 using Architecture.WebApi.Structure.Filters;
+using Architecture.WebApi.Minimals;
+using Architecture.WebApi.Apis;
 
 namespace Architecture.WebApi.Structure;
 
@@ -18,6 +20,8 @@ public class Startup
     protected AppSettings appSettings { get; set; }
 
     public Startup(IConfiguration configuration)
+
+
     {
         Configuration = configuration;
         appSettings = new AppSettings();
@@ -27,11 +31,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddMvc(options =>
-        {
-            //options.Filters.Add<ValidationFilter>();
-            // options.Filters.Add<NotificationFilter>();
-        });
+        services.AddMvcCore();
 
         services.AddControllers();
 
@@ -70,6 +70,8 @@ public class Startup
             //options.SizeLimit = 1024 * 1024;
         });
 
+        services.AddAntiforgery();
+
         services.AddSingleton(appSettings);
 
         services.AddSwaggerGen(c =>
@@ -85,6 +87,9 @@ public class Startup
         services.AddSwaggerExamples();
 
         services.AddInfraStructure(appSettings);
+
+        services.AddAuthorizationBuilder()
+            .AddPolicy("admin", policy => policy.RequireRole("admin"));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -120,9 +125,15 @@ public class Startup
 
         app.UseAuthorization();
 
+        app.UseAntiforgery();
+
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapControllers();
+            endpoints.AddAuthApi();
+
+            endpoints.AddPessoasApi();
+
+            endpoints.AddUsuariosApi();
         });
     }
 }

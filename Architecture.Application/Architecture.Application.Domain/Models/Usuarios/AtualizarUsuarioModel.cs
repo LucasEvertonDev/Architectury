@@ -1,11 +1,12 @@
 ﻿using Architecture.Application.Domain.DbContexts.Domains;
+using Architecture.Application.Domain.Models.Base;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 
 namespace Architecture.Application.Domain.Models.Usuarios;
 
-public class AtualizarUsuarioDto
+public class AtualizarUsuarioDto : IValidationAsync
 {
     [JsonIgnore]
     [FromRoute(Name = "id")]

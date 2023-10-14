@@ -1,9 +1,10 @@
 ﻿using Architecture.Application.Domain.DbContexts.Domains;
+using Architecture.Application.Domain.Models.Base;
 using System.ComponentModel;
 
 namespace Architecture.Application.Domain.Models.Usuarios;
 
-public class CriarUsuarioModel
+public class CriarUsuarioModel : IValidationAsync
 {
     [DefaultValue("lcseverton")]
     public string Username { get; set; }

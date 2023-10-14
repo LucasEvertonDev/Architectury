@@ -1,6 +1,7 @@
 ﻿using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Repositorys.Base;
+using Architecture.Application.Domain.Models.Base;
 using Architecture.Application.Domain.Models.Usuarios;
 using Architectury.Infra.Plugins.FluentValidation.Extensions;
 using FluentValidation;
