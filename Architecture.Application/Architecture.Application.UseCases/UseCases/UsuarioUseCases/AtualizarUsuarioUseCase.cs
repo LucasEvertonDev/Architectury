@@ -17,9 +17,9 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
 
     public override async Task<Result> ExecuteAsync(AtualizarUsuarioDto param)
     {
-        return await OnTransactionAsync(async (transaction) =>
+        return await OnTransactionAsync(async () =>
         {
-            var usuario = await transaction.GetRepository<Usuario>()
+            var usuario = await UnitOfWork.GetRepository<Usuario>()
                 .FirstOrDefaultTrackingAsync(u => u.Id.ToString() == param.Id);
 
             if (usuario == null)
@@ -27,7 +27,7 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
                 return Result.Failure<AtualizarUsuarioUseCase>(Erros.Business.UsuarioInexistente);
             }
 
-            var grupoUsuario = await transaction.GetRepository<GrupoUsuario>()
+            var grupoUsuario = await UnitOfWork.GetRepository<GrupoUsuario>()
                 .FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.Body.GrupoUsuarioId));
 
             usuario.AtualizaUsuario(
@@ -48,7 +48,7 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
             }
 
             return Result.IncludeResult(
-                await transaction.GetRepository<Usuario>().UpdateAsync(usuario)
+                await UnitOfWork.GetRepository<Usuario>().UpdateAsync(usuario)
                 );  
         });
     }
@@ -60,7 +60,7 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
     /// <returns></returns>
     private async Task<bool> EmailCadastrado(string email)
     {
-        return await transaction.GetRepository<Usuario>()
+        return await UnitOfWork.GetRepository<Usuario>()
             .FirstOrDefaultAsync(usuario => usuario.Email == email) != null;
     }
 
@@ -70,7 +70,7 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
     /// <returns></returns>
     private async Task<bool> UsernameCadastrado(string userName)
     {
-        return await transaction.GetRepository<Usuario>()
+        return await UnitOfWork.GetRepository<Usuario>()
             .FirstOrDefaultAsync(usuario => usuario.Username == userName) != null;
     }
 }

@@ -25,14 +25,14 @@ public class RefreshTokenUseCase : BaseUseCase<RefreshTokenDto>, IRefreshTokenUs
 
     public override async Task<Result> ExecuteAsync(RefreshTokenDto refreshTokenDto)
     {
-        return await OnTransactionAsync(async (transaction) =>
+        return await OnTransactionAsync(async () =>
         {
             if (await CredenciasClienteInvalidas(refreshTokenDto))
             {
                 return Result.Failure<LoginUseCase>(Erros.Business.CrendenciaisClienteInvalida);
             }
 
-            var user = await transaction.GetRepository<Usuario>()
+            var user = await UnitOfWork.GetRepository<Usuario>()
                 .FirstOrDefaultAsync(user => user.Id.ToString() == _identity.GetUserClaim(JWTUserClaims.UserId));
 
             if (user == null || string.IsNullOrEmpty(user.Id.ToString()))
@@ -42,12 +42,12 @@ public class RefreshTokenUseCase : BaseUseCase<RefreshTokenDto>, IRefreshTokenUs
 
             user.RegistraUltimoAcesso();
 
-            var roles = await transaction.GetCustomRepository<IMapPermissoesPorGrupoUsuarioRepository>()
+            var roles = await UnitOfWork.GetCustomRepository<IMapPermissoesPorGrupoUsuarioRepository>()
                 .GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
 
             var (tokem, data) = await _tokenService.GenerateToken(user, refreshTokenDto.ClientId, roles);
 
-            await transaction.GetRepository<Usuario>()
+            await UnitOfWork.GetRepository<Usuario>()
                 .UpdateAsync(user);
 
             return Result.IncludeResult(new TokenModel
@@ -61,7 +61,7 @@ public class RefreshTokenUseCase : BaseUseCase<RefreshTokenDto>, IRefreshTokenUs
     private async Task<bool> CredenciasClienteInvalidas(RefreshTokenDto param)
     {
         return !(
-                    await transaction.GetRepository<CredenciaisCliente>()
+                    await UnitOfWork.GetRepository<CredenciaisCliente>()
                      .GetListFromCacheAsync(a => a.Identificacao == new Guid(param.ClientId)
                             && a.Chave == param.ClientSecret)
                 ).Any();

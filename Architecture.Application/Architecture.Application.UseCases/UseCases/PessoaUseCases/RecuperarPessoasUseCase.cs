@@ -13,13 +13,13 @@ public class RecuperarPessoasUseCase : BaseUseCase, IRecuperarPessoasUseCase
 
     public override async Task<Result> ExecuteAsync()
     {
-        return await OnTransactionAsync(async (transaction) =>
+        return await OnTransactionAsync(async () =>
         {
-            var aux = await transaction.GetCustomRepository<IPessoaRepository>()
+            var aux = await UnitOfWork.GetCustomRepository<IPessoaRepository>()
                 .GetPessoasQuery();
 
             return Result.IncludeResult(
-                await transaction.GetCustomRepository<IPessoaRepository>()
+                await UnitOfWork.GetCustomRepository<IPessoaRepository>()
                     .ToListAsync()
                 );
         });

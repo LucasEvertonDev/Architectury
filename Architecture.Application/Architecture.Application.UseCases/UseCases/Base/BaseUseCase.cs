@@ -4,25 +4,28 @@ using Architecture.Application.Core.Notifications.Notifiable.Notifications;
 using Architecture.Application.Domain.DbContexts.UnitOfWork;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Security.Principal;
 
 namespace Architecture.Application.UseCases.UseCases.Base;
 
 public abstract class BaseUseCase<TParam> : Notifiable
 {
-    private readonly IUnitWorkTransaction _unitOfWorkTransaction;
+    private IUnitWorkTransaction _unitOfWorkTransaction;
     protected readonly IIdentity _identity;
+    private readonly IServiceProvider _serviceProvider;
+
     public Result Result { get; private set; }
 
     public BaseUseCase(IServiceProvider serviceProvider)
     {
-        _unitOfWorkTransaction = serviceProvider.GetService<IUnitWorkTransaction>();
         _identity = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext?.User?.Identity;
+        _serviceProvider = serviceProvider;
         Notifications = serviceProvider.GetService<NotificationContext>();
         Result = new Result(Notifications);
     }
 
-    public ITransaction transaction => _unitOfWorkTransaction;
+    public IUnitOfWork UnitOfWork => _unitOfWorkTransaction;
 
     public abstract Task<Result> ExecuteAsync(TParam param);
 
@@ -36,10 +39,12 @@ public abstract class BaseUseCase<TParam> : Notifiable
         return Task.CompletedTask;
     }
 
-    protected async Task<Result> OnTransactionAsync(Func<ITransaction, Task<Result>> func)
+    protected async Task<Result> OnTransactionAsync(Func<Task<Result>> func)
     {
         try
         {
+            _unitOfWorkTransaction = _serviceProvider.GetService<IUnitWorkTransaction>();
+
             await _unitOfWorkTransaction.OpenConnectionAsync(func);
         }
         catch (Exception exception)
@@ -54,10 +59,12 @@ public abstract class BaseUseCase<TParam> : Notifiable
         return Result;
     }
 
-    protected async Task<Result> OnTransactionAsync(Func<ITransaction, Task> func)
+    protected async Task<Result> OnTransactionAsync(Func<Task> func)
     {
         try
         {
+            _unitOfWorkTransaction = _serviceProvider.GetService<IUnitWorkTransaction>();
+
             await _unitOfWorkTransaction.OpenConnectionAsync(func);
         }
         catch (Exception exception)
@@ -75,18 +82,20 @@ public abstract class BaseUseCase<TParam> : Notifiable
 
 public abstract class BaseUseCase : Notifiable
 {
-    protected readonly IUnitWorkTransaction _unitOfWorkTransaction;
+    protected IUnitWorkTransaction _unitOfWorkTransaction;
+    private readonly IServiceProvider _serviceProvider;
     protected readonly IIdentity _identity;
     public Result Result { get; private set; }
 
     public BaseUseCase(IServiceProvider serviceProvider)
     {
-        _unitOfWorkTransaction = serviceProvider.GetService<IUnitWorkTransaction>();
+        _serviceProvider = serviceProvider;
         _identity = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext?.User?.Identity;
         Notifications = serviceProvider.GetService<NotificationContext>();
+        Result = new Result(Notifications);
     }
 
-    protected ITransaction _unitOfWork => _unitOfWorkTransaction;
+    protected IUnitOfWork UnitOfWork => _unitOfWorkTransaction;
 
 
     public abstract Task<Result> ExecuteAsync();
@@ -101,10 +110,12 @@ public abstract class BaseUseCase : Notifiable
         return Task.CompletedTask;
     }
 
-    protected async Task<Result> OnTransactionAsync(Func<ITransaction, Task<Result>> func)
+    protected async Task<Result> OnTransactionAsync(Func<Task<Result>> func)
     {
         try
         {
+            _unitOfWorkTransaction = _serviceProvider.GetService<IUnitWorkTransaction>();
+
             await _unitOfWorkTransaction.OpenConnectionAsync(func);
         }
         catch (Exception exception)
@@ -120,7 +131,7 @@ public abstract class BaseUseCase : Notifiable
         return Result;
     }
 
-    protected async Task<Result> OnTransactionAsync(Func<ITransaction, Task> func)
+    protected async Task<Result> OnTransactionAsync(Func<Task> func)
     {
         try
         {

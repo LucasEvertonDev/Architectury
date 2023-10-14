@@ -17,7 +17,7 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
 
         public override async Task<Result> ExecuteAsync(CriarPessoaModel param)
         {
-            return await OnTransactionAsync(async (transaction) =>
+            return await OnTransactionAsync(async () =>
             {
                 if (param == null)
                 {
@@ -37,7 +37,7 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
                     return Result.Failure<CriarPessoaUseCase>(pessoa);
                 }
 
-                var pessoaCriada = await transaction.GetRepository<Pessoa>().
+                var pessoaCriada = await UnitOfWork.GetRepository<Pessoa>().
                     CreateAsync(pessoa);
 
                 return Result.IncludeResult(new PessoaCriadaModel()

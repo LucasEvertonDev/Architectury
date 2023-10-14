@@ -15,9 +15,9 @@ public class BuscarUsuariosUseCase : BaseUseCase<RecuperarUsuariosDto>, IBuscarU
     }
     public override async Task<Result> ExecuteAsync(RecuperarUsuariosDto param)
     {
-        return await OnTransactionAsync(async (transaction) =>
+        return await OnTransactionAsync(async () =>
         {
-            var pagedResult = await transaction.GetRepository<Usuario>()
+            var pagedResult = await UnitOfWork.GetRepository<Usuario>()
                 .ToListAsync(
                     pageNumber: param.PageNumber,
                     pageSize: param.PageSize,

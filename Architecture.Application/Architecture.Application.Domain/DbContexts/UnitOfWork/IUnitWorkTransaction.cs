@@ -1,7 +1,7 @@
 ﻿namespace Architecture.Application.Domain.DbContexts.UnitOfWork;
 
-public interface IUnitWorkTransaction : ITransaction
+public interface IUnitWorkTransaction : IUnitOfWork
 {
-    Task<TRetorno> OpenConnectionAsync<TRetorno>(Func<ITransaction, Task<TRetorno>> func);
-    Task OpenConnectionAsync(Func<ITransaction, Task> func);
+    Task<TRetorno> OpenConnectionAsync<TRetorno>(Func<Task<TRetorno>> func);
+    Task OpenConnectionAsync(Func<Task> func);
 }

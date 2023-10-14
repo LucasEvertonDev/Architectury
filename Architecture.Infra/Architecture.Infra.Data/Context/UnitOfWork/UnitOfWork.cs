@@ -43,12 +43,12 @@ public class UnitOfWork<TDbContext> : IUnitWorkTransaction where TDbContext : Db
         return repository;
     }
 
-    public async Task OpenConnectionAsync(Func<ITransaction, Task> func)
+    public async Task OpenConnectionAsync(Func<Task> func)
     {
         var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            await func(this);
+            await func();
 
             await transaction.CommitAsync();
         }
@@ -59,12 +59,12 @@ public class UnitOfWork<TDbContext> : IUnitWorkTransaction where TDbContext : Db
         }
     }
 
-    public async Task<TRetorno> OpenConnectionAsync<TRetorno>(Func<ITransaction, Task<TRetorno>> func)
+    public async Task<TRetorno> OpenConnectionAsync<TRetorno>(Func<Task<TRetorno>> func)
     {
         var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            TRetorno retorno = await func(this);
+            TRetorno retorno = await func();
 
             await _context.SaveChangesAsync();
 
