@@ -19,15 +19,7 @@ public static class AuthApi
             {
                 var result = await loginUseCase.ExecuteAsync(loginModel);
 
-                if (result.HasFailures())
-                {
-                    return result.BadRequestFailure();
-                }
-
-                return Results.Ok(new ResponseDto<TokenModel>()
-                {
-                    Content = result.GetValue<TokenModel>()
-                });
+                return result.GetResponse<TokenModel>();
 
             }).Produces<ResponseDto<ErrorModel>>(StatusCodes.Status400BadRequest).Produces<ResponseDto<TokenModel>>(StatusCodes.Status200OK);
 
@@ -37,15 +29,8 @@ public static class AuthApi
             {
                 var result = await refreshTokenUseCase.ExecuteAsync(refreshTokenDto);
 
-                if (result.HasFailures())
-                {
-                    return result.BadRequestFailure();
-                }
+                return result.GetResponse<TokenModel>();
 
-                return Results.Ok(new ResponseDto<TokenModel>()
-                {
-                    Content = result.GetValue<TokenModel>()
-                });
             }).RequireAuthorization(); // passa o nome da policy que criou ou instancia para validar função
 
 

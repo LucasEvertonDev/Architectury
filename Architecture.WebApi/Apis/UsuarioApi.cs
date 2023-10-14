@@ -2,15 +2,12 @@
 using Architecture.Application.Domain.Models.Base;
 using Architecture.Application.Domain.Models.Usuarios;
 using Architecture.Application.UseCases.UseCases.UsuarioUseCases.UseCases;
-using Architecture.WebApi.Structure.Attributes;
 using Architecture.WebApi.Structure.Extensions;
 using Architecture.WebApi.Structure.Filters;
 using Architecture.WebApi.Structure.Helpers;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Architecture.WebApi.Apis;
-
 
 public static class UsuariosApi
 {
@@ -23,15 +20,7 @@ public static class UsuariosApi
                 {
                     var result = await buscarUsuariosUseCase.ExecuteAsync(recuperarUsuariosDto);
 
-                    if (result.HasFailures())
-                    {
-                        return result.BadRequestFailure();
-                    }
-
-                    return Results.Ok(new ResponseDto<PagedResult<UsuariosRecuperadosModel>>()
-                    {
-                        Content = result.GetValue<PagedResult<UsuariosRecuperadosModel>>()
-                    });
+                    return result.GetResponse<PagedResult<UsuariosRecuperadosModel>>();
 
                 }).RequireAuthorization();
 
@@ -40,15 +29,7 @@ public static class UsuariosApi
             {
                 var result = await criarUsuarioUseCase.ExecuteAsync(createUserModel);
 
-                if (result.HasFailures())
-                {
-                    return result.BadRequestFailure();
-                }
-
-                return Results.Ok(new ResponseDto<UsuarioCriadoModel>()
-                {
-                    Content = result.GetValue<UsuarioCriadoModel>()
-                });
+                return result.GetResponse<UsuarioCriadoModel>();
 
             }).RequireAuthorization();
 
@@ -57,15 +38,7 @@ public static class UsuariosApi
             {
                 var result = await atualizarUsuarioUseCase.ExecuteAsync(updateUserModel);
 
-                if (result.HasFailures())
-                {
-                    return result.BadRequestFailure();
-                }
-
-                return Results.Ok(new ResponseDto<AtualizarUsuarioModel>()
-                {
-                    Content = result.GetValue<AtualizarUsuarioModel>()
-                });
+                return result.GetResponse<AtualizarUsuarioModel>();
 
             }).RequireAuthorization();
 
@@ -74,15 +47,7 @@ public static class UsuariosApi
             {
                 var result = await atualizarSenhaUseCase.ExecuteAsync(atualizarSenhaUsuarioDto);
 
-                if (result.HasFailures())
-                {
-                    return result.BadRequestFailure();
-                }
-
-                return Results.Ok(new ResponseDto()
-                {
-                    Success = true
-                });
+                return result.GetResponse<ResponseDto>();
 
             }).RequireAuthorization();
 
@@ -91,15 +56,7 @@ public static class UsuariosApi
            {
                var result = await excluirUsuarioUseCase.ExecuteAsync(excluirUsuarioDto);
 
-               if (result.HasFailures())
-               {
-                   return result.BadRequestFailure();
-               }
-
-               return Results.Ok(new ResponseDto()
-               {
-                   Success = true
-               });
+               return result.GetResponse<ResponseDto>();
 
            }).RequireAuthorization();
     }

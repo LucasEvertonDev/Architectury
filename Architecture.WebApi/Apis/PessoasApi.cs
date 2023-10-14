@@ -1,4 +1,5 @@
 ﻿using Architecture.Application.Domain.DbContexts.Domains;
+using Architecture.Application.Domain.Models.Auth;
 using Architecture.Application.Domain.Models.Pessoa;
 using Architecture.Application.UseCases.UseCases.PessoaUseCases.Interfaces;
 using Architecture.WebApi.Structure.Extensions;
@@ -18,12 +19,7 @@ public static class PessoasApi
             {
                 var result = await recuperarPessoasUseCase.ExecuteAsync();
 
-                if (result.HasFailures())
-                {
-                    return result.BadRequestFailure();
-                }
-                    
-                return Results.Ok(result.GetValue<IEnumerable<Pessoa>>());
+                return result.GetResponse<IEnumerable<Pessoa>>();
 
             }).AllowAnonymous();
 
@@ -33,12 +29,7 @@ public static class PessoasApi
             {
                 var result = await criarPessoasUseCase.ExecuteAsync(criarPessoaModel);
 
-                if (result.HasFailures())
-                {
-                    return result.BadRequestFailure();
-                }
- 
-                return Results.Ok(result.GetValue<PessoaCriadaModel>());
+                return result.GetResponse<PessoaCriadaModel>();
 
             }).AllowAnonymous();
     }
