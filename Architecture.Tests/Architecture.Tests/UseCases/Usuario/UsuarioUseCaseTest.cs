@@ -44,7 +44,7 @@ public class UsuarioUseCaseTest : BaseTest
     }
 
     [Fact, TestPriority(3)]
-    public async Task ValidateUserAlreadyExists()
+    public async Task ValidateDeleteUser()
     {
         _usuarioTesteId.Should().NotBeNull();
 
@@ -57,7 +57,7 @@ public class UsuarioUseCaseTest : BaseTest
     }
 
     [Fact, TestPriority(2)]
-    public async Task ValidateDeleteUser()
+    public async Task ValidateUserAlreadyExists ()
     {
         var result = await _criarUsuarioUseCase.ExecuteAsync(new CriarUsuarioModel()
         {
