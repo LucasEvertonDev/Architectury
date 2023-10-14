@@ -23,7 +23,7 @@ public class UsuarioUseCaseTest : BaseTest
         _excluirUsuarioUseCase = _serviceProvider.GetService<IExcluirUsuarioUseCase>();
     }
 
-    [Fact, TestPriorityAttribute(1)]
+    [Fact, TestPriority(1)]
     public async Task ValidateSucess()
     {
         var result = await _criarUsuarioUseCase.ExecuteAsync(new CriarUsuarioModel()
