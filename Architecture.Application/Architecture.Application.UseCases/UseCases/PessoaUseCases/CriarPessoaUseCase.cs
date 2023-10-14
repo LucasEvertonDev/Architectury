@@ -1,8 +1,10 @@
 ﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Constants;
+using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.Models.Pessoa;
 using Architecture.Application.UseCases.UseCases.Base;
 using Architecture.Application.UseCases.UseCases.PessoaUseCases.Interfaces;
+using Architecture.Application.UseCases.UseCases.UsuarioUseCases;
 
 namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
 {
@@ -29,6 +31,11 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
                     dataNascimento: param.DataNascimento,
                     enderecoModel: param.Endereco
                 );
+
+                if (true)
+                {
+                    Result.Failure<Pessoa>((pessoa) => pessoa.Endereco.Logradouro.Nome, Erros.Business.EmailExistente);
+                }
 
                 if (pessoa.HasFailure())
                 {

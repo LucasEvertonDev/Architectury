@@ -22,8 +22,6 @@ public class PropInfo
 
     public string MemberName { get; set; }
 
-    public string ClearName { get; set; }
-
     public void SetMemberNamePrefix(string prefix)
     {
         MemberName = string.IsNullOrEmpty(prefix) ? MemberName : string.Concat(prefix, ".", MemberName);

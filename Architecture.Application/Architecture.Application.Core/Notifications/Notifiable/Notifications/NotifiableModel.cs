@@ -48,7 +48,6 @@ public partial class Notifiable<TEntity> : INotifiableModel
             {
                 property.SetValue(this, value, null);
                 CurrentProp.MemberName = value is INotifiableModel ? EntityInfo.Name : string.Concat(EntityInfo.Name, ".", property.Name);
-                CurrentProp.ClearName = property.Name;
             }
             else
             {

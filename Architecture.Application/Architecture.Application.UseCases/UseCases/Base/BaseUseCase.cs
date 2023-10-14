@@ -4,7 +4,6 @@ using Architecture.Application.Core.Notifications.Notifiable.Notifications;
 using Architecture.Application.Domain.DbContexts.UnitOfWork;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Security.Principal;
 
 namespace Architecture.Application.UseCases.UseCases.Base;
