@@ -3,6 +3,7 @@ using Architecture.Application.Core.Structure.Extensions;
 using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Repositorys.MapUserGroupRolesRepository;
+using Architecture.Application.Domain.DbContexts.UnitOfWork;
 using Architecture.Application.Domain.Models.Auth;
 using Architecture.Application.Domain.Plugins.JWT;
 using Architecture.Application.UseCases.UseCases.AuthUseCases.Interfaces;
@@ -31,7 +32,7 @@ public class RefreshTokenUseCase : BaseUseCase<RefreshTokenDto>, IRefreshTokenUs
                 return Result.Failure<LoginUseCase>(Erros.Business.CrendenciaisClienteInvalida);
             }
 
-            var user = await _unitOfWork.UsuarioRepository.FirstOrDefaultAsync(user => user.Id.ToString() == _identity.GetUserClaim(JWTUserClaims.UserId));
+            var user = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(user => user.Id.ToString() == _identity.GetUserClaim(JWTUserClaims.UserId));
 
             if (user == null || string.IsNullOrEmpty(user.Id.ToString()))
             {
@@ -40,11 +41,11 @@ public class RefreshTokenUseCase : BaseUseCase<RefreshTokenDto>, IRefreshTokenUs
 
             user.RegistraUltimoAcesso();
 
-            var roles = await _unitOfWork.MapPermissoesPorGrupoUsuarioRepository.GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
+            var roles = await unitOfWork.MapPermissoesPorGrupoUsuarioRepository.GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
 
             var (tokem, data) = await _tokenService.GenerateToken(user, refreshTokenDto.ClientId, roles);
 
-            await _unitOfWork.UsuarioRepository.UpdateAsync(user);
+            await unitOfWork.UsuarioRepository.UpdateAsync(user);
 
             return Result.IncludeResult(new TokenModel
             {
@@ -57,7 +58,7 @@ public class RefreshTokenUseCase : BaseUseCase<RefreshTokenDto>, IRefreshTokenUs
     private async Task<bool> CredenciasClienteInvalidas(RefreshTokenDto param)
     {
         return !(
-                    await _unitOfWork.CredenciaisClientesRepository.
+                    await unitOfWork.CredenciaisClientesRepository.
                         GetListFromCacheAsync(a => a.Identificacao == new Guid(param.ClientId)
                             && a.Chave == param.ClientSecret)
                 ).Any();

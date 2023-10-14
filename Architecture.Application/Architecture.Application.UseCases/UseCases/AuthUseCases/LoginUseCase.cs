@@ -1,5 +1,6 @@
 ﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Constants;
+using Architecture.Application.Domain.DbContexts.UnitOfWork;
 using Architecture.Application.Domain.Models.Auth;
 using Architecture.Application.Domain.Plugins.Cryptography;
 using Architecture.Application.Domain.Plugins.JWT;
@@ -25,12 +26,12 @@ public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
     {
         return await OnTransactionAsync(async () =>
         {
-            if (await CredenciasClienteInvalidas(param))
+            if (await CredenciasClienteInvalidas(unitOfWork, param))
             {
                 return Result.Failure<LoginUseCase>(Erros.Business.CrendenciaisClienteInvalida);
             }
 
-            var user = await _unitOfWork.UsuarioRepository.FirstOrDefaultAsync(a => a.Username == param.Body.Username);
+            var user = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(a => a.Username == param.Body.Username);
 
             if (user == null || string.IsNullOrEmpty(user.Id.ToString()))
             {
@@ -44,11 +45,11 @@ public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
 
             user.RegistraUltimoAcesso();
 
-            var roles = await _unitOfWork.MapPermissoesPorGrupoUsuarioRepository.GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
+            var roles = await unitOfWork.MapPermissoesPorGrupoUsuarioRepository.GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
 
             var (tokem, data) = await _tokenService.GenerateToken(user, param.ClientId, roles);
 
-            await _unitOfWork.UsuarioRepository.UpdateAsync(user);
+            await unitOfWork.UsuarioRepository.UpdateAsync(user);
 
             return Result.IncludeResult(new TokenModel
             {
@@ -58,10 +59,10 @@ public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
         });
     }
 
-    private async Task<bool> CredenciasClienteInvalidas(LoginDto param)
+    private async Task<bool> CredenciasClienteInvalidas(IUnitOfWork unitOfWork, LoginDto param)
     {
         return !(
-                    await _unitOfWork.CredenciaisClientesRepository.
+                    await unitOfWork.CredenciaisClientesRepository.
                         GetListFromCacheAsync(a => a.Identificacao == new Guid(param.ClientId)
                             && a.Chave == param.ClientSecret)
                 ).Any();

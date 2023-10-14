@@ -28,7 +28,7 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
         {
             var passwordHash = _passwordHash.GeneratePasswordHash();
 
-            var grupoUsuario = await _unitOfWork.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.GrupoUsuarioId));
+            var grupoUsuario = await unitOfWork.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.GrupoUsuarioId));
 
             var user = new Usuario()
                 .CriarUsuario(
@@ -69,7 +69,7 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
     /// <returns></returns>
     private async Task<bool> EmailCadastrado(string email)
     {
-        return await _unitOfWork.UsuarioRepository.FirstOrDefaultAsync(usuario => usuario.Email == email) != null;
+        return await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(usuario => usuario.Email == email) != null;
     }
 
     /// <summary>
@@ -78,6 +78,6 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
     /// <returns></returns>
     private async Task<bool> UsernameCadastrado(string userName)
     {
-        return await _unitOfWork.UsuarioRepository.FirstOrDefaultAsync(usuario => usuario.Username == userName) != null;
+        return await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(usuario => usuario.Username == userName) != null;
     }
 }

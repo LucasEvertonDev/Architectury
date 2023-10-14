@@ -4,25 +4,30 @@ using Architecture.Application.Core.Notifications.Notifiable.Notifications;
 using Architecture.Application.Domain.DbContexts.UnitOfWork;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Security.Principal;
 
 namespace Architecture.Application.UseCases.UseCases.Base;
 
 public abstract class BaseUseCase<TParam> : Notifiable
 {
-    private readonly IUnitWorkTransaction _unitOfWorkTransaction;
+    private IUnitWorkTransaction _unitOfWorkTransaction;
+    private readonly IServiceProvider _serviceProvider;
     protected readonly IIdentity _identity;
     public Result Result { get; private set; }
 
     public BaseUseCase(IServiceProvider serviceProvider)
     {
-        _unitOfWorkTransaction = serviceProvider.GetService<IUnitWorkTransaction>();
+        _serviceProvider = serviceProvider;
         _identity = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext?.User?.Identity;
         Notifications = serviceProvider.GetService<NotificationContext>();
         Result = new Result(Notifications);
     }
 
-    public IUnitOfWorkRepos _unitOfWork => _unitOfWorkTransaction;
+    /// <summary>
+    /// Tem seu bind no momento da invocação do metodo on transaction
+    /// </summary>
+    public IUnitOfWork unitOfWork => _unitOfWorkTransaction;
 
     public abstract Task<Result> ExecuteAsync(TParam param);
 
@@ -40,6 +45,8 @@ public abstract class BaseUseCase<TParam> : Notifiable
     {
         try
         {
+            _unitOfWorkTransaction = _serviceProvider.GetService<IUnitWorkTransaction>();
+
             await _unitOfWorkTransaction.OpenConnectionAsync(func);
         }
         catch (Exception exception)
@@ -58,6 +65,8 @@ public abstract class BaseUseCase<TParam> : Notifiable
     {
         try
         {
+            _unitOfWorkTransaction = _serviceProvider.GetService<IUnitWorkTransaction>();
+
             await _unitOfWorkTransaction.OpenConnectionAsync(func);
         }
         catch (Exception exception)
@@ -75,19 +84,23 @@ public abstract class BaseUseCase<TParam> : Notifiable
 
 public abstract class BaseUseCase : Notifiable
 {
-    protected readonly IUnitWorkTransaction _unitOfWorkTransaction;
+    private readonly IServiceProvider _serviceProvider;
+    protected IUnitWorkTransaction _unitOfWorkTransaction;
     protected readonly IIdentity _identity;
     public Result Result { get; private set; }
 
     public BaseUseCase(IServiceProvider serviceProvider)
     {
-        _unitOfWorkTransaction = serviceProvider.GetService<IUnitWorkTransaction>();
+        _serviceProvider = serviceProvider;
         _identity = serviceProvider.GetService<IHttpContextAccessor>()?.HttpContext?.User?.Identity;
         Notifications = serviceProvider.GetService<NotificationContext>();
+        Result = new Result(Notifications);
     }
 
-    protected IUnitOfWorkRepos _unitOfWork => _unitOfWorkTransaction;
-
+    /// <summary>
+    /// Tem seu bind no momento da invocação do metodo on transaction
+    /// </summary>
+    protected IUnitOfWork unitOfWork => _unitOfWorkTransaction;
 
     public abstract Task<Result> ExecuteAsync();
 
@@ -105,6 +118,8 @@ public abstract class BaseUseCase : Notifiable
     {
         try
         {
+            _unitOfWorkTransaction = _serviceProvider.GetService<IUnitWorkTransaction>();
+
             await _unitOfWorkTransaction.OpenConnectionAsync(func);
         }
         catch (Exception exception)
@@ -124,6 +139,8 @@ public abstract class BaseUseCase : Notifiable
     {
         try
         {
+            _unitOfWorkTransaction = _serviceProvider.GetService<IUnitWorkTransaction>();
+
             await _unitOfWorkTransaction.OpenConnectionAsync(func);
         }
         catch (Exception exception)

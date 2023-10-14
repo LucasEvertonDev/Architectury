@@ -17,14 +17,14 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
     {
         return await OnTransactionAsync(async () =>
         {
-            var usuario = await _unitOfWork.UsuarioRepository.FirstOrDefaultTrackingAsync(u => u.Id.ToString() == param.Id);
+            var usuario = await unitOfWork.UsuarioRepository.FirstOrDefaultTrackingAsync(u => u.Id.ToString() == param.Id);
 
             if (usuario == null)
             {
                 return Result.Failure<AtualizarUsuarioUseCase>(Erros.Business.UsuarioInexistente);
             }
 
-            var grupoUsuario = await _unitOfWork.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.Body.GrupoUsuarioId));
+            var grupoUsuario = await unitOfWork.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.Body.GrupoUsuarioId));
 
             usuario.AtualizaUsuario(
                     username: param.Body.Username,
@@ -43,7 +43,7 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
                 Result.Failure<AtualizarUsuarioUseCase>(Erros.Business.EmailExistente);
             }
 
-            return Result.IncludeResult(await _unitOfWork.UsuarioRepository.UpdateAsync(usuario));
+            return Result.IncludeResult(await unitOfWork.UsuarioRepository.UpdateAsync(usuario));
         });
     }
 
@@ -54,7 +54,7 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
     /// <returns></returns>
     private async Task<bool> EmailCadastrado(string email)
     {
-        return await _unitOfWork.UsuarioRepository.FirstOrDefaultAsync(usuario => usuario.Email == email) != null;
+        return await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(usuario => usuario.Email == email) != null;
     }
 
     /// <summary>
@@ -63,6 +63,6 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
     /// <returns></returns>
     private async Task<bool> UsernameCadastrado(string userName)
     {
-        return await _unitOfWork.UsuarioRepository.FirstOrDefaultAsync(usuario => usuario.Username == userName) != null;
+        return await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(usuario => usuario.Username == userName) != null;
     }
 }

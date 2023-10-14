@@ -1,6 +1,6 @@
 ﻿namespace Architecture.Application.Domain.DbContexts.UnitOfWork;
 
-public interface IUnitOfWorkRepos
+public interface IUnitOfWork
 {
     Repositorys.Base.IRepository<Domains.Usuario> UsuarioRepository { get; }
     Repositorys.Base.IRepository<Domains.Permissao> PermissaoRepository { get; }
