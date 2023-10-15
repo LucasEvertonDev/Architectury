@@ -9,7 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.Core\Architecture.Application.Core.csproj" />
     <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.Domain\Architecture.Application.Domain.csproj" />
-    <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.UseCases\Architecture.Application.UseCases.csproj" />
+    <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.UseCases\Architecture.Application.Mediator.csproj" />
     <ProjectReference Include="..\Architecture.Infra.Data\Architecture.Infra.Data.csproj" />
     <ProjectReference Include="..\Architectury.Infra.Plugins\Architectury.Infra.Plugins.csproj" />
   </ItemGroup>

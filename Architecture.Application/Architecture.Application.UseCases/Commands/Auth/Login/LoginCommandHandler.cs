@@ -4,17 +4,16 @@ using Architecture.Application.Domain.DbContexts.UnitOfWork;
 using Architecture.Application.Domain.Models.Auth;
 using Architecture.Application.Domain.Plugins.Cryptography;
 using Architecture.Application.Domain.Plugins.JWT;
-using Architecture.Application.UseCases.UseCases.AuthUseCases.Interfaces;
-using Architecture.Application.UseCases.UseCases.Base;
+using MediatR;
 
-namespace Architecture.Application.UseCases.UseCases.AuthUseCases;
+namespace Architecture.Application.Mediator.Commands.Auth.Login;
 
-public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
+public class LoginCommandHandler : BaseCommandHandler, IRequestHandler<LoginCommand, Result>
 {
     private readonly IPasswordHash _passwordHash;
     private readonly ITokenService _tokenService;
 
-    public LoginUseCase(IServiceProvider serviceProvider,
+    public LoginCommandHandler(IServiceProvider serviceProvider,
         IPasswordHash passwordHash,
         ITokenService tokenService) : base(serviceProvider)
     {
@@ -22,32 +21,32 @@ public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
         _tokenService = tokenService;
     }
 
-    public override async Task<Result> ExecuteAsync(LoginDto param)
+    public async Task<Result> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         return await OnTransactionAsync(async () =>
         {
-            if (await CredenciasClienteInvalidas(unitOfWork, param))
+            if (await CredenciasClienteInvalidas(unitOfWork, request))
             {
-                return Result.Failure<LoginUseCase>(Erros.Business.CrendenciaisClienteInvalida);
+                return Result.Failure<LoginCommandHandler>(Erros.Business.CrendenciaisClienteInvalida);
             }
 
-            var user = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(a => a.Username == param.Body.Username);
+            var user = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(a => a.Username == request.Body.Username);
 
             if (user == null || string.IsNullOrEmpty(user.Id.ToString()))
             {
-                return Result.Failure<LoginUseCase>(Erros.Business.UsernamePasswordInvalidos);
+                return Result.Failure<LoginCommandHandler>(Erros.Business.UsernamePasswordInvalidos);
             }
 
-            if (!_passwordHash.PasswordIsEquals(param.Body.Password, user?.PasswordHash, user?.Password))
+            if (!_passwordHash.PasswordIsEquals(request.Body.Password, user?.PasswordHash, user?.Password))
             {
-                return Result.Failure<LoginUseCase>(Erros.Business.UsernamePasswordInvalidos);
+                return Result.Failure<LoginCommandHandler>(Erros.Business.UsernamePasswordInvalidos);
             }
 
             user.RegistraUltimoAcesso();
 
             var roles = await unitOfWork.MapPermissoesPorGrupoUsuarioRepository.GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
 
-            var (tokem, data) = await _tokenService.GenerateToken(user, param.ClientId, roles);
+            var (tokem, data) = await _tokenService.GenerateToken(user, request.ClientId, roles);
 
             await unitOfWork.UsuarioRepository.UpdateAsync(user);
 
@@ -59,7 +58,7 @@ public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
         });
     }
 
-    private async Task<bool> CredenciasClienteInvalidas(IUnitOfWork unitOfWork, LoginDto param)
+    private async Task<bool> CredenciasClienteInvalidas(IUnitOfWork unitOfWork, LoginCommand param)
     {
         return !(
                     await unitOfWork.CredenciaisClientesRepository.
@@ -68,4 +67,3 @@ public class LoginUseCase : BaseUseCase<LoginDto>, ILoginUseCase
                 ).Any();
     }
 }
-

@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Architecture.Application.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Architecture.Application.Domain", "Architecture.Application\Architecture.Application.Domain\Architecture.Application.Domain.csproj", "{C359197E-BA3B-41DF-9195-4A79BBC057A4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Architecture.Application.UseCases", "Architecture.Application\Architecture.Application.UseCases\Architecture.Application.UseCases.csproj", "{3C581B0E-B964-4166-9F83-D769FD7E0944}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Architecture.Application.Mediator", "Architecture.Application\Architecture.Application.UseCases\Architecture.Application.Mediator.csproj", "{3C581B0E-B964-4166-9F83-D769FD7E0944}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Architecture.Infra.Data", "Architecture.Infra\Architecture.Infra.Data\Architecture.Infra.Data.csproj", "{BC914FFE-4F20-48C5-B631-A4AB794D4FEA}"
 EndProject
@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Architecture.WebApi", "Arch
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Architectury.Infra.Plugins", "Architecture.Infra\Architectury.Infra.Plugins\Architectury.Infra.Plugins.csproj", "{92134FCE-D17D-4FCB-9578-C5B25188E7D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Architecture.Tests", "Architecture.Tests\Architecture.Tests\Architecture.Tests.csproj", "{3B03863B-592F-4213-BBF1-F6FA0966BC4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Architecture.Tests", "Architecture.Tests\Architecture.Tests\Architecture.Tests.csproj", "{3B03863B-592F-4213-BBF1-F6FA0966BC4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,46 +1,45 @@
 ﻿using Architecture.Application.Core.Notifications;
-using Architecture.Application.Core.Structure.Extensions;
 using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.Models.Auth;
+using Architecture.Application.Domain.Plugins.Cryptography;
 using Architecture.Application.Domain.Plugins.JWT;
-using Architecture.Application.UseCases.UseCases.AuthUseCases.Interfaces;
-using Architecture.Application.UseCases.UseCases.Base;
+using Architecture.Application.Core.Structure.Extensions;
+using Architecture.Application.Mediator.Commands.Auth.Login;
+using MediatR;
 
-namespace Architecture.Application.UseCases.UseCases.AuthUseCases;
+namespace Architecture.Application.Mediator.Commands.Auth.RefreshToken;
 
-public class RefreshTokenUseCase : BaseUseCase<RefreshTokenDto>, IRefreshTokenUseCase
+public class RefreshTokenCommandHandler : BaseCommandHandler, IRequestHandler<RefreshTokenCommand, Result>
 {
+    private readonly IPasswordHash _passwordHash;
     private readonly ITokenService _tokenService;
 
-    public RefreshTokenUseCase(IServiceProvider serviceProvider,
-        ITokenService tokenService
-    )
-        : base(serviceProvider)
+    public RefreshTokenCommandHandler(IServiceProvider serviceProvider,
+        ITokenService tokenService) : base(serviceProvider)
     {
         _tokenService = tokenService;
     }
-
-    public override async Task<Result> ExecuteAsync(RefreshTokenDto refreshTokenDto)
+    public async Task<Result> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
         return await OnTransactionAsync(async () =>
         {
-            if (await CredenciasClienteInvalidas(refreshTokenDto))
+            if (await CredenciasClienteInvalidas(request))
             {
-                return Result.Failure<RefreshTokenUseCase>(Erros.Business.CrendenciaisClienteInvalida);
+                return Result.Failure<RefreshTokenCommandHandler>(Erros.Business.CrendenciaisClienteInvalida);
             }
 
             var user = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(user => user.Id.ToString() == _identity.GetUserClaim(JWTUserClaims.UserId));
 
             if (user == null || string.IsNullOrEmpty(user.Id.ToString()))
             {
-                return Result.Failure<RefreshTokenUseCase>(Erros.Business.RefreshTokenInvalido);
+                return Result.Failure<RefreshTokenCommandHandler>(Erros.Business.RefreshTokenInvalido);
             }
 
             user.RegistraUltimoAcesso();
 
             var roles = await unitOfWork.MapPermissoesPorGrupoUsuarioRepository.GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
 
-            var (tokem, data) = await _tokenService.GenerateToken(user, refreshTokenDto.ClientId, roles);
+            var (tokem, data) = await _tokenService.GenerateToken(user, request.ClientId, roles);
 
             await unitOfWork.UsuarioRepository.UpdateAsync(user);
 
@@ -52,7 +51,7 @@ public class RefreshTokenUseCase : BaseUseCase<RefreshTokenDto>, IRefreshTokenUs
         });
     }
 
-    private async Task<bool> CredenciasClienteInvalidas(RefreshTokenDto param)
+    private async Task<bool> CredenciasClienteInvalidas(RefreshTokenCommand param)
     {
         return !(
                     await unitOfWork.CredenciaisClientesRepository.
@@ -61,4 +60,3 @@ public class RefreshTokenUseCase : BaseUseCase<RefreshTokenDto>, IRefreshTokenUs
                 ).Any();
     }
 }
-

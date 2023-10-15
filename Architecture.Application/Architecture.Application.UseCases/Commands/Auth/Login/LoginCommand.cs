@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Architecture.Application.Core.Notifications;
+using Architecture.Application.Domain.Models.Auth;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 
-namespace Architecture.Application.Domain.Models.Auth;
+namespace Architecture.Application.Mediator.Commands.Auth.Login;
 
-public class LoginDto
+public class LoginCommand : IRequest<Result>
 {
     [JsonIgnore]
     [FromHeader(Name = "client_id")]
@@ -18,19 +21,4 @@ public class LoginDto
 
     [FromBody]
     public LoginModel Body { get; set; }
-}
-
-public class LoginModel
-{
-    [DefaultValue("lcseverton")]
-    public string Username { get; set; }
-    [DefaultValue("123456")]
-    public string Password { get; set; }
-}
-
-
-public class TokenModel
-{
-    public string TokenJWT { get; set; }
-    public DateTime DataExpiracao { get; set; }
 }

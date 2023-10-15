@@ -1,4 +1,6 @@
-﻿namespace Architecture.Application.Domain.Models.Base;
+﻿using System.Text.Json.Serialization;
+
+namespace Architecture.Application.Domain.Models.Base;
 
 public class ResponseDto<TResult>
 {

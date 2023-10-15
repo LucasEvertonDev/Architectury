@@ -1,7 +1,10 @@
 ﻿using Architecture.Application.Domain.Models.Auth;
 using Architecture.Application.Domain.Models.Base;
+using Architecture.Application.Mediator.Commands.Auth.Login;
+using Architecture.Application.Mediator.Commands.Auth.RefreshToken;
 using Architecture.Application.UseCases.UseCases.AuthUseCases.Interfaces;
 using Architecture.WebApi.Structure.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,9 +17,9 @@ public static class AuthEndpoints
         var authEndpoints = app.MapGroup(route).WithTags(tag);
 
         authEndpoints.MapPost("login", [AllowAnonymous]
-        async ([FromServices] ILoginUseCase loginUseCase, [AsParameters] LoginDto loginModel) =>
+        async ([FromServices] IMediator mediator, [AsParameters] LoginCommand loginCommand) =>
             {
-                var result = await loginUseCase.ExecuteAsync(loginModel);
+                var result = await mediator.Send(loginCommand);
 
                 return result.GetResponse<TokenModel>();
 
@@ -24,9 +27,9 @@ public static class AuthEndpoints
 
 
         authEndpoints.MapPost("refreshtoken",
-            async ([FromServices] IRefreshTokenUseCase refreshTokenUseCase, [AsParameters] RefreshTokenDto refreshTokenDto) =>
+            async ([FromServices] IMediator mediator, [AsParameters] RefreshTokenCommand refreshTokenCommand) =>
             {
-                var result = await refreshTokenUseCase.ExecuteAsync(refreshTokenDto);
+                var result = await mediator.Send(refreshTokenCommand);
 
                 return result.GetResponse<TokenModel>();
 
@@ -34,12 +37,13 @@ public static class AuthEndpoints
 
 
         authEndpoints.MapPost("flowlogin",
-            async ([FromServices] ILoginUseCase loginUseCase, HttpRequest request) =>
+            async ([FromServices] IMediator mediator, HttpRequest request) =>
             {
                 var form = await request.ReadFormAsync();
 
                 var authorization = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(request.Headers["Authorization"].ToString().Split("Basic ")[1].ToString())).Split(":");
-                var result = await loginUseCase.ExecuteAsync(new LoginDto
+
+                var result = await mediator.Send(new LoginCommand
                 {
                     Body = new LoginModel { Password = form["password"], Username = form["username"] },
                     ClientId = authorization[0],

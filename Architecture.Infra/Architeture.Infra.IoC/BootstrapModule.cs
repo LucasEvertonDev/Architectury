@@ -15,7 +15,7 @@ public static class BootstrapModule
 
         services.RegisterCore(configuration);
 
-        services.RegisterUseCases(configuration);
+        services.RegisterMediatR(configuration);
 
         services.RegisterInfraData(configuration);
 

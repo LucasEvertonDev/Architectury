@@ -17,4 +17,14 @@
     <ProjectReference Include="..\Architecture.Application.Domain\Architecture.Application.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Pipelines\" />
+    <Folder Include="Queries\" />
+  </ItemGroup>
+
 </Project>
