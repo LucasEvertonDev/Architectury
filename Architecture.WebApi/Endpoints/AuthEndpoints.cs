@@ -3,13 +3,14 @@ using Architecture.Application.Domain.Models.Base;
 using Architecture.Application.UseCases.UseCases.AuthUseCases.Interfaces;
 using Architecture.WebApi.Structure.Extensions;
 using Architecture.WebApi.Structure.Filters;
+using BenchmarkDotNet.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Architecture.WebApi.Endpoints;
 
 public static class AuthEndpoints
-{
+{ 
     public static IEndpointRouteBuilder AddAuthEndpoints(this IEndpointRouteBuilder app, string route, string tag)
     {
         var authEndpoints = app.MapGroup(route).AddEndpointFilter<ValidationFilter>().WithTags(tag).WithOpenApi();
