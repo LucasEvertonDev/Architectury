@@ -9,6 +9,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Architecture.WebApi.Structure.Middlewares;
 using Architecture.WebApi.Endpoints;
+using Architecture.WebApi.Structure.Filters;
+using Microsoft.AspNetCore.Routing;
 
 namespace Architecture.WebApi.Structure;
 
@@ -121,15 +123,18 @@ public class Startup
         app.UseAuthentication();
 
         app.UseAuthorization();
-
         app.UseAntiforgery();
 
         app.UseEndpoints(endpoints =>
         {
-            endpoints
-                .AddAuthEndpoints("api/v1/auth/", "Auth")
-                .AddPessoasEndpoints("api/v1/pessoas/", "Pessoas")
-                .AddUsuariosEndpoint("api/v1/usuarios/", "Usuarios");
+            var endpointv1 = endpoints.MapGroup("api/v1/")
+                .AddEndpointFilter<ValidationFilter>()
+                .WithOpenApi();
+
+            endpointv1
+                .AddAuthEndpoints("auth/", "Auth")
+                .AddPessoasEndpoints("pessoas/", "Pessoas")
+                .AddUsuariosEndpoint("usuarios/", "Usuarios");
         });
     }
 }

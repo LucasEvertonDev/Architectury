@@ -17,6 +17,6 @@ public class ResponseError<TResult>
 {
     public bool Success { get; set; } = false;
     public int HttpCode { get; set; }
-    public List<ErrorModel> Errors { get; set; }
+    public TResult Errors { get; set; }
 }
 

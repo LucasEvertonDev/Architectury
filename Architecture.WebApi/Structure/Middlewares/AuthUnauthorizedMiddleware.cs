@@ -30,35 +30,27 @@ public class AuthUnauthorizedMiddleware
             return;
 
         var statusCode = httpContext.Response.StatusCode;
-        var errormodel = new ResponseError<ErrorsModel>();
+        var errormodel = new ResponseError<Dictionary<object, object[]>>();
 
         switch (statusCode)
         {
             case StatusCodes.Status401Unauthorized:
-                errormodel = new ResponseError<ErrorsModel>
+                errormodel = new ResponseError<Dictionary<object, object[]>>
                 {
                     HttpCode = StatusCodes.Status401Unauthorized,
-                    Errors = new List<ErrorModel>
+                    Errors = new Dictionary<object, object[]>()
                     {
-                        new ErrorModel
-                        {
-                            Message = "Acesso negado. Você não tem permissões suficientes para acessar esta API",
-                            Context = "Authorization"
-                        }
+                        { "Authorization",  new object[]{ "Acesso negado. Você não tem permissões suficientes para acessar esta API" } }
                     }
                 };
                 break;
             case StatusCodes.Status403Forbidden:
-                errormodel = new ResponseError<ErrorsModel>
+                errormodel = new ResponseError<Dictionary<object, object[]>>
                 {
                     HttpCode = StatusCodes.Status403Forbidden,
-                    Errors = new List<ErrorModel>
+                    Errors = new Dictionary<object, object[]>()
                     {
-                        new ErrorModel
-                        {
-                            Message = "Não autorizado. Credenciais fornecidas ausentes, inválidas ou expiradas",
-                            Context = "Authorization"
-                        }
+                        { "Authorization",  new object[]{ "Não autorizado. Credenciais fornecidas ausentes, inválidas ou expiradas" } }
                     }
                 };
                 break;

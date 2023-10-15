@@ -2,7 +2,6 @@
 using Architecture.Application.Domain.Models.Pessoa;
 using Architecture.Application.UseCases.UseCases.PessoaUseCases.Interfaces;
 using Architecture.WebApi.Structure.Extensions;
-using Architecture.WebApi.Structure.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Architecture.WebApi.Endpoints;
@@ -11,7 +10,7 @@ public static class PessoasEndpoints
 {
     public static IEndpointRouteBuilder AddPessoasEndpoints(this IEndpointRouteBuilder app, string route, string tag)
     {
-        var pessoaEndpoints = app.MapGroup(route).AddEndpointFilter<ValidationFilter>().WithTags(tag).WithOpenApi();
+        var pessoaEndpoints = app.MapGroup(route).WithTags(tag);
 
         pessoaEndpoints.MapGet("",
             async ([FromServices] IRecuperarPessoasUseCase recuperarPessoasUseCase) =>
@@ -20,7 +19,7 @@ public static class PessoasEndpoints
 
                 return result.GetResponse<IEnumerable<Pessoa>>();
 
-            }).AllowAnonymous();
+            }).AllowAnonymous().Response<IEnumerable<Pessoa>>();
 
 
         pessoaEndpoints.MapPost("",
@@ -30,7 +29,7 @@ public static class PessoasEndpoints
 
                 return result.GetResponse<PessoaCriadaModel>();
 
-            }).AllowAnonymous();
+            }).AllowAnonymous().Response<PessoaCriadaModel>();
 
         return app;
     }

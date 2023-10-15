@@ -2,8 +2,6 @@
 using Architecture.Application.Domain.Models.Base;
 using Architecture.Application.UseCases.UseCases.AuthUseCases.Interfaces;
 using Architecture.WebApi.Structure.Extensions;
-using Architecture.WebApi.Structure.Filters;
-using BenchmarkDotNet.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +11,7 @@ public static class AuthEndpoints
 { 
     public static IEndpointRouteBuilder AddAuthEndpoints(this IEndpointRouteBuilder app, string route, string tag)
     {
-        var authEndpoints = app.MapGroup(route).AddEndpointFilter<ValidationFilter>().WithTags(tag).WithOpenApi();
+        var authEndpoints = app.MapGroup(route).WithTags(tag);
 
         authEndpoints.MapPost("login", [AllowAnonymous]
         async ([FromServices] ILoginUseCase loginUseCase, [AsParameters] LoginDto loginModel) =>
@@ -22,7 +20,7 @@ public static class AuthEndpoints
 
                 return result.GetResponse<TokenModel>();
 
-            }).Produces<ResponseDto<ErrorModel>>(StatusCodes.Status400BadRequest).Produces<ResponseDto<TokenModel>>(StatusCodes.Status200OK);
+            }).Response<ResponseDto<TokenModel>>();
 
 
         authEndpoints.MapPost("refreshtoken",
@@ -32,7 +30,7 @@ public static class AuthEndpoints
 
                 return result.GetResponse<TokenModel>();
 
-            }).RequireAuthorization(); // passa o nome da policy que criou ou instancia para validar função
+            }).Authorization().Response<ResponseDto<TokenModel>>();
 
 
         authEndpoints.MapPost("flowlogin",
@@ -53,13 +51,13 @@ public static class AuthEndpoints
                     return result.BadRequestFailure();
                 }
 
-                return Results.Ok(new
+                return Results.Ok(new TokenFlowModel
                 {
                     token_type = "bearer",
                     access_token = result.GetValue<TokenModel>().TokenJWT
                 });
 
-            }).AllowAnonymous();
+            }).AllowAnonymous().Response<TokenFlowModel>();
 
         return app;
     }

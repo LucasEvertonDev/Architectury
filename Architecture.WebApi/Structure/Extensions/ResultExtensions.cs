@@ -1,7 +1,6 @@
 ﻿using Architecture.Application.Core.Notifications.Enum;
 using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Models.Base;
-using Azure;
 
 namespace Architecture.WebApi.Structure.Extensions;
 
