@@ -22,7 +22,7 @@ public static class UsuariosEndpoints
 
                     return result.GetResponse<PagedResult<UsuariosRecuperadosModel>>();
 
-                }).RequireAuthorization();
+                }).RequireAuthorization(/*policy => policy.RequireRole("CHANGE_STUDENTS")*/);
 
         usuariosEndpoint.MapPost("",
             async ([FromServices] ICriarUsuarioUseCase criarUsuarioUseCase, [FromBody] CriarUsuarioModel createUserModel) =>
