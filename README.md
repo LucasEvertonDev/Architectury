@@ -4,8 +4,8 @@ Todo o contexto do projeto foi feito pra estudo. Visando muito mais arquitetura 
 # Validações dos objeto das requisições
 Neste modelo foi usado o fluent validation. O mesmo está sendo ativado de forma assincrona e automática por meio de um filter. Se faz necessário pois o pipeline do .net core não é assincrono. Sendo assim seria impossível fazer verificações junto ao banco. 
 
-# Camada Application
-Foi usado o conceito de casos de uso onde cada ação contemsua própria classe. Ao contrário do modelo de service que agrupa ações por cenário em uma única classe.
+# Camada Mediator
+Ponto de controle central do mediatr para utilizar cqrs
 
 # Camada Domain
 Foi usada um lib que ainda estou implementando. O objetivo dela é aplicar as validações de forma simples e prática. Sendo que a mesma alimenta o padrão notification pattern.
