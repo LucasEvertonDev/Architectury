@@ -2,7 +2,6 @@
 using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.Models.Usuarios;
 using Architecture.Application.Domain.Plugins.Cryptography;
-using Architecture.Application.UseCases.UseCases.UsuarioUseCases;
 using MediatR;
 
 namespace Architecture.Application.Mediator.Commands.Usuarios.AtualizarSenha;
@@ -24,7 +23,7 @@ public class AtualizarSenhaCommandHandler : BaseCommandHandler, IRequestHandler<
 
             if (usuario == null)
             {
-                return Result.Failure<AtualizarSenhaUseCase>(Erros.Business.UsuarioInexistente);
+                return Result.Failure<AtualizarSenhaCommandHandler>(Erros.Business.UsuarioInexistente);
             }
 
             string passwordHash = _passwordHash.GeneratePasswordHash();

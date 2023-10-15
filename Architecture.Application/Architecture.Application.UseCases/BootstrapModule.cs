@@ -1,5 +1,5 @@
 ﻿using Architecture.Application.Core.Structure;
-using Architecture.Application.Mediator.Commands.Auth.Login;
+using Architecture.Application.Mediator.Pipelines;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +9,7 @@ public static class BootstrapModule
 {
     public static void RegisterMediatR(this IServiceCollection services, AppSettings configuration)
     {
-        services.AddMediatR(typeof(LoginCommand));
+        services.AddMediatR(typeof(BootstrapModule).Assembly);
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
     }
 }

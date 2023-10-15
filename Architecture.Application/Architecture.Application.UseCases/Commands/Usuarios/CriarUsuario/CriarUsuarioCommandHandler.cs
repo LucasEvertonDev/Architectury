@@ -3,7 +3,6 @@ using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.Models.Usuarios;
 using Architecture.Application.Domain.Plugins.Cryptography;
-using Architecture.Application.UseCases.UseCases.UsuarioUseCases;
 using MediatR;
 
 namespace Architecture.Application.Mediator.Commands.Usuarios.CriarUsuario;
@@ -38,17 +37,17 @@ public class CriarUsuarioCommandHandler : BaseCommandHandler, IRequestHandler<Cr
 
             if (await UsernameCadastrado(user.Username))
             {
-                Result.Failure<CriarUsuarioUseCase>(Erros.Business.UsernameExistente);
+                Result.Failure<CriarUsuarioCommandHandler>(Erros.Business.UsernameExistente);
             }
 
             if (await EmailCadastrado(user.Email))
             {
-                Result.Failure<CriarUsuarioUseCase>(Erros.Business.EmailExistente);
+                Result.Failure<CriarUsuarioCommandHandler>(Erros.Business.EmailExistente);
             }
 
             if (user.HasFailure() || Result.HasFailures())
             {
-                return Result.Failure<CriarUsuarioUseCase>(user);
+                return Result.Failure<CriarUsuarioCommandHandler>(user);
             }
 
             user = await unitOfWork.UsuarioRepository.CreateAsync(user);
@@ -58,7 +57,7 @@ public class CriarUsuarioCommandHandler : BaseCommandHandler, IRequestHandler<Cr
         });
     }
 
-    /// <summary>
+       /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>

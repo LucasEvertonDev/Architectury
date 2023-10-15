@@ -7,7 +7,7 @@ namespace Architecture.Application.Mediator.Queries.Pessoas;
 
 public class RecuperarPessoasQuery : IRequest<Result>
 {
-    public RecuperarUsuariosDto() { }
+    public RecuperarPessoasQuery() { }
 
     [DefaultValue("1")]
     [FromRoute(Name = "pagenumber")]

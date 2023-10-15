@@ -2,7 +2,6 @@
 using Architecture.Application.Domain.Models.Base;
 using Architecture.Application.Mediator.Commands.Auth.Login;
 using Architecture.Application.Mediator.Commands.Auth.RefreshToken;
-using Architecture.Application.UseCases.UseCases.AuthUseCases.Interfaces;
 using Architecture.WebApi.Structure.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

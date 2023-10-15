@@ -6,13 +6,13 @@ using Architecture.Application.Domain.Models.Usuarios;
 
 namespace Architecture.Application.Mediator.Queries.Usuarios.RecuperarUsuarios;
 
-public class RecuperarUsuariosQueryHandler : BaseCommandHandler, IRequestHandler<RecuperarPessoasQuery, Result>
+public class RecuperarUsuariosQueryHandler : BaseCommandHandler, IRequestHandler<RecuperarUsuariosQuery, Result>
 {
     public RecuperarUsuariosQueryHandler(IServiceProvider serviceProvider) : base(serviceProvider)
     {
     }
 
-    public async Task<Result> Handle(RecuperarPessoasQuery request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(RecuperarUsuariosQuery request, CancellationToken cancellationToken)
     {
         return await OnTransactionAsync(async () =>
         {

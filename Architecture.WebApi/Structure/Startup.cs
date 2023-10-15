@@ -132,9 +132,9 @@ public class Startup
                 .WithOpenApi();
 
             endpointv1
-                .AddAuthEndpoints("auth/", "Auth");
-                //.AddPessoasEndpoints("pessoas/", "Pessoas")
-                //.AddUsuariosEndpoint("usuarios/", "Usuarios");
+                .AddAuthEndpoints("auth/", "Auth")
+                .AddPessoasEndpoints("pessoas/", "Pessoas")
+                .AddUsuariosEndpoint("usuarios/", "Usuarios");
         });
     }
 }

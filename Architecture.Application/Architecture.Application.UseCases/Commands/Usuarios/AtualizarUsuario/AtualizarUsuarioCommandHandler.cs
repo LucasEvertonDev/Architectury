@@ -1,6 +1,5 @@
 ﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Constants;
-using Architecture.Application.UseCases.UseCases.UsuarioUseCases;
 using MediatR;
 
 namespace Architecture.Application.Mediator.Commands.Usuarios.AtualizarUsuario;
@@ -19,7 +18,7 @@ public class AtualizarUsuarioCommandHandler : BaseCommandHandler, IRequestHandle
 
             if (usuario == null)
             {
-                return Result.Failure<AtualizarUsuarioUseCase>(Erros.Business.UsuarioInexistente);
+                return Result.Failure<AtualizarUsuarioCommandHandler>(Erros.Business.UsuarioInexistente);
             }
 
             var grupoUsuario = await unitOfWork.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(request.Body.GrupoUsuarioId));
@@ -33,17 +32,17 @@ public class AtualizarUsuarioCommandHandler : BaseCommandHandler, IRequestHandle
 
             if (await UsernameCadastrado(usuario.Username))
             {
-                Result.Failure<AtualizarUsuarioUseCase>(Erros.Business.UsernameExistente);
+                Result.Failure<AtualizarUsuarioCommandHandler>(Erros.Business.UsernameExistente);
             }
 
             if (await EmailCadastrado(usuario.Email))
             {
-                Result.Failure<AtualizarUsuarioUseCase>(Erros.Business.EmailExistente);
+                Result.Failure<AtualizarUsuarioCommandHandler>(Erros.Business.EmailExistente);
             }
 
             if (usuario.HasFailure() || HasFailure())
             {
-                Result.Failure<AtualizarUsuarioUseCase>(usuario);
+                Result.Failure<AtualizarUsuarioCommandHandler>(usuario);
             }
 
             return Result.IncludeResult(await unitOfWork.UsuarioRepository.UpdateAsync(usuario));

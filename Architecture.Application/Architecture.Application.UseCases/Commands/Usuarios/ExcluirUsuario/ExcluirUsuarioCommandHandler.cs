@@ -14,7 +14,7 @@ public class ExcluirUsuarioCommandHandler : BaseCommandHandler, IRequestHandler<
     {
         return await OnTransactionAsync(async () =>
         {
-            var usuario = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(u => u.Id.ToString() == param.Id);
+            var usuario = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(u => u.Id.ToString() == request.Id);
 
             if (usuario == null)
             {
