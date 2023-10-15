@@ -1,11 +1,9 @@
-﻿using Architecture.Application.Core.Notifications;
-using Architecture.Application.Domain.Models.Pessoa;
-using Architectury.Infra.Plugins.FluentValidation.Extensions;
+﻿using Architecture.Application.Mediator.Commands.Pessoas.CriarPessoa;
 using FluentValidation;
 
 namespace Architectury.Infra.Plugins.FluentValidation.Pessoa;
 
-public class CriarPessoaValidator : AbstractValidator<CriarPessoaModel>
+public class CriarPessoaValidator : AbstractValidator<CriarPessoasCommand>
 {
     //public CriarPessoaValidator()
     //{

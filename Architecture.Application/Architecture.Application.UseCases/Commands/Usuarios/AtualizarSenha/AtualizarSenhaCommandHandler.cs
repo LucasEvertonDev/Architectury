@@ -2,25 +2,25 @@
 using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.Models.Usuarios;
 using Architecture.Application.Domain.Plugins.Cryptography;
-using Architecture.Application.UseCases.UseCases.Base;
-using Architecture.Application.UseCases.UseCases.UsuarioUseCases.UseCases;
+using Architecture.Application.UseCases.UseCases.UsuarioUseCases;
+using MediatR;
 
-namespace Architecture.Application.UseCases.UseCases.UsuarioUseCases;
+namespace Architecture.Application.Mediator.Commands.Usuarios.AtualizarSenha;
 
-public class AtualizarSenhaUseCase : BaseUseCase<AtualizarSenhaUsuarioDto>, IAtualizarSenhaUseCase
+public class AtualizarSenhaCommandHandler : BaseCommandHandler, IRequestHandler<AtualizarSenhaCommand, Result>
 {
     private readonly IPasswordHash _passwordHash;
 
-    public AtualizarSenhaUseCase(IServiceProvider serviceProvider, IPasswordHash passwordHash) : base(serviceProvider)
+    public AtualizarSenhaCommandHandler(IServiceProvider serviceProvider, IPasswordHash passwordHash) : base(serviceProvider)
     {
         _passwordHash = passwordHash;
     }
 
-    public override async Task<Result> ExecuteAsync(AtualizarSenhaUsuarioDto param)
+    public async Task<Result> Handle(AtualizarSenhaCommand request, CancellationToken cancellationToken)
     {
         return await OnTransactionAsync(async () =>
         {
-            var usuario = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(u => u.Id.ToString() == param.Id);
+            var usuario = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(u => u.Id.ToString() == request.Id);
 
             if (usuario == null)
             {
@@ -30,7 +30,7 @@ public class AtualizarSenhaUseCase : BaseUseCase<AtualizarSenhaUsuarioDto>, IAtu
             string passwordHash = _passwordHash.GeneratePasswordHash();
 
             usuario.AtualizaSenhaUsuario(
-                    password: _passwordHash.EncryptPassword(param.Body.Password, passwordHash),
+                    password: _passwordHash.EncryptPassword(request.Body.Password, passwordHash),
                     passwordHash: passwordHash
                 );
 

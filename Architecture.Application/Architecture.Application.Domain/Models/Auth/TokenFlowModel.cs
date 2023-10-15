@@ -1,8 +1,7 @@
-﻿namespace Architecture.Application.Domain.Models.Auth
+﻿namespace Architecture.WebApi.Endpoints;
+
+public class TokenFlowModel
 {
-    internal class TokenFlowModel
-    {
-        public string token_type { get; set; }
-        public string access_token { get; set; }
-    }
+    public string token_type { get; set; }
+    public string access_token { get; set; }
 }

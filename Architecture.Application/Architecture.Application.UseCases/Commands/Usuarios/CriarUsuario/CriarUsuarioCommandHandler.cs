@@ -1,43 +1,39 @@
 ﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.DbContexts.Domains;
-using Architecture.Application.Domain.DbContexts.Repositorys.Base;
 using Architecture.Application.Domain.Models.Usuarios;
 using Architecture.Application.Domain.Plugins.Cryptography;
-using Architecture.Application.UseCases.UseCases.Base;
-using Architecture.Application.UseCases.UseCases.UsuarioUseCases.UseCases;
+using Architecture.Application.UseCases.UseCases.UsuarioUseCases;
+using MediatR;
 
-namespace Architecture.Application.UseCases.UseCases.UsuarioUseCases;
+namespace Architecture.Application.Mediator.Commands.Usuarios.CriarUsuario;
 
-public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuarioUseCase
+public class CriarUsuarioCommandHandler : BaseCommandHandler, IRequestHandler<CriarUsuarioCommand, Result>
 {
     private readonly IPasswordHash _passwordHash;
-    private readonly IRepository<Usuario> _createRepository;
 
-    public CriarUsuarioUseCase(IServiceProvider serviceProvider,
-        IPasswordHash passwordHash,
-        IRepository<Usuario> createRepository) : base(serviceProvider)
+    public CriarUsuarioCommandHandler(IServiceProvider serviceProvider,
+        IPasswordHash passwordHash) : base(serviceProvider)
     {
-        _createRepository = createRepository;
         _passwordHash = passwordHash;
     }
 
-    public override async Task<Result> ExecuteAsync(CriarUsuarioModel param)
+    public async Task<Result> Handle(CriarUsuarioCommand request, CancellationToken cancellationToken)
     {
         return await OnTransactionAsync(async () =>
         {
             var passwordHash = _passwordHash.GeneratePasswordHash();
 
-            var grupoUsuario = await unitOfWork.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.GrupoUsuarioId));
+            var grupoUsuario = await unitOfWork.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(request.GrupoUsuarioId));
 
             var user = new Usuario()
                 .CriarUsuario(
-                    username: param.Username,
-                    password: _passwordHash.EncryptPassword(param.Password, passwordHash),
+                    username: request.Username,
+                    password: _passwordHash.EncryptPassword(request.Password, passwordHash),
                     passwordHash: passwordHash,
                     grupoUsuario: grupoUsuario,
-                    nome: param.Name,
-                    email: param.Email
+                    nome: request.Name,
+                    email: request.Email
                 );
 
             if (await UsernameCadastrado(user.Username))
@@ -55,13 +51,12 @@ public class CriarUsuarioUseCase : BaseUseCase<CriarUsuarioModel>, ICriarUsuario
                 return Result.Failure<CriarUsuarioUseCase>(user);
             }
 
-            user = await _createRepository.CreateAsync(user);
+            user = await unitOfWork.UsuarioRepository.CreateAsync(user);
 
             return Result.IncludeResult(
                     new UsuarioCriadoModel().FromEntity(user));
         });
     }
-
 
     /// <summary>
     /// 

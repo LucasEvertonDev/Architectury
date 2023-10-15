@@ -1,35 +1,33 @@
 ﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Constants;
-using Architecture.Application.Domain.Models.Usuarios;
-using Architecture.Application.UseCases.UseCases.Base;
-using Architecture.Application.UseCases.UseCases.UsuarioUseCases.UseCases;
+using Architecture.Application.UseCases.UseCases.UsuarioUseCases;
+using MediatR;
 
-namespace Architecture.Application.UseCases.UseCases.UsuarioUseCases;
+namespace Architecture.Application.Mediator.Commands.Usuarios.AtualizarUsuario;
 
-public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtualizarUsuarioUseCase
+public class AtualizarUsuarioCommandHandler : BaseCommandHandler, IRequestHandler<AtualizarUsuarioCommand, Result>
 {
-
-    public AtualizarUsuarioUseCase(IServiceProvider serviceProvider) : base(serviceProvider)
+    public AtualizarUsuarioCommandHandler(IServiceProvider serviceProvider) : base(serviceProvider)
     {
     }
 
-    public override async Task<Result> ExecuteAsync(AtualizarUsuarioDto param)
+    public async Task<Result> Handle(AtualizarUsuarioCommand request, CancellationToken cancellationToken)
     {
         return await OnTransactionAsync(async () =>
         {
-            var usuario = await unitOfWork.UsuarioRepository.FirstOrDefaultTrackingAsync(u => u.Id.ToString() == param.Id);
+            var usuario = await unitOfWork.UsuarioRepository.FirstOrDefaultTrackingAsync(u => u.Id.ToString() == request.Id);
 
             if (usuario == null)
             {
                 return Result.Failure<AtualizarUsuarioUseCase>(Erros.Business.UsuarioInexistente);
             }
 
-            var grupoUsuario = await unitOfWork.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(param.Body.GrupoUsuarioId));
+            var grupoUsuario = await unitOfWork.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(request.Body.GrupoUsuarioId));
 
             usuario.AtualizaUsuario(
-                    username: param.Body.Username,
-                    email: param.Body.Email,
-                    nome: param.Body.Nome,
+                    username: request.Body.Username,
+                    email: request.Body.Email,
+                    nome: request.Body.Nome,
                     grupoUsuario: grupoUsuario
                 );
 
@@ -51,7 +49,6 @@ public class AtualizarUsuarioUseCase : BaseUseCase<AtualizarUsuarioDto>, IAtuali
             return Result.IncludeResult(await unitOfWork.UsuarioRepository.UpdateAsync(usuario));
         });
     }
-
 
     /// <summary>
     /// 

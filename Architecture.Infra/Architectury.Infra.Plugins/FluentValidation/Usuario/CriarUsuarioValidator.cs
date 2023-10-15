@@ -1,14 +1,13 @@
 ﻿using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Repositorys.Base;
-using Architecture.Application.Domain.Models.Base;
-using Architecture.Application.Domain.Models.Usuarios;
+using Architecture.Application.Mediator.Commands.Usuarios.CriarUsuario;
 using Architectury.Infra.Plugins.FluentValidation.Extensions;
 using FluentValidation;
 
 namespace Architectury.Infra.Plugins.FluentValidation.Usuario;
 
-public class CriarUsuarioValidator : AbstractValidator<CriarUsuarioModel>
+public class CriarUsuarioValidator : AbstractValidator<CriarUsuarioCommand>
 {
     public CriarUsuarioValidator(IRepository<GrupoUsuario> searchUserGroupRepository)
     {

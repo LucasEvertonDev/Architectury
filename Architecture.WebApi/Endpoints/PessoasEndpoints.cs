@@ -1,7 +1,9 @@
 ﻿using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.Models.Pessoa;
-using Architecture.Application.UseCases.UseCases.PessoaUseCases.Interfaces;
+using Architecture.Application.Mediator.Commands.Pessoas.CriarPessoa;
+using Architecture.Application.Mediator.Queries.Pessoas;
 using Architecture.WebApi.Structure.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Architecture.WebApi.Endpoints;
@@ -13,9 +15,9 @@ public static class PessoasEndpoints
         var pessoaEndpoints = app.MapGroup(route).WithTags(tag);
 
         pessoaEndpoints.MapGet("",
-            async ([FromServices] IRecuperarPessoasUseCase recuperarPessoasUseCase) =>
+            async ([FromServices] IMediator mediator) =>
             {
-                var result = await recuperarPessoasUseCase.ExecuteAsync();
+                var result = await mediator.Send(new RecuperarPessoasQuery());
 
                 return result.GetResponse<IEnumerable<Pessoa>>();
 
@@ -23,9 +25,9 @@ public static class PessoasEndpoints
 
 
         pessoaEndpoints.MapPost("",
-            async ([FromServices] ICriarPessoaUseCase criarPessoasUseCase, [FromBody] CriarPessoaModel criarPessoaModel) =>
+            async ([FromServices] IMediator mediator, [FromBody] CriarPessoasCommand criarPessoasCommand) =>
             {
-                var result = await criarPessoasUseCase.ExecuteAsync(criarPessoaModel);
+                var result = await mediator.Send(criarPessoasCommand);
 
                 return result.GetResponse<PessoaCriadaModel>();
 

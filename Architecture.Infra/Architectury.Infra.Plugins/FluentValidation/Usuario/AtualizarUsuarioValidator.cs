@@ -1,14 +1,13 @@
 ﻿using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Repositorys.Base;
-using Architecture.Application.Domain.Models.Base;
-using Architecture.Application.Domain.Models.Usuarios;
+using Architecture.Application.Mediator.Commands.Usuarios.AtualizarUsuario;
 using Architectury.Infra.Plugins.FluentValidation.Extensions;
 using FluentValidation;
 
 namespace Architectury.Infra.Plugins.FluentValidation.Usuario;
 
-public class AtualizarUsuarioValidator : AbstractValidator<AtualizarUsuarioDto>
+public class AtualizarUsuarioValidator : AbstractValidator<AtualizarUsuarioCommand>
 {
     public AtualizarUsuarioValidator(IRepository<GrupoUsuario> searchUserGroupRepository)
     {

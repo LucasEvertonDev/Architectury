@@ -1,12 +1,11 @@
 ﻿using Architecture.Application.Domain.Constants;
-using Architecture.Application.Domain.Models.Base;
-using Architecture.Application.Domain.Models.Usuarios;
+using Architecture.Application.Mediator.Commands.Usuarios.AtualizarSenha;
 using Architectury.Infra.Plugins.FluentValidation.Extensions;
 using FluentValidation;
 
 namespace Architectury.Infra.Plugins.FluentValidation.Usuario;
 
-public class AtualizarSenhaUsuarioValidator : AbstractValidator<AtualizarSenhaUsuarioDto>
+public class AtualizarSenhaUsuarioValidator : AbstractValidator<AtualizarSenhaCommand>
 {
     public AtualizarSenhaUsuarioValidator()
     {
