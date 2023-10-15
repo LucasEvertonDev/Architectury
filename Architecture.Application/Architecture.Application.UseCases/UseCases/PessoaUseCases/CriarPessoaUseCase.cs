@@ -34,7 +34,14 @@ namespace Architecture.Application.UseCases.UseCases.PessoaUseCases
 
                 if (true)
                 {
-                    Result.Failure<Pessoa>((pessoa) => pessoa.Endereco.Logradouro.Nome, Erros.Business.EmailExistente);
+                    Result.Failure<Pessoa>((pessoa) => pessoa.Endereco.Logradouro.Nome, new FailureModel("Teste1", "Teste1"));
+
+                    Result.Failure<Pessoa>((pessoa) => pessoa.Enderecos[1].Cidade, new FailureModel("Teste2", "Teste2"));
+
+                    for (int i = 0; i < 2; i++)
+                    {
+                        Result.Failure<Pessoa>((pessoa) => pessoa.Enderecos[i].Estado, new FailureModel("Estado", $"TesteList{i}"));
+                    }
                 }
 
                 if (pessoa.HasFailure())

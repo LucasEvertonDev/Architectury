@@ -6,16 +6,16 @@ using Architecture.WebApi.Structure.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Architecture.WebApi.Minimals;
+namespace Architecture.WebApi.Endpoints;
 
-public static class AuthApi
+public static class AuthEndpoints
 {
-    public static void AddAuthApi(this IEndpointRouteBuilder app)
+    public static IEndpointRouteBuilder AddAuthEndpoints(this IEndpointRouteBuilder app, string route, string tag)
     {
-        var authApi = app.MapGroup("api/v1/auth/").AddEndpointFilter<ValidationFilter>().WithTags("Auth").WithOpenApi();
+        var authEndpoints = app.MapGroup(route).AddEndpointFilter<ValidationFilter>().WithTags(tag).WithOpenApi();
 
-        authApi.MapPost("login", [AllowAnonymous]
-            async ([FromServices] ILoginUseCase loginUseCase, [AsParameters] LoginDto loginModel) =>
+        authEndpoints.MapPost("login", [AllowAnonymous]
+        async ([FromServices] ILoginUseCase loginUseCase, [AsParameters] LoginDto loginModel) =>
             {
                 var result = await loginUseCase.ExecuteAsync(loginModel);
 
@@ -24,7 +24,7 @@ public static class AuthApi
             }).Produces<ResponseDto<ErrorModel>>(StatusCodes.Status400BadRequest).Produces<ResponseDto<TokenModel>>(StatusCodes.Status200OK);
 
 
-        authApi.MapPost("refreshtoken",
+        authEndpoints.MapPost("refreshtoken",
             async ([FromServices] IRefreshTokenUseCase refreshTokenUseCase, [AsParameters] RefreshTokenDto refreshTokenDto) =>
             {
                 var result = await refreshTokenUseCase.ExecuteAsync(refreshTokenDto);
@@ -34,7 +34,7 @@ public static class AuthApi
             }).RequireAuthorization(); // passa o nome da policy que criou ou instancia para validar função
 
 
-        authApi.MapPost("flowlogin",
+        authEndpoints.MapPost("flowlogin",
             async ([FromServices] ILoginUseCase loginUseCase, HttpRequest request) =>
             {
                 var form = await request.ReadFormAsync();
@@ -42,7 +42,7 @@ public static class AuthApi
                 var authorization = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(request.Headers["Authorization"].ToString().Split("Basic ")[1].ToString())).Split(":");
                 var result = await loginUseCase.ExecuteAsync(new LoginDto
                 {
-                    Body = new LoginModel { Password = form["password"], Username = form["username"]},
+                    Body = new LoginModel { Password = form["password"], Username = form["username"] },
                     ClientId = authorization[0],
                     ClientSecret = authorization[1]
                 });
@@ -59,6 +59,8 @@ public static class AuthApi
                 });
 
             }).AllowAnonymous();
+
+        return app;
     }
 }
 

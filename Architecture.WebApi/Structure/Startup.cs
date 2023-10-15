@@ -4,14 +4,11 @@ using Microsoft.OpenApi.Models;
 using Architecture.Infra.IoC;
 using Architecture.WebApi.Structure.Extensions;
 using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Architecture.WebApi.Structure.Middlewares;
-using Architecture.WebApi.Structure.Filters;
-using Architecture.WebApi.Minimals;
-using Architecture.WebApi.Apis;
+using Architecture.WebApi.Endpoints;
 
 namespace Architecture.WebApi.Structure;
 
@@ -129,11 +126,10 @@ public class Startup
 
         app.UseEndpoints(endpoints =>
         {
-            endpoints.AddAuthApi();
-
-            endpoints.AddPessoasApi();
-
-            endpoints.AddUsuariosApi();
+            endpoints
+                .AddAuthEndpoints("api/v1/auth/", "Auth")
+                .AddPessoasEndpoints("api/v1/pessoas/", "Pessoas")
+                .AddUsuariosEndpoint("api/v1/usuarios/", "Usuarios");
         });
     }
 }

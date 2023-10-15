@@ -7,15 +7,15 @@ using Architecture.WebApi.Structure.Filters;
 using Architecture.WebApi.Structure.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Architecture.WebApi.Apis;
+namespace Architecture.WebApi.Endpoints;
 
-public static class UsuariosApi
+public static class UsuariosEndpoints
 {
-    public static void AddUsuariosApi(this IEndpointRouteBuilder app)
+    public static IEndpointRouteBuilder AddUsuariosEndpoint(this IEndpointRouteBuilder app, string route, string tag)
     {
-        var usuariosApi = app.MapGroup("api/v1/usuarios/").AddEndpointFilter<ValidationFilter>().WithTags("Usuarios").WithOpenApi();
+        var usuariosEndpoint = app.MapGroup(route).AddEndpointFilter<ValidationFilter>().WithTags(tag).WithOpenApi();
 
-        usuariosApi.MapGet(Params.GetRoute<RecuperarUsuariosDto>(),
+        usuariosEndpoint.MapGet(Params.GetRoute<RecuperarUsuariosDto>(),
             async ([FromServices] IBuscarUsuariosUseCase buscarUsuariosUseCase, [AsParameters] RecuperarUsuariosDto recuperarUsuariosDto) =>
                 {
                     var result = await buscarUsuariosUseCase.ExecuteAsync(recuperarUsuariosDto);
@@ -24,7 +24,7 @@ public static class UsuariosApi
 
                 }).RequireAuthorization();
 
-        usuariosApi.MapPost("", 
+        usuariosEndpoint.MapPost("",
             async ([FromServices] ICriarUsuarioUseCase criarUsuarioUseCase, [FromBody] CriarUsuarioModel createUserModel) =>
             {
                 var result = await criarUsuarioUseCase.ExecuteAsync(createUserModel);
@@ -33,7 +33,7 @@ public static class UsuariosApi
 
             }).RequireAuthorization();
 
-        usuariosApi.MapPut("{id}",
+        usuariosEndpoint.MapPut("{id}",
             async ([FromServices] IAtualizarUsuarioUseCase atualizarUsuarioUseCase, [AsParameters] AtualizarUsuarioDto updateUserModel) =>
             {
                 var result = await atualizarUsuarioUseCase.ExecuteAsync(updateUserModel);
@@ -42,7 +42,7 @@ public static class UsuariosApi
 
             }).RequireAuthorization();
 
-        usuariosApi.MapPut("updatepassword/{id}",
+        usuariosEndpoint.MapPut("updatepassword/{id}",
             async ([FromServices] IAtualizarSenhaUseCase atualizarSenhaUseCase, [AsParameters] AtualizarSenhaUsuarioDto atualizarSenhaUsuarioDto) =>
             {
                 var result = await atualizarSenhaUseCase.ExecuteAsync(atualizarSenhaUsuarioDto);
@@ -51,7 +51,7 @@ public static class UsuariosApi
 
             }).RequireAuthorization();
 
-        usuariosApi.MapDelete("{id}",
+        usuariosEndpoint.MapDelete("{id}",
            async ([FromServices] IExcluirUsuarioUseCase excluirUsuarioUseCase, [AsParameters] ExcluirUsuarioDto excluirUsuarioDto) =>
            {
                var result = await excluirUsuarioUseCase.ExecuteAsync(excluirUsuarioDto);
@@ -59,5 +59,7 @@ public static class UsuariosApi
                return result.GetResponse<ResponseDto>();
 
            }).RequireAuthorization();
+
+        return app;
     }
 }

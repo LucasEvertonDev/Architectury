@@ -1,20 +1,19 @@
 ﻿using Architecture.Application.Domain.DbContexts.Domains;
-using Architecture.Application.Domain.Models.Auth;
 using Architecture.Application.Domain.Models.Pessoa;
 using Architecture.Application.UseCases.UseCases.PessoaUseCases.Interfaces;
 using Architecture.WebApi.Structure.Extensions;
 using Architecture.WebApi.Structure.Filters;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Architecture.WebApi.Apis;
+namespace Architecture.WebApi.Endpoints;
 
-public static class PessoasApi
+public static class PessoasEndpoints
 {
-    public static void AddPessoasApi(this IEndpointRouteBuilder app)
+    public static IEndpointRouteBuilder AddPessoasEndpoints(this IEndpointRouteBuilder app, string route, string tag)
     {
-        var pessoasApi = app.MapGroup("api/v1/pessoas/").AddEndpointFilter<ValidationFilter>().WithTags("Pessoas").WithOpenApi();
+        var pessoaEndpoints = app.MapGroup(route).AddEndpointFilter<ValidationFilter>().WithTags(tag).WithOpenApi();
 
-        pessoasApi.MapGet("", 
+        pessoaEndpoints.MapGet("",
             async ([FromServices] IRecuperarPessoasUseCase recuperarPessoasUseCase) =>
             {
                 var result = await recuperarPessoasUseCase.ExecuteAsync();
@@ -24,7 +23,7 @@ public static class PessoasApi
             }).AllowAnonymous();
 
 
-        pessoasApi.MapPost("", 
+        pessoaEndpoints.MapPost("",
             async ([FromServices] ICriarPessoaUseCase criarPessoasUseCase, [FromBody] CriarPessoaModel criarPessoaModel) =>
             {
                 var result = await criarPessoasUseCase.ExecuteAsync(criarPessoaModel);
@@ -32,5 +31,7 @@ public static class PessoasApi
                 return result.GetResponse<PessoaCriadaModel>();
 
             }).AllowAnonymous();
+
+        return app;
     }
 }
