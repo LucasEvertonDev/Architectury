@@ -1,5 +1,5 @@
 ﻿using Architecture.Application.Domain.DbContexts.Domains;
-using Architecture.Application.Domain.DbContexts.Repositorys.PessoaRepository;
+using Architecture.Application.Domain.DbContexts.Repositories.PessoaRepository;
 using Architecture.Infra.Data.Context.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 

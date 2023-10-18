@@ -2,7 +2,7 @@
 using Architecture.Application.Domain.DbContexts.Domains.Base;
 using System.Linq.Expressions;
 
-namespace Architecture.Application.Domain.DbContexts.Repositorys.Base;
+namespace Architecture.Application.Domain.DbContexts.Repositories.Base;
 
 public interface IRepository<TEntity> : IRepository where TEntity : IEntity
 {

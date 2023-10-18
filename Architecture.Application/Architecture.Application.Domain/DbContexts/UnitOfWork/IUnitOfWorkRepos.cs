@@ -1,11 +1,15 @@
-﻿namespace Architecture.Application.Domain.DbContexts.UnitOfWork;
+﻿using Architecture.Application.Domain.DbContexts.Repositories.Base;
+using Architecture.Application.Domain.DbContexts.Repositories.MapUserGroupRolesRepository;
+using Architecture.Application.Domain.DbContexts.Repositories.PessoaRepository;
+
+namespace Architecture.Application.Domain.DbContexts.UnitOfWork;
 
 public interface IUnitOfWork
 {
-    Repositorys.Base.IRepository<Domains.Usuario> UsuarioRepository { get; }
-    Repositorys.Base.IRepository<Domains.Permissao> PermissaoRepository { get; }
-    Repositorys.PessoaRepository.IPessoaRepository PessoasRepository { get; }
-    Repositorys.Base.IRepository<Domains.CredenciaisCliente> CredenciaisClientesRepository { get; }
-    Repositorys.MapUserGroupRolesRepository.IMapPermissoesPorGrupoUsuarioRepository MapPermissoesPorGrupoUsuarioRepository { get; }
-    Repositorys.Base.IRepository<Domains.GrupoUsuario> GrupoUsuarioRepository { get; }
+    IRepository<Domains.Usuario> UsuarioRepository { get; }
+    IRepository<Domains.Permissao> PermissaoRepository { get; }
+    IPessoaRepository PessoasRepository { get; }
+    IRepository<Domains.CredenciaisCliente> CredenciaisClientesRepository { get; }
+    IMapPermissoesPorGrupoUsuarioRepository MapPermissoesPorGrupoUsuarioRepository { get; }
+    IRepository<Domains.GrupoUsuario> GrupoUsuarioRepository { get; }
 }

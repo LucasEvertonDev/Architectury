@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DbContexts\Repositorys\Base\IDeleteRepository.cs" />
-    <Compile Remove="DbContexts\Repositorys\Base\ISearchRepository.cs" />
-    <Compile Remove="DbContexts\Repositorys\Base\IUpdateRepository.cs" />
+    <Compile Remove="DbContexts\Repositories\Base\IDeleteRepository.cs" />
+    <Compile Remove="DbContexts\Repositories\Base\ISearchRepository.cs" />
+    <Compile Remove="DbContexts\Repositories\Base\IUpdateRepository.cs" />
     <Compile Remove="Models\Pessoa\CriarPessoaModel.cs" />
   </ItemGroup>
 

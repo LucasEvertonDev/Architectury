@@ -1,5 +1,5 @@
 ﻿using Architecture.Application.Domain.DbContexts.Domains;
-using Architecture.Application.Domain.DbContexts.Repositorys.MapUserGroupRolesRepository;
+using Architecture.Application.Domain.DbContexts.Repositories.MapUserGroupRolesRepository;
 using Architecture.Infra.Data.Context.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 

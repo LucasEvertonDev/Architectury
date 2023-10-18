@@ -56,4 +56,34 @@ public partial class Notifiable<TEntity> : INotifiableModel
         }
         CurrentProp.Value = value;
     }
+
+    private void SetValue2(dynamic lambda, dynamic value)
+    {
+        CurrentProp = new PropInfo();
+
+        try
+        {
+
+            var memberSelectorExpression = lambda.Body as MemberExpression;
+            if (memberSelectorExpression != null)
+            {
+                var property = memberSelectorExpression.Member as PropertyInfo;
+                if (property != null)
+                {
+                    property.SetValue(this, value, null);
+                    CurrentProp.MemberName = value is INotifiableModel ? EntityInfo.Name : string.Concat(EntityInfo.Name, ".", property.Name);
+                }
+                else
+                {
+                    throw new Exception("É preciso adicionar {get; set;} a sua prop");
+                }
+            }
+            CurrentProp.Value = value;
+        }
+        catch(Exception ex)
+        {
+
+        }
+
+    }
 }

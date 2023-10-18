@@ -1,7 +1,7 @@
 ﻿using Architecture.Application.Domain.DbContexts.Domains;
-using Architecture.Application.Domain.DbContexts.Repositorys.Base;
+using Architecture.Application.Domain.DbContexts.Repositories.Base;
 
-namespace Architecture.Application.Domain.DbContexts.Repositorys.MapUserGroupRolesRepository;
+namespace Architecture.Application.Domain.DbContexts.Repositories.MapUserGroupRolesRepository;
 
 public interface IMapPermissoesPorGrupoUsuarioRepository : IRepository<MapPermissoesPorGrupoUsuario>
 {

@@ -1,12 +1,17 @@
 ﻿using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.DbContexts.Domains.Base;
 using Architecture.Application.Domain.Enuns;
+using Newtonsoft.Json.Linq;
 
 namespace Architecture.Application.Domain.DbContexts.Domains;
 
 public class Usuario : BaseEntity<Usuario>
 {
-    public string Username { get; private set; }
+    public string Username
+    {
+        get;
+        private set;
+    }
     public string Password { get; private set; }
     public string PasswordHash { get; private set; }
     public Guid GrupoUsuarioId { get; private set; }
@@ -17,16 +22,13 @@ public class Usuario : BaseEntity<Usuario>
 
     public Usuario CriarUsuario(string username, string password, string passwordHash, GrupoUsuario grupoUsuario, string nome, string email)
     {
-        Set(usuario => usuario.Username, username)
-            .ValidateWhen()
-            .IsNullOrEmpty()
-            .AddFailure(Erros.Usuario.UsernameObrigatorio);
+        Set(() => Username, username).ValidateWhen().IsNullOrEmpty().AddFailure(Erros.Usuario.UsernameObrigatorio);
 
         Set(usuario => usuario.Password, password)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(Erros.Usuario.PasswordObrigatorio);
-
+         
         Set(usuario => usuario.PasswordHash, passwordHash)
             .ValidateWhen()
             .IsNullOrEmpty()
