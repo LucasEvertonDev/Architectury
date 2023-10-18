@@ -16,6 +16,11 @@ public partial class Pessoa : BaseEntity<Pessoa>
 
     public Pessoa CriarPessoa(string primeiroNome, string sobrenome, string email, DateTime? dataNascimento, EnderecoModel enderecoModel)
     {
+        if (Nome != null)
+        {
+            Result.Failure<Pessoa>((pessoa) => pessoa.Nome, Erros.Pessoa.NomeObrigatorio);
+        }
+
         Set(pessoa => pessoa.Nome, new Nome()
             .CriarNome(
                 primeiroNome: primeiroNome,

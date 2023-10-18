@@ -6,13 +6,20 @@ namespace Architecture.Application.Domain.DbContexts.Domains;
 
 public class Usuario : BaseEntity<Usuario>
 {
-    public string Username { get; private set; }
+    public string Username 
+    { 
+        get => Username;
+        private set
+        {
+            Set(Username, value).ValidateWhen().IsNullOrEmpty().AddFailure(Erros.Usuario.UsernameObrigatorio);
+        }
+    }
     public string Password { get; private set; }
     public string PasswordHash { get; private set; }
     public Guid GrupoUsuarioId { get; private set; }
     public string Nome { get; private set; }
     public string Email { get; private set; }
-    public DateTime UltimoAcesso { get; private set; }
+    public DateTime UltimoAcesso { get; set; }
     public GrupoUsuario GrupoUsuario {  get; private set; }
 
     public Usuario CriarUsuario(string username, string password, string passwordHash, GrupoUsuario grupoUsuario, string nome, string email)
@@ -29,7 +36,7 @@ public class Usuario : BaseEntity<Usuario>
 
         Set(usuario => usuario.PasswordHash, passwordHash)
             .ValidateWhen()
-            .IsNullOrEmpty()
+            .IsNullOrEmpty( )
             .AddFailure(Erros.Usuario.PasswordHashObrigatorio);
 
         Set(usuario => usuario.GrupoUsuario, grupoUsuario)
@@ -48,6 +55,12 @@ public class Usuario : BaseEntity<Usuario>
             .AddFailure(Erros.Usuario.EmailObrigatorio);
 
         Set(usuario => usuario.Situacao, (int)ESituacao.Ativo);
+
+        if(this.Username == "")
+        {
+            Result.Failure<Usuario>(usuario => usuario.Username, Erros.Usuario.UsernameObrigatorio);
+            this.Username = username;
+        }
 
         return this;
     }
