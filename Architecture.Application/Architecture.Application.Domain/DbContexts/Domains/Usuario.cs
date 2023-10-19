@@ -22,36 +22,23 @@ public class Usuario : BaseEntity<Usuario>
 
     public Usuario CriarUsuario(string username, string password, string passwordHash, GrupoUsuario grupoUsuario, string nome, string email)
     {
-        Set2((username) => Username);
+        RuleFor(usuario => usuario.Password, password).When().IsNullOrEmpty().AddFailure(Erros.Usuario.PasswordObrigatorio);
+        RuleFor(usuario => usuario.PasswordHash, passwordHash).When().IsNullOrEmpty().AddFailure(Erros.Usuario.PasswordHashObrigatorio);
+        RuleFor(usuario => usuario.GrupoUsuario, grupoUsuario).When().IsNullOrEmpty().AddFailure(Erros.Usuario.GrupoUsuarioInvalido);
+        RuleFor(usuario => usuario.Nome, nome).When().IsNullOrEmpty().AddFailure(Erros.Usuario.NomeObrigatorio);
+        RuleFor(usuario => usuario.Email, email).When().IsNullOrEmpty().AddFailure(Erros.Usuario.EmailObrigatorio);
 
-        Set(Username, username);
+        if (string.IsNullOrEmpty(username))
+        {
+            Result.Failure<Usuario>(usuario => usuario.Username, Erros.Usuario.UsernameObrigatorio);
+        }
 
-        Set(usuario => usuario.Password, password)
-            .ValidateWhen()
-            .IsNullOrEmpty()
-            .AddFailure(Erros.Usuario.PasswordObrigatorio);
-         
-        Set(usuario => usuario.PasswordHash, passwordHash)
-            .ValidateWhen()
-            .IsNullOrEmpty()
-            .AddFailure(Erros.Usuario.PasswordHashObrigatorio);
-
-        Set(usuario => usuario.GrupoUsuario, grupoUsuario)
-            .ValidateWhen()
-            .IsNull()
-            .AddFailure(Erros.Usuario.GrupoUsuarioInvalido);
-
-        Set(usuario => usuario.Nome, nome)
-            .ValidateWhen()
-            .IsNullOrEmpty()
-            .AddFailure(Erros.Usuario.NomeObrigatorio);
-
-        Set(usuario => usuario.Email, email)
-            .ValidateWhen()
-            .IsNullOrEmpty()
-            .AddFailure(Erros.Usuario.EmailObrigatorio);
-
-        Set(usuario => usuario.Situacao, (int)ESituacao.Ativo);
+        this.Username = username;
+        this.Password = password;
+        this.PasswordHash = passwordHash;
+        this.Situacao = (int)ESituacao.Ativo;
+        this.Nome = nome;
+        this.Email = email;
 
         return this;
     }
@@ -64,22 +51,22 @@ public class Usuario : BaseEntity<Usuario>
     public Usuario AtualizaUsuario(string username, string email, string nome, GrupoUsuario grupoUsuario)
     {
         Set(usuario => usuario.Username, username)
-            .ValidateWhen()
+            .When()
             .IsNullOrEmpty()
             .AddFailure(Erros.Usuario.UsernameObrigatorio);
 
         Set(usuario => usuario.GrupoUsuario, grupoUsuario)
-            .ValidateWhen()
+            .When()
             .IsNull()
             .AddFailure(Erros.Usuario.GrupoUsuarioInvalido);
 
         Set(usuario => usuario.Nome, nome)
-            .ValidateWhen()
+            .When()
             .IsNullOrEmpty()
             .AddFailure(Erros.Usuario.NomeObrigatorio);
 
         Set(usuario => usuario.Email, email)
-            .ValidateWhen()
+            .When()
             .IsNullOrEmpty()
             .AddFailure(Erros.Usuario.EmailObrigatorio);
 
@@ -89,12 +76,12 @@ public class Usuario : BaseEntity<Usuario>
     public Usuario AtualizaSenhaUsuario(string password, string passwordHash)
     {
         Set(usuario => usuario.Password, password)
-          .ValidateWhen()
+          .When()
           .IsNullOrEmpty()
           .AddFailure(Erros.Usuario.PasswordObrigatorio);
 
         Set(usuario => usuario.PasswordHash, passwordHash)
-            .ValidateWhen()
+            .When()
             .IsNullOrEmpty()
             .AddFailure(Erros.Usuario.PasswordHashObrigatorio);
 

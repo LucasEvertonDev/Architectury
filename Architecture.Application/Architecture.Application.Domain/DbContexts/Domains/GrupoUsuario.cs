@@ -24,12 +24,12 @@ public class GrupoUsuario : BaseEntity<GrupoUsuario>
     public GrupoUsuario CriarGrupoUsuario(string nome, string descricao)
     {
         Set(grupo => grupo.Nome, nome)
-            .ValidateWhen()
+            .When()
             .IsNullOrEmpty()
             .AddFailure(Erros.GrupoUsuario.NomeObrigatorio);
 
         Set(grupo => grupo.Descricao, nome)
-           .ValidateWhen()
+           .When()
            .IsNullOrEmpty()
            .AddFailure(Erros.GrupoUsuario.DescricaoObrigatoria);
 

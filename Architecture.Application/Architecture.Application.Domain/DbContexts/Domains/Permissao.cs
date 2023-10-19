@@ -18,7 +18,7 @@ public class Permissao : BaseEntity<Permissao>
     public Permissao CriarPermissao(string nome)
     {
         Set(permissao => permissao.Nome, nome)
-            .ValidateWhen()
+            .When()
             .IsNullOrEmpty()
             .AddFailure(Erros.Permissao.NomeObrigatorio);
 

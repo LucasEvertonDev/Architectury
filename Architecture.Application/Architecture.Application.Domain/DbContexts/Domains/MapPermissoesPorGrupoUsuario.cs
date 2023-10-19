@@ -16,12 +16,12 @@ public class MapPermissoesPorGrupoUsuario : BaseEntity<MapPermissoesPorGrupoUsua
     public MapPermissoesPorGrupoUsuario CriarMapeamentoPermissaoPorGrupoUsuario(GrupoUsuario grupoUsuario, Permissao permissao)
     {
         Set(map => map.GrupoUsuario, grupoUsuario)
-            .ValidateWhen()
+            .When()
             .IsNull()
             .AddFailure(Erros.MapPermissoesPorGrupoUsuario.GrupoUsuarioObrigatorio);
 
         Set(map => map.Permissao, permissao)
-          .ValidateWhen()
+          .When()
           .IsNull()
           .AddFailure(Erros.MapPermissoesPorGrupoUsuario.PermissaoObrigatoria);
 
@@ -31,12 +31,12 @@ public class MapPermissoesPorGrupoUsuario : BaseEntity<MapPermissoesPorGrupoUsua
     public MapPermissoesPorGrupoUsuario CriarMapeamentoParaCarga(Guid grupoUsuario, Guid permissao)
     {
         Set(map => map.GrupoUsuarioId, grupoUsuario)
-            .ValidateWhen()
+            .When()
             .IsNull()
             .AddFailure(Erros.MapPermissoesPorGrupoUsuario.GrupoUsuarioObrigatorio);
 
         Set(map => map.PermissaoId, permissao)
-          .ValidateWhen()
+          .When()
           .IsNull()
           .AddFailure(Erros.MapPermissoesPorGrupoUsuario.PermissaoObrigatoria);
 

@@ -18,17 +18,17 @@ public class Endereco : BaseEntity<Endereco>
     public Endereco CriarEndereco(string cep, string estado, string cidade)
     {
         Set(endereco => endereco.Cep, cep)
-            .ValidateWhen()
+            .When()
             .IsNullOrEmpty()
             .AddFailure(new FailureModel("endereco", "Cep é obrigatório"));
 
         Set(endereco => endereco.Estado, estado)
-            .ValidateWhen()
+            .When()
             .IsNullOrEmpty()
             .AddFailure(new FailureModel("endereco", "Estado é obrigatório"));
 
         Set(endereco => endereco.Cidade, cidade)
-            .ValidateWhen()
+            .When()
             .IsNullOrEmpty()
             .AddFailure(new FailureModel("endereco", "Cidade é obrigatório"));
 

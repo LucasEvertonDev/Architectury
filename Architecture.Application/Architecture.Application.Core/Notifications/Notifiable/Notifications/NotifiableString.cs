@@ -14,6 +14,14 @@ public partial class Notifiable<TEntity> : INotifiableModel
         return new AfterSet<AfterValidationWhenString>(Result.GetContext(), new NotificationInfo(CurrentProp, EntityInfo));
     }
 
+    protected AfterSet<AfterValidationWhenString> RuleFor(Expression<Func<TEntity, dynamic>> memberLamda, dynamic value)
+    {
+        //this.SetValue(memberLamda, value);
+
+        return new AfterSet<AfterValidationWhenString>(Result.GetContext(), new NotificationInfo(CurrentProp, EntityInfo));
+    }
+
+
     protected AfterSet<AfterValidationWhenString> Set(Expression<Func<string>> expression, string value)
     {
         

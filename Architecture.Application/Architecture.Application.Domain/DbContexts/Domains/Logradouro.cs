@@ -10,7 +10,7 @@ public class Logradouro : BaseEntity<Logradouro>
     public Logradouro CriarLogradouro(string logradouro)
     {
         Set(logradouro => logradouro.Nome, logradouro)
-            .ValidateWhen()
+            .When()
             .IsNullOrEmpty()
             .AddFailure(new FailureModel("logradouro", "logradouro é obrigatório"));
 
@@ -33,7 +33,7 @@ public class Rua : BaseEntity<Rua>
     public Rua CriarRua(string Rua)
     {
         Set(Rua => Rua.Nome, Rua)
-            .ValidateWhen()
+            .When()
             .IsNullOrEmpty()
             .AddFailure(new FailureModel("Rua", "Rua é obrigatório"));
 

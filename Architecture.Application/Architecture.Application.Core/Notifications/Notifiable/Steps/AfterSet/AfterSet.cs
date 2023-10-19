@@ -11,7 +11,7 @@ public class AfterSet<TNext>
         _notificationInfo = notificationInfo;
     }
 
-    public TNext ValidateWhen()
+    public TNext When()
     {
         return (TNext)Activator.CreateInstance(typeof(TNext), _notificationContext, _notificationInfo);
     }
