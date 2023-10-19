@@ -11,7 +11,6 @@ public class CriarUsuarioValidator : AbstractValidator<CriarUsuarioCommand>
 {
     public CriarUsuarioValidator(IRepository<GrupoUsuario> searchUserGroupRepository)
     {
-
         RuleFor(c => c.Username).NotNullOrEmpty().WithError(Erros.Usuario.UsernameObrigatorio);
         RuleFor(c => c.Email).NotNullOrEmpty().WithError(Erros.Usuario.EmailObrigatorio);
 

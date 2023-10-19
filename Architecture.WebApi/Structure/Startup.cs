@@ -123,7 +123,7 @@ public class Startup
         app.UseAuthentication();
 
         app.UseAuthorization();
-        app.UseAntiforgery();
+        //app.UseAntiforgery();
 
         app.UseEndpoints(endpoints =>
         {

@@ -22,7 +22,9 @@ public class Usuario : BaseEntity<Usuario>
 
     public Usuario CriarUsuario(string username, string password, string passwordHash, GrupoUsuario grupoUsuario, string nome, string email)
     {
-        Set(() => Username, username).ValidateWhen().IsNullOrEmpty().AddFailure(Erros.Usuario.UsernameObrigatorio);
+        Set2((username) => Username);
+
+        Set(Username, username);
 
         Set(usuario => usuario.Password, password)
             .ValidateWhen()
@@ -52,6 +54,11 @@ public class Usuario : BaseEntity<Usuario>
         Set(usuario => usuario.Situacao, (int)ESituacao.Ativo);
 
         return this;
+    }
+
+    private void Set2(Func<object, string> value)
+    {
+        throw new NotImplementedException();
     }
 
     public Usuario AtualizaUsuario(string username, string email, string nome, GrupoUsuario grupoUsuario)

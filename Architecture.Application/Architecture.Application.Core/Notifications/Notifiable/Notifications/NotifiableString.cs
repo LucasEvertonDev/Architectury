@@ -21,4 +21,20 @@ public partial class Notifiable<TEntity> : INotifiableModel
 
         return new AfterSet<AfterValidationWhenString>(Result.GetContext(), new NotificationInfo(CurrentProp, EntityInfo));
     }
+
+    protected AfterSet<AfterValidationWhenString> Set(object prop, string value)
+    {
+
+        ////this.SetValue2(expression, value);
+
+        return new AfterSet<AfterValidationWhenString>(Result.GetContext(), new NotificationInfo(CurrentProp, EntityInfo));
+    }
+
+    protected AfterSet<AfterValidationWhenString> Set2(Func<object, string> expression, string value)
+    {
+
+        ////this.SetValue2(expression, value);
+
+        return new AfterSet<AfterValidationWhenString>(Result.GetContext(), new NotificationInfo(CurrentProp, EntityInfo));
+    }
 }
