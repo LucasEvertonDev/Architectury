@@ -4,7 +4,7 @@ using Architecture.Application.Core.Structure.Attributes;
 using Architecture.Application.Core.Structure.Models;
 using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Domains.Base;
-using Architecture.Application.Domain.DbContexts.Repositorys.Base;
+using Architecture.Application.Domain.DbContexts.Repositories.Base;
 using Architecture.Infra.Data.Structure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -15,8 +15,7 @@ using System.Reflection;
 
 namespace Architecture.Infra.Data.Structure.Repository;
 
-public class Repository<TContext, TEntity> : ICreateRepository<TEntity>, IDeleteRepository<TEntity>,
-    IUpdateRepository<TEntity>, ISearchRepository<TEntity> where TEntity : BaseEntity<TEntity> where TContext : DbContext
+public class Repository<TContext, TEntity> : IRepository<TEntity> where TEntity : BaseEntity<TEntity> where TContext : DbContext
 {
     protected TContext _applicationDbContext;
     private readonly IMemoryCache _memoryCache;

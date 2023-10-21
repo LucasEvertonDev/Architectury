@@ -17,25 +17,24 @@ public class CredenciaisCliente : BaseEntityWithDates<CredenciaisCliente>
 
     public CredenciaisCliente CriarCredenticiaisCliente(Guid identificacao, string chave, string descricao)
     {
-        Set(cliente => cliente.Identificacao, identificacao)
+        Set(Identificacao => identificacao)
             .ValidateWhen()
             .IsNull()
             .AddFailure(Erros.CredenciaisCliente.IdentificacaoObrigatoria);
 
-        Set(cliente => cliente.Chave, chave)
+        Set(Chave => chave)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(Erros.CredenciaisCliente.ChaveObrigatoria);
 
-        Set(cliente => cliente.Descricao, descricao)
+        Set(Descricao => descricao)
            .ValidateWhen()
            .IsNullOrEmpty()
            .AddFailure(Erros.CredenciaisCliente.ChaveObrigatoria);
 
-        Set(cliente => cliente.Situacao, (int)ESituacao.Ativo);
+        Set(Situacao => (int)ESituacao.Ativo);
 
-        Set(cliente => cliente.CreateDate, DateTime.Now);
-
+        Set(CreateDate => DateTime.Now);
 
         return this;
     }

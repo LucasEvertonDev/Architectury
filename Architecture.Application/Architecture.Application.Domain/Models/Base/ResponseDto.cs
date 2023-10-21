@@ -1,4 +1,6 @@
-﻿namespace Architecture.Application.Domain.Models.Base;
+﻿using System.Text.Json.Serialization;
+
+namespace Architecture.Application.Domain.Models.Base;
 
 public class ResponseDto<TResult>
 {
@@ -17,6 +19,6 @@ public class ResponseError<TResult>
 {
     public bool Success { get; set; } = false;
     public int HttpCode { get; set; }
-    public List<ErrorModel> Errors { get; set; }
+    public TResult Errors { get; set; }
 }
 

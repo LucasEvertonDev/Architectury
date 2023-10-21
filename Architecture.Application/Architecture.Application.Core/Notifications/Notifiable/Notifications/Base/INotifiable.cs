@@ -2,7 +2,7 @@
 
 public interface INotifiable
 {
-    bool HasNotifications();
+    bool HasFailure();
 }
 
 

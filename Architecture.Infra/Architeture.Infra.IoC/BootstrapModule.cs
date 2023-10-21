@@ -1,6 +1,6 @@
 ﻿using Architecture.Application.Core;
 using Architecture.Application.Core.Structure;
-using Architecture.Application.UseCases;
+using Architecture.Application.Mediator;
 using Architecture.Infra.Data;
 using Architectury.Infra.Plugins;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +15,7 @@ public static class BootstrapModule
 
         services.RegisterCore(configuration);
 
-        services.RegisterUseCases(configuration);
+        services.RegisterMediatR(configuration);
 
         services.RegisterInfraData(configuration);
 

@@ -4,78 +4,78 @@ public static class Erros
 {
     public  class CredenciaisCliente
     {
-        public static NotificationModel IdentificacaoObrigatoria = new NotificationModel("IdentificacaoObrigatoria", "Identificação é obrigatória");
+        public static FailureModel IdentificacaoObrigatoria = new FailureModel("IdentificacaoObrigatoria", "Identificação é obrigatória");
 
-        public static NotificationModel ChaveObrigatoria = new NotificationModel("ChaveObrigatoria", "Chave é obrigatória");
+        public static FailureModel ChaveObrigatoria = new FailureModel("ChaveObrigatoria", "Chave é obrigatória");
 
-        public static NotificationModel DescricaoObrigatoria = new NotificationModel("DescricaoObrigatoria", "Descrição é obrigatória");
+        public static FailureModel DescricaoObrigatoria = new FailureModel("DescricaoObrigatoria", "Descrição é obrigatória");
     }
 
     public class Pessoa
     {
-        public static NotificationModel NomeObrigatorio = new NotificationModel("NomeObrigatorio", "Nome é obrigatório");
+        public static FailureModel NomeObrigatorio = new FailureModel("NomeObrigatorio", "Nome é obrigatório");
 
-        public static NotificationModel EmailObrigatorio = new NotificationModel("EmailObrigatorio", "Email é obrigatório");
+        public static FailureModel EmailObrigatorio = new FailureModel("EmailObrigatorio", "Email é obrigatório");
 
-        public static NotificationModel EmailInvalido = new NotificationModel("EmailInválido", "Email Inválido");
+        public static FailureModel EmailInvalido = new FailureModel("EmailInválido", "Email Inválido");
 
-        public static NotificationModel PessoaNula = new NotificationModel("Pessoa", "Pessoa não pode ser nulo");
+        public static FailureModel PessoaNula = new FailureModel("Pessoa", "Pessoa não pode ser nulo");
     }
 
     public class GrupoUsuario
     {
-        public static NotificationModel NomeObrigatorio = new NotificationModel("NomeObrigatorio", "Nome é obrigatório");
+        public static FailureModel NomeObrigatorio = new FailureModel("NomeObrigatorio", "Nome é obrigatório");
 
-        public static NotificationModel DescricaoObrigatoria = new NotificationModel("DescricaoObrigatoria", "Descrição é obrigatória");
+        public static FailureModel DescricaoObrigatoria = new FailureModel("DescricaoObrigatoria", "Descrição é obrigatória");
     }
 
     public class MapPermissoesPorGrupoUsuario
     {
-        public static NotificationModel PermissaoObrigatoria = new NotificationModel("PermissaoObrigatoria", "Permissão é obrigatória");
+        public static FailureModel PermissaoObrigatoria = new FailureModel("PermissaoObrigatoria", "Permissão é obrigatória");
 
-        public static NotificationModel GrupoUsuarioObrigatorio = new NotificationModel("GrupoUsuarioObrigatorio", "Grupo de usuário é obrigatório");
+        public static FailureModel GrupoUsuarioObrigatorio = new FailureModel("GrupoUsuarioObrigatorio", "Grupo de usuário é obrigatório");
     }
 
     public class Permissao
     {
-        public static NotificationModel NomeObrigatorio = new NotificationModel("NomeObrigatorio", "Nome é obrigatório");
+        public static FailureModel NomeObrigatorio = new FailureModel("NomeObrigatorio", "Nome é obrigatório");
     }
 
     public class Usuario
     {
-        public static NotificationModel NomeObrigatorio = new NotificationModel("NomeObrigatorio", "Nome é obrigatório");
+        public static FailureModel NomeObrigatorio = new FailureModel("NomeObrigatorio", "Nome é obrigatório");
 
-        public static NotificationModel EmailObrigatorio = new NotificationModel("EmailObrigatorio", "Email é obrigatório");
+        public static FailureModel EmailObrigatorio = new FailureModel("EmailObrigatorio", "Email é obrigatório");
 
-        public static NotificationModel EmailInvalido = new NotificationModel("EmailInválido", "Email Inválido");
+        public static FailureModel EmailInvalido = new FailureModel("EmailInválido", "Email Inválido");
 
-        public static NotificationModel UsernameObrigatorio = new NotificationModel("UsernameObrigatorio", "Username é obrigatória");
+        public static FailureModel UsernameObrigatorio = new FailureModel("UsernameObrigatorio", "Username é obrigatória");
 
-        public static NotificationModel PasswordObrigatorio = new NotificationModel("PasswordObrigatorio", "Senha é obrigatória");
+        public static FailureModel PasswordObrigatorio = new FailureModel("PasswordObrigatorio", "Senha é obrigatória");
 
-        public static NotificationModel PasswordHashObrigatorio = new NotificationModel("PasswordHash", "Hash obrigatório");
+        public static FailureModel PasswordHashObrigatorio = new FailureModel("PasswordHash", "Hash obrigatório");
 
-        public static NotificationModel GrupoUsuarioObrigatorio = new NotificationModel("GrupoUsuarioObrigatorio", "Grupo de Usuário é obrigatório");
+        public static FailureModel GrupoUsuarioObrigatorio = new FailureModel("GrupoUsuarioObrigatorio", "Grupo de Usuário é obrigatório");
 
-        public static NotificationModel DataUltimoAcessoInvalida = new NotificationModel("DataUltimoAcessoInvalida", "Data de último acesso inválida");
+        public static FailureModel DataUltimoAcessoInvalida = new FailureModel("DataUltimoAcessoInvalida", "Data de último acesso inválida");
 
-        public static NotificationModel GrupoUsuarioInvalido = new NotificationModel("GrupoUsuarioInvalido", "Grupo de usuário inválido");
+        public static FailureModel GrupoUsuarioInvalido = new FailureModel("GrupoUsuarioInvalido", "Grupo de usuário inválido");
 
-        public static NotificationModel PasswordLenght = new NotificationModel("PasswordLenght", "Senha deve ter no máximo seis caracteres");
+        public static FailureModel PasswordLenght = new FailureModel("PasswordLenght", "Senha deve ter no máximo seis caracteres");
     }
 
     public class Business
     {
-        public static NotificationModel CrendenciaisClienteInvalida = new NotificationModel("CrendenciaisClienteInvalida", "Credencias de clinete inválidas");
+        public static FailureModel CrendenciaisClienteInvalida = new FailureModel("CrendenciaisClienteInvalida", "Credencias de clinete inválidas");
 
-        public static NotificationModel UsernamePasswordInvalidos = new NotificationModel("UsernamePasswordInvalidos", "Username ou senha inválidos");
+        public static FailureModel UsernamePasswordInvalidos = new FailureModel("UsernamePasswordInvalidos", "Username ou senha inválidos");
 
-        public static NotificationModel RefreshTokenInvalido = new NotificationModel("RefreshTokenInvalido", "Refresh token inválido");
+        public static FailureModel RefreshTokenInvalido = new FailureModel("RefreshTokenInvalido", "Refresh token inválido");
 
-        public static NotificationModel UsernameExistente = new NotificationModel("UsernameCadastrado", "Já existe um usuário cadastrado para o username informado.");
+        public static FailureModel UsernameExistente = new FailureModel("UsernameCadastrado", "Já existe um usuário cadastrado para o username informado.");
 
-        public static NotificationModel EmailExistente = new NotificationModel("EmailExistente", "Já existe um usuário cadastrado para o email informado.");
+        public static FailureModel EmailExistente = new FailureModel("EmailExistente", "Já existe um usuário cadastrado para o email informado.");
 
-        public static NotificationModel UsuarioInexistente = new NotificationModel("UsuarioInexistente", "Não foi possível encontrar o usuário para os parâmetros informados ");
+        public static FailureModel UsuarioInexistente = new FailureModel("UsuarioInexistente", "Não foi possível encontrar o usuário para os parâmetros informados ");
     }
 }

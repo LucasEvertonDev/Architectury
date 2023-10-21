@@ -1,15 +1,15 @@
 ﻿using Architecture.Application.Domain.Constants;
 using Architecture.Application.Domain.DbContexts.Domains;
-using Architecture.Application.Domain.DbContexts.Repositorys.Base;
-using Architecture.Application.Domain.Models.Usuarios;
-using Architectury.Infra.Plugins.FluentValidation.Extensions;
+using Architecture.Application.Domain.DbContexts.Repositories.Base;
+using Architecture.Application.Mediator.Commands.Usuarios.AtualizarUsuario;
+using Architectury.Infra.Plugins.FluentValidation.Structure.Extensions;
 using FluentValidation;
 
-namespace PLaboratory.Plugins.FluentValidation.User;
+namespace Architectury.Infra.Plugins.FluentValidation.Usuario;
 
-public class AtualizarUsuarioValidator : AbstractValidator<AtualizarUsuarioDto>
+public class AtualizarUsuarioValidator : AbstractValidator<AtualizarUsuarioCommand>
 {
-    public AtualizarUsuarioValidator(ISearchRepository<GrupoUsuario> searchUserGroupRepository)
+    public AtualizarUsuarioValidator(IRepository<GrupoUsuario> searchUserGroupRepository)
     {
         RuleFor(c => c.Body.Username).NotNullOrEmpty().WithError(Erros.Usuario.UsernameObrigatorio);
         RuleFor(c => c.Body.Email).NotNullOrEmpty().WithError(Erros.Usuario.EmailObrigatorio);
@@ -25,7 +25,7 @@ public class AtualizarUsuarioValidator : AbstractValidator<AtualizarUsuarioDto>
         {
             if (!string.IsNullOrEmpty(userGroup))
             {
-                return !((await searchUserGroupRepository.FirstOrDefaultAsync(u => u.Id.ToString() == userGroup)) == null);
+                return !(await searchUserGroupRepository.FirstOrDefaultAsync(u => u.Id.ToString() == userGroup) == null);
             }
             return true;
         }).WithError(Erros.Usuario.GrupoUsuarioInvalido);

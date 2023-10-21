@@ -1,5 +1,6 @@
 ﻿using Architecture.Application.Core.Notifications.Notifiable.Notifications.Base;
-using System.Reflection;
+using Architecture.Application.Core.Notifications.Services;
+using System.Linq.Expressions;
 
 namespace Architecture.Application.Core.Notifications;
 
@@ -8,7 +9,10 @@ public class Result
     public Result(NotificationContext Notification)
     {
         NotificationContext = Notification;
+        _resultService = new ResultService(Notification);
     }
+
+    private ResultService _resultService { get; set; }
 
     private NotificationContext NotificationContext { get; set; }
 
@@ -16,24 +20,15 @@ public class Result
 
     public IReadOnlyCollection<NotificationModel> GetFailures => NotificationContext.Notifications;
 
-    public Result Failure<T>(NotificationModel notification) where T : class
+    public Result Failure<T>(FailureModel failure) where T : INotifiable
     {
-        var notificationType = Enum.NotificationType.BusinessNotification;
-        if (typeof(T).GetInterfaces().ToList().Exists(x => x.Name == nameof(INotifiableModel)))
-        {
-            notificationType = Enum.NotificationType.DomainNotification;
-        }
+        _resultService.Failure<T>(failure);
+        return this;
+    }
 
-        var notificationInfo = new NotificationInfo()
-        {
-            NotificationType = notificationType,
-            Name = typeof(T).Name,
-            Namespace = typeof(T).Namespace
-        };
-
-        notification.SetNotificationInfo(notificationInfo);
-
-        NotificationContext.AddNotification(notification);
+    public Result Failure<T>(Expression<Func<T, dynamic>> exp, FailureModel failure) where T : INotifiableModel
+    {
+        _resultService.Failure<T>(exp, failure);
         return this;
     }
 
@@ -43,13 +38,24 @@ public class Result
         return this;
     }
 
-    public NotificationContext GetContext() => NotificationContext;
-
-    public Result IncludeResult(dynamic value)
+    public Result Failure(List<NotificationModel> failures)
     {
-        this.Data = value;
+        NotificationContext.AddNotifications(failures);
         return this;
     }
 
-    public dynamic Data { get; private set; }
+    public NotificationContext GetContext() => NotificationContext;
+
+    public T GetContent<T>()
+    {
+        return (T)Content;
+    }
+
+    public Result SetContent(dynamic content)
+    {
+        Content = content;
+        return this;
+    }
+
+    private dynamic Content { get; set; }
 }

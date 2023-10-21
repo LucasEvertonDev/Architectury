@@ -41,23 +41,23 @@ public static class SwaggerExtensions
             options.OperationFilter<SecureEndpointAuthRequirementFilter>();
         }
 
-        options.OrderActionsBy((apiDesc) => $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.HttpMethod}");
+        //options.OrderActionsBy((apiDesc) => $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.HttpMethod}");
 
-        options.TagActionsBy(api =>
-        {
-            if (api.GroupName != null)
-            {
-                return new[] { api.GroupName };
-            }
+        //options.TagActionsBy(api =>
+        //{
+        //    if (api.GroupName != null)
+        //    {
+        //        return new[] { api.GroupName };
+        //    }
 
-            var controllerActionDescriptor = api.ActionDescriptor as ControllerActionDescriptor;
-            if (controllerActionDescriptor != null)
-            {
-                return new[] { controllerActionDescriptor.ControllerName };
-            }
+        //    var controllerActionDescriptor = api.ActionDescriptor as ControllerActionDescriptor;
+        //    if (controllerActionDescriptor != null)
+        //    {
+        //        return new[] { controllerActionDescriptor.ControllerName };
+        //    }
 
-            throw new InvalidOperationException("Unable to determine tag for endpoint.");
-        });
+        //    throw new InvalidOperationException("Unable to determine tag for endpoint.");
+        //});
 
         options.DocInclusionPredicate((name, api) => true);
 

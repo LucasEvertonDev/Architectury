@@ -1,37 +1,19 @@
-﻿using Architecture.Application.Core.Notifications.Enum;
-
-namespace Architecture.Application.Core.Notifications;
+﻿namespace Architecture.Application.Core.Notifications;
 
 public record NotificationModel
 {
-    public NotificationModel(string key, string message)
+    public NotificationModel(FailureModel failure, NotificationInfo notificationInfo)
     {
-        this.key = key;
-        this.message = message;
+        Error = failure;
+        NotificationInfo = notificationInfo;
     }
 
-    public void SetNotificationInfo(NotificationInfo notificationInfo)
-    {
-        this.context = notificationInfo.Namespace;
-        this.member = notificationInfo.MemberName;
-        this.notificationType = notificationInfo.NotificationType;
-    }
+    public FailureModel Error { get; set; }
+    public NotificationInfo NotificationInfo { get; set; }
+}
 
-    public void SetMemberNamePrefix(string prefix)
-    {
-        this.member = string.IsNullOrEmpty(prefix) ? this.member : string.Concat(prefix, ".", this.member);
-    }
+public record FailureModel(string code, string message)
+{
 
-    public string key { get; private set; }
-    public string message { get; private set; }
-    public string context { get; private set; }
-    public string member { get; private set; }
-
-    public void SetMember(string member)
-    {
-        this.member = member;
-    }
-
-    public NotificationType notificationType { get; private set; } = NotificationType.BusinessNotification; 
-} 
+}
 

@@ -1,12 +1,11 @@
 ﻿using Architecture.Application.Domain.Constants;
-using Architecture.Application.Domain.Models.Usuarios;
-using Architectury.Infra.Plugins.FluentValidation.Extensions;
+using Architecture.Application.Mediator.Commands.Usuarios.AtualizarSenha;
+using Architectury.Infra.Plugins.FluentValidation.Structure.Extensions;
 using FluentValidation;
-using static Architecture.Application.Domain.Constants.Erros;
 
-namespace PLaboratory.Plugins.FluentValidation.User;
+namespace Architectury.Infra.Plugins.FluentValidation.Usuario;
 
-public class AtualizarSenhaUsuarioValidator : AbstractValidator<AtualizarSenhaUsuarioDto>
+public class AtualizarSenhaUsuarioValidator : AbstractValidator<AtualizarSenhaCommand>
 {
     public AtualizarSenhaUsuarioValidator()
     {
@@ -14,7 +13,7 @@ public class AtualizarSenhaUsuarioValidator : AbstractValidator<AtualizarSenhaUs
 
         When(c => !string.IsNullOrWhiteSpace(c.Body.Password), () =>
         {
-            RuleFor(c => c.Body.Password.Length).GreaterThanOrEqualTo(6).WithError(Erros.Usuario.SenhaMaximoLenght);
+            RuleFor(c => c.Body.Password.Length).GreaterThanOrEqualTo(6).WithError(Erros.Usuario.PasswordLenght);
         });
     }
 }

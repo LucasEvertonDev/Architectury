@@ -1,10 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="MediatR\**" />
+    <EmbeddedResource Remove="MediatR\**" />
+    <None Remove="MediatR\**" />
+  </ItemGroup>
 
 
   <ItemGroup>
@@ -15,11 +22,13 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.11" />
     <PackageReference PrivateAssets="none" Include="Serilog.AspNetCore" Version="7.0.0" />
     <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.3.0" />
+    <PackageReference Include="MediatR" Version="10.0.1" />
   </ItemGroup>
 
 
   <ItemGroup>
     <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.Core\Architecture.Application.Core.csproj" />
     <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.Domain\Architecture.Application.Domain.csproj" />
+    <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.Mediator\Architecture.Application.Mediator.csproj" />
   </ItemGroup>
 </Project>

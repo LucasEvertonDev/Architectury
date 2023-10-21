@@ -1,6 +1,5 @@
 ﻿using Architecture.Application.Domain.DbContexts.Domains.Base;
 using Architecture.Infra.Data.Structure.Repository;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Architecture.Infra.Data.Context.Repositories.Base;
 

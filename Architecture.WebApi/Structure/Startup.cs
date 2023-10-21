@@ -4,11 +4,13 @@ using Microsoft.OpenApi.Models;
 using Architecture.Infra.IoC;
 using Architecture.WebApi.Structure.Extensions;
 using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Architecture.WebApi.Structure.Middlewares;
+using Architecture.WebApi.Endpoints;
+using Architecture.WebApi.Structure.Filters;
+using Microsoft.AspNetCore.Routing;
 
 namespace Architecture.WebApi.Structure;
 
@@ -17,6 +19,8 @@ public class Startup
     protected AppSettings appSettings { get; set; }
 
     public Startup(IConfiguration configuration)
+
+
     {
         Configuration = configuration;
         appSettings = new AppSettings();
@@ -26,11 +30,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddMvc(options =>
-        {
-            //options.Filters.Add<ValidationFilter>();
-            // options.Filters.Add<NotificationFilter>();
-        });
+        services.AddMvcCore();
 
         services.AddControllers();
 
@@ -69,6 +69,8 @@ public class Startup
             //options.SizeLimit = 1024 * 1024;
         });
 
+        services.AddAntiforgery();
+
         services.AddSingleton(appSettings);
 
         services.AddSwaggerGen(c =>
@@ -84,6 +86,9 @@ public class Startup
         services.AddSwaggerExamples();
 
         services.AddInfraStructure(appSettings);
+
+        services.AddAuthorizationBuilder()
+            .AddPolicy("admin", policy => policy.RequireRole("admin"));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -118,10 +123,18 @@ public class Startup
         app.UseAuthentication();
 
         app.UseAuthorization();
+        app.UseAntiforgery();
 
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapControllers();
+            var endpointv1 = endpoints.MapGroup("api/v1/")
+                //.AddEndpointFilter<ValidationFilter>()
+                .WithOpenApi();
+
+            endpointv1
+                .AddAuthEndpoints("auth/", "Auth")
+                .AddPessoasEndpoints("pessoas/", "Pessoas")
+                .AddUsuariosEndpoint("usuarios/", "Usuarios");
         });
     }
 }

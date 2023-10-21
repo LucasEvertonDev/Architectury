@@ -17,12 +17,12 @@ public class Permissao : BaseEntity<Permissao>
 
     public Permissao CriarPermissao(string nome)
     {
-        Set(permissao => permissao.Nome, nome)
+        Set(Nome => nome)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(Erros.Permissao.NomeObrigatorio);
 
-        Set(permissao => permissao.Situacao, (int)ESituacao.Ativo);
+        Set(Situacao => (int)ESituacao.Ativo);
         return this;
     }
 

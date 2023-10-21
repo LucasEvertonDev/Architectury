@@ -1,4 +1,6 @@
-﻿namespace Architecture.Application.Core.Notifications.Context;
+﻿using Architecture.Application.Core.Notifications;
+
+namespace Architecture.Application.Core.Notifications.Context;
 
 public class NotificationContext
 {
@@ -9,11 +11,6 @@ public class NotificationContext
     public NotificationContext()
     {
         _notifications = new List<NotificationModel>();
-    }
-
-    public void AddNotification(string key, string message)
-    {
-        _notifications.Add(new NotificationModel(key, message));
     }
 
     public void AddNotification(NotificationModel notification)

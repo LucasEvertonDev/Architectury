@@ -9,10 +9,10 @@ public class Logradouro : BaseEntity<Logradouro>
     public List<Rua> Ruas { get; set; } = new List<Rua>();
     public Logradouro CriarLogradouro(string logradouro)
     {
-        Set(logradouro => logradouro.Nome, logradouro)
+        Set(Nome => logradouro)
             .ValidateWhen()
             .IsNullOrEmpty()
-            .AddFailure(new NotificationModel("logradouro", "logradouro é obrigatório"));
+            .AddFailure(new FailureModel("logradouro", "logradouro é obrigatório"));
 
         var ruas = new List<Rua>()
         { 
@@ -20,7 +20,7 @@ public class Logradouro : BaseEntity<Logradouro>
             new Rua().CriarRua("")
         };
 
-        Set(logradouro => logradouro.Ruas, ruas);
+        Set<Rua>(Ruas => ruas);
 
         return this;
     }
@@ -32,10 +32,10 @@ public class Rua : BaseEntity<Rua>
 
     public Rua CriarRua(string Rua)
     {
-        Set(Rua => Rua.Nome, Rua)
+        Set(Nome => Rua)
             .ValidateWhen()
             .IsNullOrEmpty()
-            .AddFailure(new NotificationModel("Rua", "Rua é obrigatório"));
+            .AddFailure(new FailureModel("Rua", "Rua é obrigatório"));
 
         return this;
     }
