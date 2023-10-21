@@ -5,14 +5,14 @@ using MediatR;
 
 namespace Architecture.Application.Mediator.Pipelines;
 
-public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> 
+public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse> where TResponse : Result
 {
     private readonly IFluentService _fluentService;
     private readonly NotificationContext _notificationContext;
     private Result Result { get; set; }
 
-    public ValidationBehaviour(IFluentService fluentService, 
+    public ValidationBehaviour(IFluentService fluentService,
         NotificationContext notificationContext)
     {
         _fluentService = fluentService;
@@ -20,7 +20,7 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
         Result = new Result(notificationContext);
     }
 
-    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next) 
+    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
         var failures = await _fluentService.ValidateParameterAsync(request);
 

@@ -12,41 +12,38 @@ public class AtualizarUsuarioCommandHandler : BaseCommandHandler, IRequestHandle
 
     public async Task<Result> Handle(AtualizarUsuarioCommand request, CancellationToken cancellationToken)
     {
-        return await OnTransactionAsync(async () =>
+        var usuario = await unitOfWork.UsuarioRepository.FirstOrDefaultTrackingAsync(u => u.Id.ToString() == request.Id);
+
+        if (usuario == null)
         {
-            var usuario = await unitOfWork.UsuarioRepository.FirstOrDefaultTrackingAsync(u => u.Id.ToString() == request.Id);
+            return Result.Failure<AtualizarUsuarioCommandHandler>(Erros.Business.UsuarioInexistente);
+        }
 
-            if (usuario == null)
-            {
-                return Result.Failure<AtualizarUsuarioCommandHandler>(Erros.Business.UsuarioInexistente);
-            }
+        var grupoUsuario = await unitOfWork.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(request.Body.GrupoUsuarioId));
 
-            var grupoUsuario = await unitOfWork.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(request.Body.GrupoUsuarioId));
+        usuario.AtualizaUsuario(
+                username: request.Body.Username,
+                email: request.Body.Email,
+                nome: request.Body.Nome,
+                grupoUsuario: grupoUsuario
+            );
 
-            usuario.AtualizaUsuario(
-                    username: request.Body.Username,
-                    email: request.Body.Email,
-                    nome: request.Body.Nome,
-                    grupoUsuario: grupoUsuario
-                );
+        if (await UsernameCadastrado(usuario.Username))
+        {
+            Result.Failure<AtualizarUsuarioCommandHandler>(Erros.Business.UsernameExistente);
+        }
 
-            if (await UsernameCadastrado(usuario.Username))
-            {
-                Result.Failure<AtualizarUsuarioCommandHandler>(Erros.Business.UsernameExistente);
-            }
+        if (await EmailCadastrado(usuario.Email))
+        {
+            Result.Failure<AtualizarUsuarioCommandHandler>(Erros.Business.EmailExistente);
+        }
 
-            if (await EmailCadastrado(usuario.Email))
-            {
-                Result.Failure<AtualizarUsuarioCommandHandler>(Erros.Business.EmailExistente);
-            }
+        if (usuario.HasFailure() || HasFailure())
+        {
+            Result.Failure<AtualizarUsuarioCommandHandler>(usuario);
+        }
 
-            if (usuario.HasFailure() || HasFailure())
-            {
-                Result.Failure<AtualizarUsuarioCommandHandler>(usuario);
-            }
-
-            return Result.SetContent(await unitOfWork.UsuarioRepository.UpdateAsync(usuario));
-        });
+        return Result.SetContent(await unitOfWork.UsuarioRepository.UpdateAsync(usuario));
     }
 
     /// <summary>

@@ -13,15 +13,12 @@ public class RecuperarUsuariosQueryHandler : BaseCommandHandler, IRequestHandler
 
     public async Task<Result> Handle(RecuperarUsuariosQuery request, CancellationToken cancellationToken)
     {
-        return await OnTransactionAsync(async () =>
-        {
-            var pagedResult = await unitOfWork.UsuarioRepository.ToListAsync(
-                pageNumber: request.PageNumber,
-                pageSize: request.PageSize,
-                predicate: u => string.IsNullOrEmpty(request.Nome) || u.Nome.Contains(request.Nome)
-            );
+        var pagedResult = await unitOfWork.UsuarioRepository.ToListAsync(
+            pageNumber: request.PageNumber,
+            pageSize: request.PageSize,
+            predicate: u => string.IsNullOrEmpty(request.Nome) || u.Nome.Contains(request.Nome)
+        );
 
-            return Result.SetContent(new UsuariosRecuperadosModel().FromEntity(pagedResult));
-        });
+        return Result.SetContent(new UsuariosRecuperadosModel().FromEntity(pagedResult));
     }
 }

@@ -6,6 +6,7 @@ using Architecture.Application.Domain.DbContexts.UnitOfWork;
 using Architecture.Infra.Data.Context.Repositories;
 using Architecture.Infra.Data.Context.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Architecture.Infra.Data.Context.UnitOfWork;
 
@@ -19,7 +20,7 @@ public class UnitOfWork<TDbContext> : IUnitWorkTransaction where TDbContext : Db
     private IRepository<CredenciaisCliente> _credenciaisClienteRepository;
     private IMapPermissoesPorGrupoUsuarioRepository _mapPermissoesPorGrupoUsuarioRepository;
     private IRepository<GrupoUsuario> _grupoUsuarioRepository;
-
+    private IDbContextTransaction _transaction;
     public UnitOfWork(TDbContext applicationDbContext,
             IServiceProvider serviceProvider
         )
@@ -101,38 +102,22 @@ public class UnitOfWork<TDbContext> : IUnitWorkTransaction where TDbContext : Db
         }
     }
 
-    public async Task OpenConnectionAsync(Func<Task> func)
+    public async Task<TRetorno> OnTransactionAsync<TRetorno>(Func<Task<TRetorno>> func)
     {
-        var transaction = await _context.Database.BeginTransactionAsync();
-        try
-        {
-            await func();
-
-            await transaction.CommitAsync();
-        }
-        catch
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
-    }
-
-    public async Task<TRetorno> OpenConnectionAsync<TRetorno>(Func<Task<TRetorno>> func)
-    {
-        var transaction = await _context.Database.BeginTransactionAsync();
+        _transaction = await _context.Database.BeginTransactionAsync();
         try
         {
             TRetorno retorno = await func();
 
             await _context.SaveChangesAsync();
 
-            await transaction.CommitAsync();
+            await _transaction.CommitAsync();
 
             return retorno;
         }
         catch
         {
-            await transaction.RollbackAsync();
+            await _transaction.RollbackAsync();
             throw;
         }
     }

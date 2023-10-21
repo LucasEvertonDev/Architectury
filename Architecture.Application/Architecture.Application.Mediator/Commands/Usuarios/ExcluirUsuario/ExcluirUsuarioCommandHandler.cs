@@ -12,18 +12,15 @@ public class ExcluirUsuarioCommandHandler : BaseCommandHandler, IRequestHandler<
 
     public async Task<Result> Handle(ExcluirUsuarioCommand request, CancellationToken cancellationToken)
     {
-        return await OnTransactionAsync(async () =>
+        var usuario = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(u => u.Id.ToString() == request.Id);
+
+        if (usuario == null)
         {
-            var usuario = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(u => u.Id.ToString() == request.Id);
+            return Result.Failure<ExcluirUsuarioCommandHandler>(Erros.Business.UsuarioInexistente);
+        }
 
-            if (usuario == null)
-            {
-                return Result.Failure<ExcluirUsuarioCommandHandler>(Erros.Business.UsuarioInexistente);
-            }
+        await unitOfWork.UsuarioRepository.DeleteLogicAsync(usuario);
 
-            await unitOfWork.UsuarioRepository.DeleteLogicAsync(usuario);
-
-            return Result;
-        });
+        return Result;
     }
 }

@@ -13,44 +13,41 @@ public class CriarPessoasCommandHandler : BaseCommandHandler, IRequestHandler<Cr
     }
     public async Task<Result> Handle(CriarPessoasCommand request, CancellationToken cancellationToken)
     {
-        return await OnTransactionAsync(async () =>
+        if (request == null)
         {
-            if (request == null)
+            Result.Failure<CriarPessoasCommandHandler>(Erros.Pessoa.PessoaNula);
+        }
+
+        var pessoa = new Pessoa().CriarPessoa(
+            primeiroNome: request.PrimeiroNome,
+            sobrenome: request.Sobrenome,
+            email: request.Email,
+            dataNascimento: request.DataNascimento,
+            enderecoModel: request.Endereco
+        );
+
+        if (true)
+        {
+            Result.Failure<Pessoa>((pessoa) => pessoa.Endereco.Logradouro.Nome, new FailureModel("Teste1", "Teste1"));
+
+            Result.Failure<Pessoa>((pessoa) => pessoa.Enderecos[1].Cidade, new FailureModel("Teste2", "Teste2"));
+
+            for (int i = 0; i < 2; i++)
             {
-                Result.Failure<CriarPessoasCommandHandler>(Erros.Pessoa.PessoaNula);
+                Result.Failure<Pessoa>((pessoa) => pessoa.Enderecos[i].Estado, new FailureModel("Estado", $"TesteList{i}"));
             }
+        }
 
-            var pessoa = new Pessoa().CriarPessoa(
-                primeiroNome: request.PrimeiroNome,
-                sobrenome: request.Sobrenome,
-                email: request.Email,
-                dataNascimento: request.DataNascimento,
-                enderecoModel: request.Endereco
-            );
+        if (pessoa.HasFailure())
+        {
+            return Result.Failure<CriarPessoasCommandHandler>(pessoa);
+        }
 
-            if (true)
-            {
-                Result.Failure<Pessoa>((pessoa) => pessoa.Endereco.Logradouro.Nome, new FailureModel("Teste1", "Teste1"));
+        var pessoaCriada = await unitOfWork.PessoasRepository.CreateAsync(pessoa);
 
-                Result.Failure<Pessoa>((pessoa) => pessoa.Enderecos[1].Cidade, new FailureModel("Teste2", "Teste2"));
-
-                for (int i = 0; i < 2; i++)
-                {
-                    Result.Failure<Pessoa>((pessoa) => pessoa.Enderecos[i].Estado, new FailureModel("Estado", $"TesteList{i}"));
-                }
-            }
-
-            if (pessoa.HasFailure())
-            {
-                return Result.Failure<CriarPessoasCommandHandler>(pessoa);
-            }
-
-            var pessoaCriada = await unitOfWork.PessoasRepository.CreateAsync(pessoa);
-
-            return Result.SetContent(new PessoaCriadaModel()
-            {
-                Message = "Filé demais"
-            });
+        return Result.SetContent(new PessoaCriadaModel()
+        {
+            Message = "Filé demais"
         });
     }
 }

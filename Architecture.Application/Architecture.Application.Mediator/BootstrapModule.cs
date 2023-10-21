@@ -11,5 +11,6 @@ public static class BootstrapModule
     {
         services.AddMediatR(typeof(BootstrapModule).Assembly);
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
     }
 }

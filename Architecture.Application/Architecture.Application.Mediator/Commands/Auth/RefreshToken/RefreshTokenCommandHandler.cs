@@ -19,33 +19,30 @@ public class RefreshTokenCommandHandler : BaseCommandHandler, IRequestHandler<Re
 
     public async Task<Result> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        return await OnTransactionAsync(async () =>
+        if (await CredenciasClienteInvalidas(request))
         {
-            if (await CredenciasClienteInvalidas(request))
-            {
-                return Result.Failure<RefreshTokenCommandHandler>(Erros.Business.CrendenciaisClienteInvalida);
-            }
+            return Result.Failure<RefreshTokenCommandHandler>(Erros.Business.CrendenciaisClienteInvalida);
+        }
 
-            var user = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(user => user.Id.ToString() == _identity.GetUserClaim(JWTUserClaims.UserId));
+        var user = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(user => user.Id.ToString() == _identity.GetUserClaim(JWTUserClaims.UserId));
 
-            if (user == null || string.IsNullOrEmpty(user.Id.ToString()))
-            {
-                return Result.Failure<RefreshTokenCommandHandler>(Erros.Business.RefreshTokenInvalido);
-            }
+        if (user == null || string.IsNullOrEmpty(user.Id.ToString()))
+        {
+            return Result.Failure<RefreshTokenCommandHandler>(Erros.Business.RefreshTokenInvalido);
+        }
 
-            user.RegistraUltimoAcesso();
+        user.RegistraUltimoAcesso();
 
-            var roles = await unitOfWork.MapPermissoesPorGrupoUsuarioRepository.GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
+        var roles = await unitOfWork.MapPermissoesPorGrupoUsuarioRepository.GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
 
-            var (tokem, data) = await _tokenService.GenerateToken(user, request.ClientId, roles);
+        var (tokem, data) = await _tokenService.GenerateToken(user, request.ClientId, roles);
 
-            await unitOfWork.UsuarioRepository.UpdateAsync(user);
+        await unitOfWork.UsuarioRepository.UpdateAsync(user);
 
-            return Result.SetContent(new TokenModel
-            {
-                TokenJWT = tokem,
-                DataExpiracao = data.ToLocalTime()
-            });
+        return Result.SetContent(new TokenModel
+        {
+            TokenJWT = tokem,
+            DataExpiracao = data.ToLocalTime()
         });
     }
 

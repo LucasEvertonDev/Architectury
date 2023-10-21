@@ -23,38 +23,35 @@ public class LoginCommandHandler : BaseCommandHandler, IRequestHandler<LoginComm
 
     public async Task<Result> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        return await OnTransactionAsync(async () =>
+        if (await CredenciasClienteInvalidas(unitOfWork, request))
         {
-            if (await CredenciasClienteInvalidas(unitOfWork, request))
-            {
-                return Result.Failure<LoginCommandHandler>(Erros.Business.CrendenciaisClienteInvalida);
-            }
+            return Result.Failure<LoginCommandHandler>(Erros.Business.CrendenciaisClienteInvalida);
+        }
 
-            var user = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(a => a.Username == request.Body.Username);
+        var user = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(a => a.Username == request.Body.Username);
 
-            if (user == null || string.IsNullOrEmpty(user.Id.ToString()))
-            {
-                return Result.Failure<LoginCommandHandler>(Erros.Business.UsernamePasswordInvalidos);
-            }
+        if (user == null || string.IsNullOrEmpty(user.Id.ToString()))
+        {
+            return Result.Failure<LoginCommandHandler>(Erros.Business.UsernamePasswordInvalidos);
+        }
 
-            if (!_passwordHash.PasswordIsEquals(request.Body.Password, user?.PasswordHash, user?.Password))
-            {
-                return Result.Failure<LoginCommandHandler>(Erros.Business.UsernamePasswordInvalidos);
-            }
+        if (!_passwordHash.PasswordIsEquals(request.Body.Password, user?.PasswordHash, user?.Password))
+        {
+            return Result.Failure<LoginCommandHandler>(Erros.Business.UsernamePasswordInvalidos);
+        }
 
-            user.RegistraUltimoAcesso();
+        user.RegistraUltimoAcesso();
 
-            var roles = await unitOfWork.MapPermissoesPorGrupoUsuarioRepository.GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
+        var roles = await unitOfWork.MapPermissoesPorGrupoUsuarioRepository.GetRolesByGrupoUsuario(user.GrupoUsuarioId.ToString());
 
-            var (tokem, data) = await _tokenService.GenerateToken(user, request.ClientId, roles);
+        var (tokem, data) = await _tokenService.GenerateToken(user, request.ClientId, roles);
 
-            await unitOfWork.UsuarioRepository.UpdateAsync(user);
+        await unitOfWork.UsuarioRepository.UpdateAsync(user);
 
-            return Result.SetContent(new TokenModel
-            {
-                TokenJWT = tokem,
-                DataExpiracao = data.ToLocalTime()
-            });
+        return Result.SetContent(new TokenModel
+        {
+            TokenJWT = tokem,
+            DataExpiracao = data.ToLocalTime()
         });
     }
 

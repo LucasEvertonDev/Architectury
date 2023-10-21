@@ -19,41 +19,38 @@ public class CriarUsuarioCommandHandler : BaseCommandHandler, IRequestHandler<Cr
 
     public async Task<Result> Handle(CriarUsuarioCommand request, CancellationToken cancellationToken)
     {
-        return await OnTransactionAsync(async () =>
+        var passwordHash = _passwordHash.GeneratePasswordHash();
+
+        var grupoUsuario = await unitOfWork.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(request.GrupoUsuarioId));
+
+        var user = new Usuario()
+            .CriarUsuario(
+                username: request.Username,
+                password: _passwordHash.EncryptPassword(request.Password, passwordHash),
+                passwordHash: passwordHash,
+                grupoUsuario: grupoUsuario,
+                nome: request.Name,
+                email: request.Email
+            );
+
+        if (await UsernameCadastrado(user.Username))
         {
-            var passwordHash = _passwordHash.GeneratePasswordHash();
+            Result.Failure<CriarUsuarioCommandHandler>(Erros.Business.UsernameExistente);
+        }
 
-            var grupoUsuario = await unitOfWork.GrupoUsuarioRepository.FirstOrDefaultTrackingAsync(grupo => grupo.Id == new Guid(request.GrupoUsuarioId));
+        if (await EmailCadastrado(user.Email))
+        {
+            Result.Failure<CriarUsuarioCommandHandler>(Erros.Business.EmailExistente);
+        }
 
-            var user = new Usuario()
-                .CriarUsuario(
-                    username: request.Username,
-                    password: _passwordHash.EncryptPassword(request.Password, passwordHash),
-                    passwordHash: passwordHash,
-                    grupoUsuario: grupoUsuario,
-                    nome: request.Name,
-                    email: request.Email
-                );
+        if (user.HasFailure() || Result.HasFailures())
+        {
+            return Result.Failure<CriarUsuarioCommandHandler>(user);
+        }
 
-            if (await UsernameCadastrado(user.Username))
-            {
-                Result.Failure<CriarUsuarioCommandHandler>(Erros.Business.UsernameExistente);
-            }
+        user = await unitOfWork.UsuarioRepository.CreateAsync(user);
 
-            if (await EmailCadastrado(user.Email))
-            {
-                Result.Failure<CriarUsuarioCommandHandler>(Erros.Business.EmailExistente);
-            }
-
-            if (user.HasFailure() || Result.HasFailures())
-            {
-                return Result.Failure<CriarUsuarioCommandHandler>(user);
-            }
-
-            user = await unitOfWork.UsuarioRepository.CreateAsync(user);
-
-            return Result.SetContent(new UsuarioCriadoModel().FromEntity(user));
-        });
+        return Result.SetContent(new UsuarioCriadoModel().FromEntity(user));
     }
 
        /// <summary>

@@ -17,23 +17,20 @@ public class AtualizarSenhaCommandHandler : BaseCommandHandler, IRequestHandler<
 
     public async Task<Result> Handle(AtualizarSenhaCommand request, CancellationToken cancellationToken)
     {
-        return await OnTransactionAsync(async () =>
+        var usuario = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(u => u.Id.ToString() == request.Id);
+
+        if (usuario == null)
         {
-            var usuario = await unitOfWork.UsuarioRepository.FirstOrDefaultAsync(u => u.Id.ToString() == request.Id);
+            return Result.Failure<AtualizarSenhaCommandHandler>(Erros.Business.UsuarioInexistente);
+        }
 
-            if (usuario == null)
-            {
-                return Result.Failure<AtualizarSenhaCommandHandler>(Erros.Business.UsuarioInexistente);
-            }
+        string passwordHash = _passwordHash.GeneratePasswordHash();
 
-            string passwordHash = _passwordHash.GeneratePasswordHash();
+        usuario.AtualizaSenhaUsuario(
+                password: _passwordHash.EncryptPassword(request.Body.Password, passwordHash),
+                passwordHash: passwordHash
+            );
 
-            usuario.AtualizaSenhaUsuario(
-                    password: _passwordHash.EncryptPassword(request.Body.Password, passwordHash),
-                    passwordHash: passwordHash
-                );
-
-            return Result.SetContent(new UsuarioAtualizadoModel().FromEntity(await unitOfWork.UsuarioRepository.UpdateAsync(usuario)));
-        });
+        return Result.SetContent(new UsuarioAtualizadoModel().FromEntity(await unitOfWork.UsuarioRepository.UpdateAsync(usuario)));
     }
 }

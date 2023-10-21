@@ -12,11 +12,8 @@ public class RecuperarPessoasQueryHandler : BaseCommandHandler, IRequestHandler<
 
     public  async Task<Result> Handle(RecuperarPessoasQuery request, CancellationToken cancellationToken)
     {
-        return await OnTransactionAsync(async () =>
-        {
-            var aux = await unitOfWork.PessoasRepository.GetPessoasQuery();
+        var aux = await unitOfWork.PessoasRepository.GetPessoasQuery();
 
-            return Result.SetContent(await unitOfWork.PessoasRepository.ToListAsync());
-        });
+        return Result.SetContent(await unitOfWork.PessoasRepository.ToListAsync());
     }
 }
