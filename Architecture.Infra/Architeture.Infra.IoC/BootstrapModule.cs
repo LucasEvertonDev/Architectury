@@ -1,6 +1,6 @@
 ﻿using Architecture.Application.Core;
 using Architecture.Application.Core.Structure;
-using Architecture.Application.UseCases;
+using Architecture.Application.Mediator;
 using Architecture.Infra.Data;
 using Architectury.Infra.Plugins;
 using Microsoft.Extensions.DependencyInjection;

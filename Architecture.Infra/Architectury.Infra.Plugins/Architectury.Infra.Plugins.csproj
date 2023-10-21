@@ -22,7 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.Core\Architecture.Application.Core.csproj" />
     <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.Domain\Architecture.Application.Domain.csproj" />
-    <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.UseCases\Architecture.Application.Mediator.csproj" />
+    <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.Mediator\Architecture.Application.Mediator.csproj" />
   </ItemGroup>
 
 

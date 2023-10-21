@@ -1,4 +1,4 @@
-﻿namespace Architecture.WebApi.Endpoints;
+﻿namespace Architecture.Application.Domain.Models.Auth;
 
 public class TokenFlowModel
 {

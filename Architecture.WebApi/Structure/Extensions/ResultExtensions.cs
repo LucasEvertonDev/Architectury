@@ -35,7 +35,7 @@ public static class ResultExtensions
         });
     }
 
-    public static Task<IResult> GetResponse<T>(this Result result)
+    public static Task<IResult> GetResponse(this Result result)
     {
         if (result.HasFailures())
         {
@@ -67,7 +67,7 @@ public static class ResultExtensions
         }
         else
         {
-            if (typeof(T) == typeof(ResponseDto))
+            if (result.GetContent<dynamic>() == null)
             {
                 return Task.FromResult(Results.Ok(new ResponseDto
                 {
@@ -76,9 +76,9 @@ public static class ResultExtensions
             }
             else
             {
-                return Task.FromResult(Results.Ok(new ResponseDto<T>()
+                return Task.FromResult(Results.Ok(new ResponseDto<dynamic>()
                 {
-                    Content = result.GetValue<T>()
+                    Content = result.GetContent<dynamic>()
                 }));
             }
         }

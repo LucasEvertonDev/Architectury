@@ -1,4 +1,5 @@
-﻿using Architecture.Application.Domain.DbContexts.Domains;
+﻿using Architecture.Application.Core.Notifications;
+using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.Models.Pessoa;
 using Architecture.Application.Mediator.Commands.Pessoas.CriarPessoa;
 using Architecture.Application.Mediator.Queries.Pessoas;
@@ -15,23 +16,17 @@ public static class PessoasEndpoints
         var pessoaEndpoints = app.MapGroup(route).WithTags(tag);
 
         pessoaEndpoints.MapGet("",
-            async ([FromServices] IMediator mediator) =>
-            {
-                var result = await mediator.Send(new RecuperarPessoasQuery());
-
-                return result.GetResponse<IEnumerable<Pessoa>>();
-
-            }).AllowAnonymous().Response<IEnumerable<Pessoa>>();
+            async ([FromServices] IMediator mediator) => 
+                await mediator.Send<Result>(new RecuperarPessoasQuery()).Result.GetResponse()
+            )
+            .AllowAnonymous().Response<IEnumerable<Pessoa>>();
 
 
         pessoaEndpoints.MapPost("",
             async ([FromServices] IMediator mediator, [FromBody] CriarPessoasCommand criarPessoasCommand) =>
-            {
-                var result = await mediator.Send(criarPessoasCommand);
-
-                return result.GetResponse<PessoaCriadaModel>();
-
-            }).AllowAnonymous().Response<PessoaCriadaModel>();
+                await mediator.Send<Result>(criarPessoasCommand).Result.GetResponse()
+            )
+            .AllowAnonymous().Response<PessoaCriadaModel>();
 
         return app;
     }

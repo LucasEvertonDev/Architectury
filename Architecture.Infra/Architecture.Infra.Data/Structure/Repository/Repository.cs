@@ -4,7 +4,7 @@ using Architecture.Application.Core.Structure.Attributes;
 using Architecture.Application.Core.Structure.Models;
 using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Domains.Base;
-using Architecture.Application.Domain.DbContexts.Repositorys.Base;
+using Architecture.Application.Domain.DbContexts.Repositories.Base;
 using Architecture.Infra.Data.Structure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;

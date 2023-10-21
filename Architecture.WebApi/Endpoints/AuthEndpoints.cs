@@ -18,16 +18,15 @@ public static class AuthEndpoints
 
         authEndpoints.MapPost("login", [AllowAnonymous]
             async ([FromServices] IMediator mediator, [AsParameters] LoginCommand loginCommand) =>
-                await mediator.Send<Result>(loginCommand).Result.GetResponse<TokenModel>()
+                await mediator.Send<Result>(loginCommand).Result.GetResponse()
             )
             .Response<ResponseDto<TokenModel>>();
 
         authEndpoints.MapPost("refreshtoken",
             async ([FromServices] IMediator mediator, [AsParameters] RefreshTokenCommand refreshTokenCommand) =>
-                await mediator.Send<Result>(refreshTokenCommand).Result.GetResponse<TokenModel>()
+                await mediator.Send<Result>(refreshTokenCommand).Result.GetResponse()
             )
             .Authorization().Response<ResponseDto<TokenModel>>();
-
 
         authEndpoints.MapPost("flowlogin",
             async ([FromServices] IMediator mediator, HttpRequest request) =>
@@ -51,7 +50,7 @@ public static class AuthEndpoints
                 return Results.Ok(new TokenFlowModel
                 {
                     token_type = "bearer",
-                    access_token = result.GetValue<TokenModel>().TokenJWT
+                    access_token = result.GetContent<TokenModel>().TokenJWT
                 });
 
             }).AllowAnonymous().Response<TokenFlowModel>();

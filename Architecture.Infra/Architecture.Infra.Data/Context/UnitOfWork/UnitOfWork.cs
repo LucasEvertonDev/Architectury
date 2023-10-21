@@ -1,7 +1,7 @@
 ﻿using Architecture.Application.Domain.DbContexts.Domains;
-using Architecture.Application.Domain.DbContexts.Repositorys.Base;
-using Architecture.Application.Domain.DbContexts.Repositorys.MapUserGroupRolesRepository;
-using Architecture.Application.Domain.DbContexts.Repositorys.PessoaRepository;
+using Architecture.Application.Domain.DbContexts.Repositories.Base;
+using Architecture.Application.Domain.DbContexts.Repositories.MapUserGroupRolesRepository;
+using Architecture.Application.Domain.DbContexts.Repositories.PessoaRepository;
 using Architecture.Application.Domain.DbContexts.UnitOfWork;
 using Architecture.Infra.Data.Context.Repositories;
 using Architecture.Infra.Data.Context.Repositories.Base;

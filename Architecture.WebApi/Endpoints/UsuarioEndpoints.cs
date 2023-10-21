@@ -1,10 +1,12 @@
-﻿using Architecture.Application.Core.Structure.Models;
+﻿using Architecture.Application.Core.Notifications;
+using Architecture.Application.Core.Structure.Models;
 using Architecture.Application.Domain.Models.Base;
 using Architecture.Application.Domain.Models.Usuarios;
 using Architecture.Application.Mediator.Commands.Usuarios.AtualizarSenha;
 using Architecture.Application.Mediator.Commands.Usuarios.AtualizarUsuario;
 using Architecture.Application.Mediator.Commands.Usuarios.CriarUsuario;
 using Architecture.Application.Mediator.Commands.Usuarios.ExcluirUsuario;
+using Architecture.Application.Mediator.Queries.Pessoas;
 using Architecture.Application.Mediator.Queries.Usuarios.RecuperarUsuarios;
 using Architecture.WebApi.Structure.Extensions;
 using Architecture.WebApi.Structure.Helpers;
@@ -21,48 +23,33 @@ public static class UsuariosEndpoints
 
         usuariosEndpoint.MapGet(Params.GetRoute<RecuperarUsuariosDto>(),
             async ([FromServices] IMediator mediator, [AsParameters] RecuperarUsuariosQuery recuperarUsuariosQuery) =>
-                {
-                    var result = await mediator.Send(recuperarUsuariosQuery);
-
-                    return result.GetResponse<PagedResult<UsuariosRecuperadosModel>>();
-
-                }).Authorization().Response<ResponseDto<PagedResult<UsuariosRecuperadosModel>>>();
+                 await mediator.Send<Result>(recuperarUsuariosQuery).Result.GetResponse()
+            )
+            .Authorization().Response<ResponseDto<PagedResult<UsuariosRecuperadosModel>>>();
 
         usuariosEndpoint.MapPost("",
             async ([FromServices] IMediator mediator, [FromBody] CriarUsuarioCommand criarUsuarioCommand) =>
-            {
-                var result = await mediator.Send(criarUsuarioCommand);
-
-                return result.GetResponse<UsuarioCriadoModel>();
-
-            }).AllowAnonymous().Response<ResponseDto<UsuarioCriadoModel>>();
+                await mediator.Send<Result>(criarUsuarioCommand).Result.GetResponse()
+            )
+            .AllowAnonymous().Response<ResponseDto<UsuarioCriadoModel>>();
 
         usuariosEndpoint.MapPut("{id}",
             async ([FromServices] IMediator mediator, [AsParameters] AtualizarUsuarioCommand atualizarUsuarioCommand) =>
-            {
-                var result = await mediator.Send(atualizarUsuarioCommand);
-
-                return result.GetResponse<AtualizarUsuarioModel>();
-
-            }).Authorization().Response<ResponseDto<AtualizarUsuarioModel>>();
+                await mediator.Send<Result>(atualizarUsuarioCommand).Result.GetResponse()
+            )
+            .Authorization().Response<ResponseDto<AtualizarUsuarioModel>>();
 
         usuariosEndpoint.MapPut("updatepassword/{id}",
             async ([FromServices] IMediator mediator, [AsParameters] AtualizarSenhaCommand atualizarSenhaCommand) =>
-            {
-                var result = await mediator.Send(atualizarSenhaCommand);
-
-                return result.GetResponse<ResponseDto>();
-
-            }).Authorization().Response<ResponseDto>();
+                await mediator.Send<Result>(atualizarSenhaCommand).Result.GetResponse()
+            )
+            .Authorization().Response<ResponseDto>();
 
         usuariosEndpoint.MapDelete("{id}",
            async ([FromServices] IMediator mediator, [AsParameters] ExcluirUsuarioCommand excluirUsuarioCommand) =>
-           {
-               var result = await mediator.Send(excluirUsuarioCommand);
-
-               return result.GetResponse<ResponseDto>();
-
-           }).Authorization().Response<ResponseDto>();
+               await mediator.Send<Result>(excluirUsuarioCommand).Result.GetResponse()
+            )
+            .Authorization().Response<ResponseDto>();
 
         return app;
     }

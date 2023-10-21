@@ -7,14 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DbContexts\Repositorys\Base\IDeleteRepository.cs" />
-    <Compile Remove="DbContexts\Repositorys\Base\ISearchRepository.cs" />
-    <Compile Remove="DbContexts\Repositorys\Base\IUpdateRepository.cs" />
-    <Compile Remove="Models\Pessoa\CriarPessoaModel.cs" />
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <Compile Remove="DbContexts\Repositories\Base\IDeleteRepository.cs" />
+    <Compile Remove="DbContexts\Repositories\Base\ISearchRepository.cs" />
+    <Compile Remove="DbContexts\Repositories\Base\IUpdateRepository.cs" />
+    <Compile Remove="Models\Pessoa\CriarPessoaModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
