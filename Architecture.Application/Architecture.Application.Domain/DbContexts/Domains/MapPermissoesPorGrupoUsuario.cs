@@ -15,12 +15,12 @@ public class MapPermissoesPorGrupoUsuario : BaseEntity<MapPermissoesPorGrupoUsua
 
     public MapPermissoesPorGrupoUsuario CriarMapeamentoPermissaoPorGrupoUsuario(GrupoUsuario grupoUsuario, Permissao permissao)
     {
-        Set(map => map.GrupoUsuario, grupoUsuario)
+        Set(GrupoUsuario => grupoUsuario)
             .ValidateWhen()
             .IsNull()
             .AddFailure(Erros.MapPermissoesPorGrupoUsuario.GrupoUsuarioObrigatorio);
 
-        Set(map => map.Permissao, permissao)
+        Set(Permissao => permissao)
           .ValidateWhen()
           .IsNull()
           .AddFailure(Erros.MapPermissoesPorGrupoUsuario.PermissaoObrigatoria);
@@ -30,17 +30,17 @@ public class MapPermissoesPorGrupoUsuario : BaseEntity<MapPermissoesPorGrupoUsua
 
     public MapPermissoesPorGrupoUsuario CriarMapeamentoParaCarga(Guid grupoUsuario, Guid permissao)
     {
-        Set(map => map.GrupoUsuarioId, grupoUsuario)
+        Set(GrupoUsuarioId => grupoUsuario)
             .ValidateWhen()
             .IsNull()
             .AddFailure(Erros.MapPermissoesPorGrupoUsuario.GrupoUsuarioObrigatorio);
 
-        Set(map => map.PermissaoId, permissao)
+        Set(PermissaoId => permissao)
           .ValidateWhen()
           .IsNull()
           .AddFailure(Erros.MapPermissoesPorGrupoUsuario.PermissaoObrigatoria);
 
-        Set(grupo => grupo.Situacao, (int)ESituacao.Ativo);
+        Set(Situacao => (int)ESituacao.Ativo);
 
         return this;
     }

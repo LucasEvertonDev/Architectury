@@ -35,7 +35,7 @@ public static class ResultExtensions
         });
     }
 
-    public static IResult GetResponse<T>(this Result result)
+    public static Task<IResult> GetResponse<T>(this Result result)
     {
         if (result.HasFailures())
         {
@@ -59,27 +59,27 @@ public static class ResultExtensions
                 dic.Add(i.key, i.messages);
             });
 
-            return Results.BadRequest(new
+            return Task.FromResult(Results.BadRequest(new
             {
                 status = 400,
                 errors = dic
-            });
+            }));
         }
         else
         {
             if (typeof(T) == typeof(ResponseDto))
             {
-                return Results.Ok(new ResponseDto
+                return Task.FromResult(Results.Ok(new ResponseDto
                 {
                     Success = true
-                });
+                }));
             }
             else
             {
-                return Results.Ok(new ResponseDto<T>()
+                return Task.FromResult(Results.Ok(new ResponseDto<T>()
                 {
                     Content = result.GetValue<T>()
-                });
+                }));
             }
         }
     }

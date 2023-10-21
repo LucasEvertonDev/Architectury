@@ -1,4 +1,5 @@
-﻿using Architecture.Application.Domain.Models.Auth;
+﻿using Architecture.Application.Core.Notifications;
+using Architecture.Application.Domain.Models.Auth;
 using Architecture.Application.Domain.Models.Base;
 using Architecture.Application.Mediator.Commands.Auth.Login;
 using Architecture.Application.Mediator.Commands.Auth.RefreshToken;
@@ -16,23 +17,16 @@ public static class AuthEndpoints
         var authEndpoints = app.MapGroup(route).WithTags(tag);
 
         authEndpoints.MapPost("login", [AllowAnonymous]
-        async ([FromServices] IMediator mediator, [AsParameters] LoginCommand loginCommand) =>
-            {
-                var result = await mediator.Send(loginCommand);
-
-                return result.GetResponse<TokenModel>();
-
-            }).Response<ResponseDto<TokenModel>>();
-
+            async ([FromServices] IMediator mediator, [AsParameters] LoginCommand loginCommand) =>
+                await mediator.Send<Result>(loginCommand).Result.GetResponse<TokenModel>()
+            )
+            .Response<ResponseDto<TokenModel>>();
 
         authEndpoints.MapPost("refreshtoken",
             async ([FromServices] IMediator mediator, [AsParameters] RefreshTokenCommand refreshTokenCommand) =>
-            {
-                var result = await mediator.Send(refreshTokenCommand);
-
-                return result.GetResponse<TokenModel>();
-
-            }).Authorization().Response<ResponseDto<TokenModel>>();
+                await mediator.Send<Result>(refreshTokenCommand).Result.GetResponse<TokenModel>()
+            )
+            .Authorization().Response<ResponseDto<TokenModel>>();
 
 
         authEndpoints.MapPost("flowlogin",

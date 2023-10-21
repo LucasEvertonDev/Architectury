@@ -2,51 +2,51 @@
 using Architecture.Application.Core.Notifications.Notifiable.Steps.AfterSet;
 using Architecture.Application.Core.Notifications.Notifiable.Steps.AfterValidationWhen;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace Architecture.Application.Core.Notifications.Notifiable.Notifications;
 
 public partial class Notifiable<TEntity> : INotifiableModel
 {
-    protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, short>> memberLamda, short value)
+    protected AfterSet<AfterValidationWhenObject> Set(Func<short, short> setFunc, [CallerArgumentExpression("setFunc")] dynamic argumentExpression = null)
     {
-        this.SetValue(memberLamda, value);
+        this.SetValue(argumentExpression, setFunc(0));
 
         return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), new NotificationInfo(CurrentProp, EntityInfo));
     }
 
-    protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, short?>> memberLamda, short? value)
+    protected AfterSet<AfterValidationWhenObject> Set(Func<short?, short?> setFunc, [CallerArgumentExpression("setFunc")] dynamic argumentExpression = null)
     {
-        this.SetValue(memberLamda, value);
+        this.SetValue(argumentExpression, setFunc(0));
 
         return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), new NotificationInfo(CurrentProp, EntityInfo));
     }
 
-    protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, int>> memberLamda, int value)
+    protected AfterSet<AfterValidationWhenObject> Set(Func<int, int> setFunc, [CallerArgumentExpression("setFunc")] dynamic argumentExpression = null)
     {
-        this.SetValue(memberLamda, value);
+        this.SetValue(argumentExpression, setFunc(0));
 
         return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), new NotificationInfo(CurrentProp, EntityInfo));
     }
 
-    protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, int?>> memberLamda, int? value)
+    protected AfterSet<AfterValidationWhenObject> Set(Func<int?, int?> setFunc, [CallerArgumentExpression("setFunc")] dynamic argumentExpression = null)
     {
-        this.SetValue(memberLamda, value);
+        this.SetValue(argumentExpression, setFunc(0));
 
         return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), new NotificationInfo(CurrentProp, EntityInfo));
     }
 
-    protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, long>> memberLamda, long value)
+    protected AfterSet<AfterValidationWhenObject> Set(Func<long, long> setFunc, [CallerArgumentExpression("setFunc")] dynamic argumentExpression = null)
     {
-        this.SetValue(memberLamda, value);
+        this.SetValue(argumentExpression, setFunc(0));
 
         return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), new NotificationInfo(CurrentProp, EntityInfo));
     }
 
-    protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, long?>> memberLamda, long? value)
+    protected AfterSet<AfterValidationWhenObject> Set(Func<long?, long?> setFunc, [CallerArgumentExpression("setFunc")] dynamic argumentExpression = null)
     {
-        this.SetValue(memberLamda, value);
+        this.SetValue(argumentExpression, setFunc(0));
 
         return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), new NotificationInfo(CurrentProp, EntityInfo));
     }
-
 }

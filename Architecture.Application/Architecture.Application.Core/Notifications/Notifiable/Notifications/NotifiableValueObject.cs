@@ -3,19 +3,18 @@ using Architecture.Application.Core.Notifications.Notifiable.Steps.AfterSet;
 using Architecture.Application.Core.Notifications.Notifiable.Steps.AfterValidationWhen;
 using Architecture.Application.Core.Structure.Extensions;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace Architecture.Application.Core.Notifications.Notifiable.Notifications;
 
 public partial class Notifiable<TEntity> : INotifiableModel
 {
-    /// <summary>
-    ///  Quando record as notificaçoes são integradas de forma interna 
-    /// </summary>
-    /// <param name="memberLamda"></param>
-    /// <param name="value"></param>
-    protected AfterSet<AfterValidationWhenObject> Set(Expression<Func<TEntity, INotifiableModel>> memberLamda, INotifiableModel value)
+
+    protected AfterSet<AfterValidationWhenObject> Set(Func<INotifiableModel, INotifiableModel> setFunc, [CallerArgumentExpression("setFunc")] dynamic argumentExpression = null)
     {
-        this.SetValue(memberLamda, value);
+        var value = setFunc(null);
+
+        this.SetValue(argumentExpression, value);
 
         for (var i = 0; i < value?.GetFailures()?.Count(); i++)
         {
@@ -31,14 +30,12 @@ public partial class Notifiable<TEntity> : INotifiableModel
         return new AfterSet<AfterValidationWhenObject>(Result.GetContext(), new NotificationInfo(CurrentProp, EntityInfo));
     }
 
-    /// <summary>
-    ///  Quando record as notificaçoes são integradas de forma interna 
-    /// </summary>
-    /// <param name="memberLamda"></param>
-    /// <param name="value"></param>
-    protected AfterSet<AfterValidationWhenObject> Set<T>(Expression<Func<TEntity, List<T>>> memberLamda, List<T> value) where T : INotifiableModel
+
+    protected AfterSet<AfterValidationWhenObject> Set<T>(Func<List<T>, List<T>> setFunc, [CallerArgumentExpression("setFunc")] dynamic argumentExpression = null) where T : INotifiableModel
     {
-        this.SetValue(memberLamda, value);
+        List<T> value = setFunc(Activator.CreateInstance<List<T>>());
+
+        this.SetValue(argumentExpression, value);
 
         var failures = value.GetNotifications(CurrentProp.MemberName);
 

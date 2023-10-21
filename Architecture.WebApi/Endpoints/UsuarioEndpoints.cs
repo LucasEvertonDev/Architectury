@@ -35,7 +35,7 @@ public static class UsuariosEndpoints
 
                 return result.GetResponse<UsuarioCriadoModel>();
 
-            }).Authorization().Response<ResponseDto<UsuarioCriadoModel>>();
+            }).AllowAnonymous().Response<ResponseDto<UsuarioCriadoModel>>();
 
         usuariosEndpoint.MapPut("{id}",
             async ([FromServices] IMediator mediator, [AsParameters] AtualizarUsuarioCommand atualizarUsuarioCommand) =>

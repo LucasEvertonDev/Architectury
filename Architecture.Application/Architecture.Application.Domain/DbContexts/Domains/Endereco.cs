@@ -1,6 +1,4 @@
 ﻿using Architecture.Application.Domain.DbContexts.Domains.Base;
-using Architecture.Application.Domain.DbContexts.ValueObjects;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Architecture.Application.Domain.DbContexts.Domains;
 
@@ -10,29 +8,27 @@ public class Endereco : BaseEntity<Endereco>
     public string Estado { get; private set; }
     public string Cidade { get; private set; }
     public Guid PessoaId { get; private set; }
-
     public Pessoa Pessoa { get; private set; } 
-
     public Logradouro Logradouro { get; private set; }  
 
     public Endereco CriarEndereco(string cep, string estado, string cidade)
     {
-        Set(endereco => endereco.Cep, cep)
+        Set(Cep => cep)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(new FailureModel("endereco", "Cep é obrigatório"));
 
-        Set(endereco => endereco.Estado, estado)
+        Set(Estado => estado)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(new FailureModel("endereco", "Estado é obrigatório"));
 
-        Set(endereco => endereco.Cidade, cidade)
+        Set(Cidade => cidade)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(new FailureModel("endereco", "Cidade é obrigatório"));
 
-        Set(endereco => endereco.Logradouro, new Logradouro().CriarLogradouro(""));
+        Set(Logradouro => new Logradouro().CriarLogradouro(""));
 
         return this;
     }

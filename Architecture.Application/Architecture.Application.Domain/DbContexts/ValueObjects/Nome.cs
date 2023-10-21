@@ -14,12 +14,12 @@ public class Nome : ValueObject<Nome>
 
     public Nome CriarNome(string primeiroNome, string sobrenome)
     {
-        Set(nome => nome.PrimeiroNome, primeiroNome)
+        Set(PrimeiroNome => primeiroNome)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(new FailureModel("PRIMEIRO_NOME", "Primeiro nome é obrigatório"));
 
-        Set(nome => nome.Sobrenome, sobrenome)
+        Set(Sobrenome => sobrenome)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(new FailureModel("SOBRENOME", "SobreNome é obrigatório"));
