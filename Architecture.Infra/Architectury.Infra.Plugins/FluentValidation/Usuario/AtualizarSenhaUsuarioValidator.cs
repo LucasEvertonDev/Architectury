@@ -1,6 +1,6 @@
 ﻿using Architecture.Application.Domain.Constants;
 using Architecture.Application.Mediator.Commands.Usuarios.AtualizarSenha;
-using Architectury.Infra.Plugins.FluentValidation.Extensions;
+using Architectury.Infra.Plugins.FluentValidation.Structure.Extensions;
 using FluentValidation;
 
 namespace Architectury.Infra.Plugins.FluentValidation.Usuario;

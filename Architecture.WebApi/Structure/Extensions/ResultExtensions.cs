@@ -1,37 +1,18 @@
-﻿using Architecture.Application.Core.Notifications.Enum;
-using Architecture.Application.Core.Notifications;
+﻿using Architecture.Application.Core.Notifications;
 using Architecture.Application.Domain.Models.Base;
-
+using Architecture.Application.Core.Notifications.Services;
+ 
 namespace Architecture.WebApi.Structure.Extensions;
 
 public static class ResultExtensions
 {
     public static IResult BadRequestFailure(this Result result)
     {
-        Dictionary<object, object[]> dic = new Dictionary<object, object[]>();
-
-        var agrupados = result.GetFailures.OrderByDescending(a => (int)a.NotificationInfo.EntityInfo.NotificationType)
-            .Select(a => new
-            {
-                key = a.NotificationInfo.PropInfo.MemberName ?? nameof(NotificationType.BusinessNotification),
-                a.Error.message,
-            })
-            .GroupBy(a => a.key).Select(a => new
-            {
-                key = a.Key,
-                messages = a.ToList().Select(a => a.message).ToArray()
-            })
-            .ToList();
-
-        agrupados.ForEach(i =>
+        return Results.BadRequest(new ResponseError<Dictionary<object, object[]>>
         {
-            dic.Add(i.key, i.messages);
-        });
-
-        return Results.BadRequest(new
-        {
-            status = 400,
-            errors = dic
+            HttpCode = 400,
+            Success = false,
+            Errors = ResultService.GetFailures(result)
         });
     }
 
@@ -39,30 +20,11 @@ public static class ResultExtensions
     {
         if (result.HasFailures())
         {
-            Dictionary<object, object[]> dic = new Dictionary<object, object[]>();
-
-            var agrupados = result.GetFailures.OrderByDescending(a => (int)a.NotificationInfo.EntityInfo.NotificationType)
-                .Select(a => new
-                {
-                    key = a.NotificationInfo.PropInfo.MemberName ?? nameof(NotificationType.BusinessNotification),
-                    a.Error.message,
-                })
-                .GroupBy(a => a.key).Select(a => new
-                {
-                    key = a.Key,
-                    messages = a.ToList().Select(a => a.message).ToArray()
-                })
-                .ToList();
-
-            agrupados.ForEach(i =>
+            return Task.FromResult(Results.BadRequest(new ResponseError<Dictionary<object, object[]>>
             {
-                dic.Add(i.key, i.messages);
-            });
-
-            return Task.FromResult(Results.BadRequest(new
-            {
-                status = 400,
-                errors = dic
+                HttpCode = 400,
+                Success = false,
+                Errors = ResultService.GetFailures(result)
             }));
         }
         else

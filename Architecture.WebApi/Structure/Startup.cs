@@ -128,7 +128,7 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             var endpointv1 = endpoints.MapGroup("api/v1/")
-                .AddEndpointFilter<ValidationFilter>()
+                //.AddEndpointFilter<ValidationFilter>()
                 .WithOpenApi();
 
             endpointv1

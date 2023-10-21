@@ -12,7 +12,7 @@ public record NotificationModel
     public NotificationInfo NotificationInfo { get; set; }
 }
 
-public record FailureModel(string key, string message)
+public record FailureModel(string code, string message)
 {
 
 }

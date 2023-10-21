@@ -4,4 +4,5 @@ public enum NotificationType
 {
     DomainNotification,
     BusinessNotification,
+    RequestValidation
 }

@@ -4,7 +4,14 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="MediatR\**" />
+    <EmbeddedResource Remove="MediatR\**" />
+    <None Remove="MediatR\**" />
+  </ItemGroup>
 
 
   <ItemGroup>
@@ -23,10 +30,5 @@
     <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.Core\Architecture.Application.Core.csproj" />
     <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.Domain\Architecture.Application.Domain.csproj" />
     <ProjectReference Include="..\..\Architecture.Application\Architecture.Application.Mediator\Architecture.Application.Mediator.csproj" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="MediatR\" />
   </ItemGroup>
 </Project>

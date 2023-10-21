@@ -1,6 +1,4 @@
 ﻿using Architecture.Application.Core.Notifications.Notifiable.Notifications.Base;
-using System.Linq.Expressions;
-using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace Architecture.Application.Core.Notifications.Notifiable.Notifications;
@@ -46,6 +44,7 @@ public partial class Notifiable<TEntity> : INotifiableModel
         }
         catch (Exception ex)
         {
+            Console.WriteLine(ex.Message);
             throw;
         }
 

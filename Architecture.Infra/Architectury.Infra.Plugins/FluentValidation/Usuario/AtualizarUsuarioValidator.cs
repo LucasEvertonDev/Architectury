@@ -2,7 +2,7 @@
 using Architecture.Application.Domain.DbContexts.Domains;
 using Architecture.Application.Domain.DbContexts.Repositories.Base;
 using Architecture.Application.Mediator.Commands.Usuarios.AtualizarUsuario;
-using Architectury.Infra.Plugins.FluentValidation.Extensions;
+using Architectury.Infra.Plugins.FluentValidation.Structure.Extensions;
 using FluentValidation;
 
 namespace Architectury.Infra.Plugins.FluentValidation.Usuario;
