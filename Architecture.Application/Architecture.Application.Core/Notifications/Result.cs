@@ -38,6 +38,12 @@ public class Result
         return this;
     }
 
+    public Result Failure(NotificationModel notifiableModel)
+    {
+        NotificationContext.AddNotification(notifiableModel);
+        return this;
+    }
+
     public Result Failure(List<NotificationModel> failures)
     {
         NotificationContext.AddNotifications(failures);

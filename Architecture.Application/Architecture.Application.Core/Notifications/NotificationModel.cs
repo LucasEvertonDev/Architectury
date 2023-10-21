@@ -12,8 +12,16 @@ public record NotificationModel
     public NotificationInfo NotificationInfo { get; set; }
 }
 
-public record FailureModel(string code, string message)
+public record FailureModel
 {
+    public FailureModel(string code, string message)
+    {
+        Code = code;
+        Message = message;
+    }
+
+    public string Code { get; set; }
+    public string Message { get; set; }
 
 }
 

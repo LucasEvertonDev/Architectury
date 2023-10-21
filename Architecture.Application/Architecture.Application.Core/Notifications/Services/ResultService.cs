@@ -126,12 +126,12 @@ public class ResultService
             .Select(a => new
             {
                 key = a.NotificationInfo.PropInfo.MemberName ?? nameof(NotificationType.BusinessNotification),
-                a.Error.message,
+                a.Error.Message,
             })
             .GroupBy(a => a.key).Select(a => new
             {
                 key = a.Key,
-                messages = a.ToList().Select(a => a.message).ToArray()
+                messages = a.ToList().Select(a => a.Message).ToArray()
             })
             .ToList();
 

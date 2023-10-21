@@ -28,7 +28,7 @@ public class NotificationFilter : IAsyncResultFilter
                 .Select(a => new
                 {
                     key = a.NotificationInfo.PropInfo.MemberName ?? nameof(NotificationType.BusinessNotification),
-                    message = a.Error.message,
+                    message = a.Error.Message,
                 })
                 .GroupBy(a => a.key).Select(a => new
                 {
