@@ -1,5 +1,5 @@
-﻿using Architecture.Application.Core.Notifications.Notifiable.Notifications;
-using Architecture.Application.Core.Notifications.Notifiable.Notifications.Base;
+﻿using Notification.Notifications.Notifiable.Notifications.Base;
+using Notifications.Notifiable.Notifications;
 
 namespace Architecture.Application.Domain.DbContexts.ValueObjects.Base;
 

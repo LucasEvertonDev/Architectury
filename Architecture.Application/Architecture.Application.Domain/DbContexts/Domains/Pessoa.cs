@@ -15,22 +15,22 @@ public partial class Pessoa : BaseEntity<Pessoa>
 
     public Pessoa CriarPessoa(string primeiroNome, string sobrenome, string email, DateTime? dataNascimento, EnderecoModel enderecoModel)
     {
-        Set(Nome => new Nome()
+        Set(u => u.Nome, new Nome()
             .CriarNome(
                 primeiroNome: primeiroNome,
                 sobrenome: sobrenome
             ));
 
-        Set(Email => email)
+        Set(u => u.Email,email)
             .ValidateWhen()
             .IsNullOrEmpty().AddFailure(Erros.Pessoa.EmailObrigatorio)
             .IsInvalidEmail().AddFailure(Erros.Pessoa.EmailInvalido);
 
-        Set(DataNascimento => dataNascimento);
+        Set(u => u.DataNascimento, dataNascimento);
 
         if(enderecoModel != null)
         {
-            Set(Endereco => new Endereco()
+            Set(u => u.Endereco, new Endereco()
                  .CriarEndereco(
                      cep: enderecoModel?.Cep,
                      estado: enderecoModel?.Estado,
@@ -43,7 +43,7 @@ public partial class Pessoa : BaseEntity<Pessoa>
 
             var list = new List<Endereco>() { endereco, endereco2 };
 
-            Set<Endereco>(Enderecos => list);
+            Set(u => u.Enderecos, list);
         }
 
         return this;

@@ -1,4 +1,6 @@
-﻿namespace Architecture.Application.Domain.Constants;
+﻿using Notification.Notifications;
+
+namespace Architecture.Application.Domain.Constants;
 
 public static class Erros
 {

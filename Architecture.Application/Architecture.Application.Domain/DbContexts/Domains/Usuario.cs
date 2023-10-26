@@ -17,59 +17,59 @@ public class Usuario : BaseEntity<Usuario>
 
     public Usuario CriarUsuario(string username, string password, string passwordHash, GrupoUsuario grupoUsuario, string nome, string email)
     {
-        Set(Username => username)
+        Set(u => u.Username, username)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(Erros.Usuario.UsernameObrigatorio);
 
-        Set(Password => password)
+        Set(u => u.Password, password)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(Erros.Usuario.PasswordObrigatorio);
 
-        Set(PasswordHash => passwordHash)
+        Set(u => u.PasswordHash,passwordHash)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(Erros.Usuario.PasswordHashObrigatorio);
 
-        Set(GrupoUsuario => grupoUsuario)
+        Set(u => u.GrupoUsuario, grupoUsuario)
             .ValidateWhen()
             .IsNull()
             .AddFailure(Erros.Usuario.GrupoUsuarioInvalido);
 
-        Set(Nome => nome)
+        Set(u => u.Nome, nome)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(Erros.Usuario.NomeObrigatorio);
 
-        Set(Email => email)
+        Set(u => u.Email, email)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(Erros.Usuario.EmailObrigatorio);
 
-        Set(Situacao => (int)ESituacao.Ativo);
+        Set(u => u.Situacao , (int)ESituacao.Ativo);
 
         return this;
     }
 
     public Usuario AtualizaUsuario(string username, string email, string nome, GrupoUsuario grupoUsuario)
     {
-        Set(Username => username)
+        Set(u => u.Username, username)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(Erros.Usuario.UsernameObrigatorio);
 
-        Set(GrupoUsuario => grupoUsuario)
+        Set(u => u.GrupoUsuario, grupoUsuario)
             .ValidateWhen()
             .IsNull()
             .AddFailure(Erros.Usuario.GrupoUsuarioInvalido);
 
-        Set(Nome => nome)
+        Set(u => u.Nome, nome)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(Erros.Usuario.NomeObrigatorio);
 
-        Set(Email => email)
+        Set(u => u.Email, email)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(Erros.Usuario.EmailObrigatorio);
@@ -79,12 +79,12 @@ public class Usuario : BaseEntity<Usuario>
 
     public Usuario AtualizaSenhaUsuario(string password, string passwordHash)
     {
-        Set(Password => password)
+        Set(u => u.Password => password)
           .ValidateWhen()
           .IsNullOrEmpty()
           .AddFailure(Erros.Usuario.PasswordObrigatorio);
 
-        Set(PasswordHash => passwordHash)
+        Set(u => u.PasswordHash => passwordHash)
             .ValidateWhen()
             .IsNullOrEmpty()
             .AddFailure(Erros.Usuario.PasswordHashObrigatorio);

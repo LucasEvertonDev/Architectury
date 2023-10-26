@@ -1,5 +1,5 @@
-﻿using Architecture.Application.Core.Notifications.Notifiable.Notifications;
-using Architecture.Application.Domain.Enuns;
+﻿using Architecture.Application.Domain.Enuns;
+using Notifications.Notifiable.Notifications;
 
 namespace Architecture.Application.Domain.DbContexts.Domains.Base;
 

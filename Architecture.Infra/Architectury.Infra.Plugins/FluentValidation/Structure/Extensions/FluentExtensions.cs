@@ -1,6 +1,6 @@
-﻿using Architecture.Application.Core.Notifications;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Validators;
+using Notification.Notifications;
 
 namespace Architectury.Infra.Plugins.FluentValidation.Structure.Extensions;
 

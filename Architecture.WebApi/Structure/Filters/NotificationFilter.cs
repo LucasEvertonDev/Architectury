@@ -1,7 +1,7 @@
-﻿using Architecture.Application.Core.Notifications.Context;
-using Architecture.Application.Core.Notifications.Enum;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
+using Notification.Notifications.Context;
+using Notification.Notifications.Enum;
 using System.Net;
 
 namespace Architecture.WebApi.Structure.Filters;
